@@ -92,11 +92,11 @@ $cfg['allowedLanguages'] = array('en', 'ru');
 $cfg['defaultLanguage'] = 'en';
 
 $cfg['apiUrl'] = 'https://api.themages.net';
-$cfg['apiUsername'] = 'themages';
-$cfg['apiPassword'] = 'simple';
+$cfg['apiUsername'] = '';
+$cfg['apiPassword'] = '';
 
-$cfg['recaptchaSiteKey'] = '6LcsG_8SAAAAAH7eqFItb1ZMSku0fDmHYwJ0RaXN';
-$cfg['recaptchaSecretKey'] = '6LcsG_8SAAAAABeCWBSqWev6CSf3BwNaYY3h80um';
+$cfg['recaptchaSiteKey'] = '';
+$cfg['recaptchaSecretKey'] = '';
 
 $cfg['ud_alter'] = array(
 	array('tm_strings', ''),
