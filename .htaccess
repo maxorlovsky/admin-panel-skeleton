@@ -1,0 +1,44 @@
+#php_value max_execution_time 300
+#php_flag display_errors 1
+
+AddDefaultCharset UTF-8
+
+Options -Indexes
+Options +FollowSymLinks
+
+<Files ~ "(.tpl)">
+    Order allow,deny
+    Deny from all
+    Require all denied
+</Files>
+
+RewriteEngine On
+RewriteBase /
+
+#RewriteRule ^content - [L]
+#RewriteRule ^content/ - [L]
+
+#RewriteRule ^admin/*/ - [L]
+RewriteRule ^updates/? - [L]
+RewriteRule ^web/static/? - [L]
+RewriteRule ^cms/static/? - [L]
+RewriteRule ^web/uploads/? - [L]
+RewriteRule ^screenshots/? - [L]
+
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+
+RewriteRule ^admin/updates/CHANGELOG.txt /updates/CHANGELOG.txt [QSA,L]
+
+RewriteRule ^([a-z]+)/?$ /index.php?language=$1 [QSA,L]
+RewriteRule ^([a-z]+)/([^/]*)/?$ /index.php?language=$1&val1=$2 [QSA,L]
+RewriteRule ^([a-z]+)/([^/]*)/([^/]*)/?$ /index.php?language=$1&val1=$2&val2=$3 [QSA,L]
+RewriteRule ^([a-z]+)/([^/]*)/([^/]*)/([^/]*)/?$ /index.php?language=$1&val1=$2&val2=$3&val3=$4 [QSA,L]
+RewriteRule ^([a-z]+)/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$ /index.php?language=$1&val1=$2&val2=$3&val3=$4&val4=$5 [QSA,L]
+RewriteRule ^([a-z]+)/([^/]*)/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$ /index.php?language=$1&val1=$2&val2=$3&val3=$4&val4=$5&val5=$6 [QSA,L]
+
+#<FilesMatch "\.(js|json)$">
+#    <IfModule mod_headers.c>
+#        Header set Access-Control-Allow-Origin "*"
+#    </IfModule>
+#</FilesMatch>
