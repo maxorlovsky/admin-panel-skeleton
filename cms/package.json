@@ -2,7 +2,7 @@
     "name": "TheMagesCMS",
     "title": "TheMagesCMS",
     "description": "TheMages CMS",
-    "repository": "https://svn.maxorlovsky.net/svn/themaes",
+    "repository": "https://github.com/Maxtream/themages-cms.git",
     "readme": " ",
     "devDependencies": {
         "grunt": "^0.4.1",
