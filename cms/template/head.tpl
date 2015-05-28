@@ -13,7 +13,7 @@
     <script src="<?=_cfg('cmsstatic')?>/js/pre-js.js"></script>
     <? } ?>
     
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,600&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/jqueryUI.css" />
     <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/chosen.css" />
     <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/fonts.css" />
@@ -25,7 +25,7 @@
         var strings = <?=at('cms_json_strings')?>;
         var lang = '<?=$this->user->language?>';
         var logged_in = <?=$this->logged_in?>;
-        var redirect = <?=$this->user->editRedirect?>;
+        var redirect = <?=($this->logged_in?$this->user->editRedirect:0)?>;
     </script>
 </head>
 <body>

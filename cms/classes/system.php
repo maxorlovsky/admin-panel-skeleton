@@ -13,12 +13,19 @@ class System
     
     public function __construct($status = 1) {
     	$this->loadClasses();
-        
+
         //Run only once!
         if ($status != 1) {
     		//Making a connection
             Db::connect();
     	}
+        
+        //As soon as DB class is enabled, checking https staru
+        $row = Db::fetchRow('SELECT `value` FROM `tm_settings` WHERE `setting` = "https" LIMIT 1');
+        //Checking if https always enabled and if user is on http, then redirecting to https
+        if ($row->value == 1 && extension_loaded('openssl') && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')) {
+            go(str_replace('http', 'https', _cfg('cmssite')));
+        }
         
         if (!$this->data) {
             $this->data = new stdClass();
@@ -154,53 +161,42 @@ class System
         );
     }
     
+    //@email - Send TO
+    //@subject - Subject of email
+    //@msg - Body of message (can be html)
+    //@file - array, optional, attachment to email, required full link, data in array
+    //@file['name'] - name of the file with extension
+    //@file['content'] - plain text or plain html, it will be converted into attachment
     public function sendMail($email, $subject, $msg) {
-    	if(!_cfg('smtpMailName') || !_cfg('smtpMailPass')) return false;
-    	
-        $mailData = 'Date: '.date('D, d M Y H:i:s')." UT\r\n";
-        $mailData .= 'Subject: =?UTF-8?B?'.base64_encode($subject). "=?=\r\n";
-        $mailData .= 'Reply-To: '._cfg('smtpMailFrom'). "\r\n";
-        $mailData .= 'MIME-Version: 1.0'."\r\n";
-        $mailData .= 'Content-Type: text/html; charset="UTF-8"'."\r\n";
-        $mailData .= 'Content-Transfer-Encoding: 8bit'."\r\n";
-        $mailData .= 'From: "'._cfg('smtpMailFrom').'" <'._cfg('smtpMailFrom').'>'."\r\n";
-        $mailData .= 'To: '.$email.' <'.$email.'>'."\r\n";
-        $mailData .= 'X-Priority: 3'."\r\n\r\n";
-        
-        $mailData .= $msg."\r\n";
-        
-        if(!$socket = fsockopen(_cfg('smtpMailHost'), _cfg('smtpMailPort'), $errno, $errstr, 30)) {
-            return $errno."&lt;br&gt;".$errstr;
+        if(!_cfg('smtpMailName') || !_cfg('smtpMailPass')) {
+            return false;
         }
-        if (!$this->serverParse($socket, '220', __LINE__)) return false;
         
-        fputs($socket, 'HELO '._cfg('smtpMailHost'). "\r\n");
-        if (!$this->serverParse($socket, '250', __LINE__)) return false;
+        // Connecting
+        $transport = Swift_SmtpTransport::newInstance(_cfg('smtpMailHost'), _cfg('smtpMailPort'));
+        $transport->setUsername(_cfg('smtpMailName'));
+        $transport->setPassword(_cfg('smtpMailPass'));
         
-        fputs($socket, 'AUTH LOGIN'."\r\n");
-        if (!$this->serverParse($socket, '334', __LINE__)) return false;
+        $message = Swift_Message::newInstance()
+        // Give the message a subject
+        ->setSubject($subject)
+        // Set the From address with an associative array
+        ->setFrom(array(_cfg('smtpMailName') => _cfg('smtpMailFrom')))
+        // Set the To addresses with an associative array
+        ->setTo(array($email))
+        // Give it a body
+        ->setBody($msg, 'text/html');
+        // Optionally add any attachments
+        //->attach(Swift_Attachment::fromPath('my-document.pdf'))
         
-        fputs($socket, base64_encode(_cfg('smtpMailName')) . "\r\n");
-        if (!$this->serverParse($socket, '334', __LINE__)) return false;
+        //Sending message
+        $mailer = Swift_Mailer::newInstance($transport);
+        $mailer->send($message, $fails);
         
-        fputs($socket, base64_encode(_cfg('smtpMailPass')) . "\r\n");
-        if (!$this->serverParse($socket, '235', __LINE__)) return false;
-        
-        fputs($socket, 'MAIL FROM: <'._cfg('smtpMailName').'>'."\r\n");
-        if (!$this->serverParse($socket, '250', __LINE__)) return false;
-        
-        fputs($socket, 'RCPT TO: <'.$email.'>'."\r\n");
-        if (!$this->serverParse($socket, '250', __LINE__)) return false;
-        
-        fputs($socket, 'DATA'."\r\n");
-        if (!$this->serverParse($socket, '354', __LINE__)) return false;
-        
-        fputs($socket, $mailData."\r\n.\r\n");
-        if (!$this->serverParse($socket, '250', __LINE__)) return false;
-        
-        fputs($socket, 'QUIT'."\r\n");
-        
-        fclose($socket);
+        if($fails) {
+            $_SESSION['mailError'] = $fails;
+            return false;
+        }
         
         return true;
     }
@@ -357,9 +353,15 @@ class System
                 {
                     die('Invalid secret');
                 }
+                
+                set_time_limit(60);
     
                 $cronClass = new Cron();
-                /*$cronClass->cleanSessions();*/
+                //SQL involved functions
+                $cronClass->sqlCleanUp();
+                    
+                //Others functions without SQL
+                //$cronClass->cleanImagesTmp();
             }
             else {
                 exit('Run command error');

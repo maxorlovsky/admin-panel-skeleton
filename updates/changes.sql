@@ -1,3 +1,39 @@
+#3.13
+DELIMITER ;;
+
+DROP PROCEDURE IF EXISTS cleanupCmsData;;
+CREATE PROCEDURE cleanupCmsData()
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+    MODIFIES SQL DATA
+    SQL SECURITY INVOKER
+BEGIN
+    DECLARE v_delete_limit INT DEFAULT 1000;
+    DECLARE v_row_count INT DEFAULT 0;
+    
+    SELECT 'Cleaning CMS User Auth...';
+    REPEAT
+        -- SELECT '.';
+        START TRANSACTION;
+        DELETE FROM tm_user_auth
+            WHERE `timestamp` < DATE_SUB( NOW(), INTERVAL 1 MONTH )
+            ORDER BY `id`
+            LIMIT v_delete_limit;
+        SET v_row_count = ROW_COUNT();
+        COMMIT;
+        
+        SELECT CONCAT( '... deleted ', v_row_count );
+    UNTIL v_row_count < v_delete_limit
+    END REPEAT;
+END;;
+
+DELIMITER ;
+
+INSERT INTO `cms`.`tm_settings` (`setting`, `value`, `field`, `type`, `position`) VALUES ('https', '0', 'HTTPS always', 'checkbox', '9');
+
+ALTER TABLE tm_settings DROP INDEX setting;
+ALTER TABLE `tm_settings` ADD UNIQUE(`setting`);
+
 # 03.12.2014 - 3.9
 CREATE TABLE IF NOT EXISTS `tm_user_auth_attempts` (
   `ip` varchar(25) NOT NULL,

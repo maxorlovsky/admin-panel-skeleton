@@ -1,17 +1,21 @@
 <h1><?=at('links')?></h1>
 
 <table class="table links">
-    <td colspan="6" id="buttons" class="hint" name="Add">
-        <a href="<?=_cfg('cmssite').'/#links/add'?>"><div class="add-image"></div><?=at('add_new')?> <?=strtolower(at('link'))?></a>
-    </td>
-	<tr>
-        <td width="40%" class="b"><?=at('link')?></td>
-        <td width="40%" class="b"><?=at('sublink')?></td>
-        <td width="10%" class="centered b"><?=at('only_for_logged_in')?></td>
-        <td width="1" class="b"><?=at('updown')?></td>
-        <td width="1" class="b"><?=at('enaldisabl')?></td>
-        <td width="10%" class="centered b"><?=at('actions')?></td>
-    </tr>
+	<tbody>
+		<tr class="notSortable">
+	    	<td colspan="6" id="buttons" class="hint" name="Add">
+	        	<a href="<?=_cfg('cmssite').'/#links/add'?>"><div class="add-image"></div><?=at('add_new')?> <?=strtolower(at('link'))?></a>
+	    	</td>
+		</tr>
+		<tr class="notSortable">
+	        <td width="40%" class="b"><?=at('link')?></td>
+	        <td width="40%" class="b"><?=at('sublink')?></td>
+	        <td width="10%" class="centered b"><?=at('only_for_logged_in')?></td>
+	        <td width="1" class="b"><?=at('enaldisabl')?></td>
+	        <td width="10%" class="centered b"><?=at('actions')?></td>
+	    </tr>
+	</tbody>
+    <tbody class="sortable">
 	<?
 		if ($module->links) {
 			foreach($module->links as $v) {
@@ -22,19 +26,11 @@
 				<?
 				}*/
 				?>
-                <tr>
+                <tr attr-id="<?=$v->id?>">
 					<td><a href="<?=_cfg('cmssite').'/#links/edit/'.$v->id?>"><?=str_replace('web-link-','',$v->value)?></a></td>
 					<td></td>
                     <td class="centered">
                         <?=($v->logged_in == 1 ? '<img src='._cfg('cmsimg').'/tick-small.png  class="hint" name="Page available only for logged in users"/>' : '')?>
-                    </td>
-                    <td class="centered">
-                        <span class="big">
-                            <a href="<?=_cfg('cmssite').'/#links/moveup/'.$v->id?>" class="hint" name="Move UP"><img src="<?=_cfg('cmsimg')?>/arrow_up.png" /></a>
-                        </span>
-                        <span class="big">
-                            <a href="<?=_cfg('cmssite').'/#links/movedown/'.$v->id?>" class="hint" name="Move DOWN"><img src="<?=_cfg('cmsimg')?>/arrow_down.png" /></a>
-                        </span>
                     </td>
                     <td class="centered">
                         <a href="<?=_cfg('cmssite').'/#links/able/'.$v->id?>">
@@ -54,24 +50,12 @@
                 foreach($module->sublinks as $vs) {
                     if ($v->id == $vs->main_link) {
                         ?>
-                        <tr>
+                        <tr attr-id="<?=$vs->id?>">
 							<td class="centered"><a href="<?=_cfg('cmssite').'/#links/edit/'.$vs->id?>">=></a></td>
 							<td><a href="<?=_cfg('cmssite').'/#links/edit/'.$vs->id?>"><?=str_replace('web-link-','',$vs->value)?></a></td>
                             <td class="centered">
                                 <?=($vs->logged_in == 1 ? '<img src='._cfg('cmsimg').'/tick-small.png  class="hint" name="Page available only for logged in users"/>' : '')?>
                             </td>
-		                    <td class="centered">
-		                        <span class="big">
-		                            <a href="<?=_cfg('cmssite').'/#links/moveup/'.$vs->id?>">
-		                                <img src="<?=_cfg('cmsimg')?>/arrow_up.png" />
-		                            </a>
-		                        </span>
-		                        <span class="big">
-		                            <a href="<?=_cfg('cmssite').'/#links/movedown/'.$vs->id?>">
-		                                <img src="<?=_cfg('cmsimg')?>/arrow_down.png" />
-		                            </a>
-		                        </span>
-		                    </td>
 		                    <td class="centered">
 		                        <a href="<?=_cfg('cmssite').'/#links/able/'.$vs->id?>">
 		                            <?=($vs->able == 1 ? '<img src='._cfg('cmsimg').'/enabled.png  class="hint" name="Disable"/>' : '<img src='._cfg('cmsimg').'/disabled.png  class="hint" name="Enable"/>')?>
@@ -91,4 +75,20 @@
 			}
 		}
 	?>
+</tbody>
 </table>
+
+<script>
+	$(function() {
+		$('.sortable').sortable({
+			cancel: '.notSortable',
+			stop: function() {
+				var ids = [];
+				$('tbody.sortable tr').each(function() {
+					ids.push($(this).attr('attr-id'));
+				});
+				TM.changeOrder('links', ids);
+			}
+		}).disableSelection();
+	});
+</script>

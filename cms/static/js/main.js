@@ -153,6 +153,30 @@ var TM = {
     saveSettingInput: '',
     
     //Functions
+    changeOrder: function(module, ids) {
+        TM.showMsg(2,strings.loading);
+                
+        var query = {
+            type: 'POST',
+            timeout: 10000,
+            data: {
+                control: 'saveOrder',
+                page: module,
+                ids: ids
+            },
+            success: function(data) {
+                answer = data.split(';');
+                TM.cleanMsg();
+                TM.showMsg(answer[0],answer[1]);
+                TM.messageTimer = setTimeout(TM.cleanMsg,3000);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                TM.showMsg(0,'Error timeout');
+                TM.messageTimer = setTimeout(TM.cleanMsg,3000);
+            }
+        };
+        TM.ajax(query);
+    },
     cancelInput: function(id, t) {
         if (t === 0) {
             $('#'+id).html(this.saveSettingInput);
@@ -267,9 +291,11 @@ var TM = {
         $('#asucmsg, #aerrmsg, #amsg').stop().hide();
         $('#asucmsg, #aerrmsg, #amsg').html('');
         
+        t = parseInt(t);
+        
         var woffset = $('body')[0].clientWidth;
         
-        if (t == 1) {
+        if (t === 1) {
             $('#asucmsg').html(text);
             $('#asucmsg').css('left',(((woffset/2)-($('#asucmsg').width()/2))+'px'));
             $('#asucmsg').stop().slideDown();
@@ -289,7 +315,7 @@ var TM = {
         clearInterval(this.sessionTimeout);
         
         this.sessionTimeout = setInterval(function() {
-            go(site+'/admin/#aexit');
+            go(TM.site+'/admin/#aexit');
         }, 1800000); //30 min
     },
     deletion: function(url) {
@@ -330,7 +356,7 @@ var TM = {
             },
             success: function(data) {
                 if (param[0] == '#aexit') {
-                    go(_SITE+'/admin');
+                    go(TM.site+'/admin');
                 }
                 TM.blockHint = 0;
                 $('#loading').fadeOut('fast');
@@ -501,36 +527,24 @@ var TM = {
     }
 };
 
-tinyMCE.init({
+tinymce.init({
 	// General options
-	mode : "none",
-	theme : "advanced",
-	plugins : "autolink,lists,layer,save,advimage,advlink,iespell,preview,media,contextmenu,paste,pasteAsPlainText,directionality,fullscreen,noneditable,visualchars,advlist,images,spellchecker",
+    selector: 'textarea:not(.noEditor)',
+    
+	//plugins : "layer,save,advimage,advlink,iespell,media,contextmenu,paste,pasteAsPlainText,directionality,fullscreen,noneditable,visualchars",
+    plugins: 'advlist autolink link image lists charmap print preview, spellchecker',
 	width: '99%',
-	style_font_size: '16px',
-	
-	// Theme options
-	theme_advanced_buttons1 : "code,images,fullscreen,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,formatselect,fontsizeselect",
-	theme_advanced_buttons2 : "cut,copy,paste,|,outdent,indent,|,undo,redo,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,iespell,media,|,link,unlink,image,cleanup,spellchecker",
-	theme_advanced_buttons3 : "",
-	theme_advanced_buttons4 : "",
-	theme_advanced_toolbar_location : "top",
-	theme_advanced_toolbar_align : "left",
-	theme_advanced_statusbar_location : "bottom",
-	theme_advanced_resizing : true,
-    theme_advanced_resize_horizontal : false,
-	forced_root_block : '',
-	nonbreaking_force_tab : false,
+
+	forced_root_block : false,
     resize: true,
-    relative_urls : false,
+    relative_urls: false,
+    document_base_url: TM.site+'/web/',
     remove_script_host : false,
-    document_base_url : site+"/web/",
-    editor_deselector : "noEditor",
 
 	// Drop lists for link/image/media/template dialogs
-    content_css : site+"/cms/static/css/tinymce.css",
+    /*content_css: site+"/cms/static/css/tinymce.css",
 	template_external_list_url : "lists/template_list.js",
 	external_link_list_url : "lists/link_list.js",
 	external_image_list_url : "lists/image_list.js",
-	media_external_list_url : "lists/media_list.js"
+	media_external_list_url : "lists/media_list.js"*/
 });
