@@ -14,10 +14,7 @@
     <? } ?>
     
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,600&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/jqueryUI.css" />
-    <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/chosen.css" />
-    <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/fonts.css" />
-    <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/combined.css" />
     
     <script>
     	var site = "<?=_cfg('site')?>";

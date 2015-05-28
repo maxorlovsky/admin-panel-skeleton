@@ -16,11 +16,28 @@ session_start();
 global $cfg;
 global $astr;
 
+if (isset($_GET['params']) && $_GET['params']) {
+    $breakdown = explode('/', $_GET['params']);
+    if ($breakdown) {
+        $i = 0;
+        foreach($breakdown as $f) {
+            $_GET[($i==0?'language':'val'.$i)] = $f;
+            ++$i;
+        }
+    }
+}
+
 $cfg['root'] = str_replace('\\', '/', __DIR__);
 
 date_default_timezone_set('UTC');
 
-require_once dirname(__FILE__).'/cms/inc/config.php';
+if (!file_exists(dirname(__FILE__).'/cms/inc/config.php')) {
+    exit('Config file not exist, please create '.dirname(__FILE__).'/cms/inc/config.php file from '.dirname(__FILE__).'/cms/inc/config.sample.php');
+}
+else {
+    require_once dirname(__FILE__).'/cms/inc/config.php';
+}
+
 require_once $cfg['cmsinc'].'/functions.php';
 
 //If catching admin variable, running admin system

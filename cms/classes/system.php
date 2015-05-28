@@ -23,10 +23,11 @@ class System
         //As soon as DB class is enabled, checking https staru
         $row = Db::fetchRow('SELECT `value` FROM `tm_settings` WHERE `setting` = "https" LIMIT 1');
         //Checking if https always enabled and if user is on http, then redirecting to https
+
         if ($row->value == 1 && extension_loaded('openssl') && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')) {
             go(str_replace('http', 'https', _cfg('cmssite')));
         }
-        
+
         if (!$this->data) {
             $this->data = new stdClass();
         }
@@ -141,7 +142,6 @@ class System
     
     public function cleanData() {
     	unset($_SESSION['token'], $_SESSION['recaptcha_login']);
-        session_destroy();
     	$this->logged_in = 0;
     	$this->user = array();
     	go(_cfg('site').'/admin');
@@ -347,9 +347,9 @@ class System
     private function checkGetData() {
         global $cfg;
     
-        if (isset($_GET['language']) && $_GET['language'] == 'run') { //Special RUN command
-            if ( isset( $_GET['cronjob'] ) ) {
-                if ( $_GET['cronjob'] !== _cfg('cronjob') )
+        if (isset($_GET['language']) && isset($_GET['val1']) && $_GET['val1'] == 'run') { //Special RUN command
+            if ( isset( $_GET['val2'] ) ) {
+                if ( $_GET['val2'] !== _cfg('cronjob') )
                 {
                     die('Invalid secret');
                 }

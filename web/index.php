@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__).'/inc/config.php';
-
 //REMOVE ON WEB, NEEDED ONLY FOR CMS
 echo 'Direct access registered.<br />';
 echo '<a href="'._cfg('site').'/admin">Please move to "CMS" directory</a>';

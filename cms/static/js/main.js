@@ -22,8 +22,6 @@ if (logged_in) {
         var oldValue = $(this).html();
         $(this).html('Loading...');
         
-        tinyMCE.triggerSave();
-        
         var element = $(this).parents('table');
         
         form = {};
@@ -334,7 +332,7 @@ var TM = {
         }
         
         $('textarea').each(function(){
-            tinyMCE.execCommand('mceRemoveControl', false, $(this).attr('id'));
+            tinymce.EditorManager.execCommand('mceRemoveEditor', false, $(this).attr('id'));
         });
         
         param = page.split('/');
@@ -365,7 +363,7 @@ var TM = {
                 $('#link_'+activeLink).addClass('active');
                 $('.content').html(data);
                 $('.content textarea:not(.noEditor)').each(function(){
-                    tinyMCE.execCommand('mceAddControl', false, $(this).attr('id'));
+                    tinymce.EditorManager.execCommand('mceAddEditor', false, $(this).attr('id'));
                 });
                 
                 $('.chosen').chosen({
@@ -532,7 +530,8 @@ tinymce.init({
     selector: 'textarea:not(.noEditor)',
     
 	//plugins : "layer,save,advimage,advlink,iespell,media,contextmenu,paste,pasteAsPlainText,directionality,fullscreen,noneditable,visualchars",
-    plugins: 'advlist autolink link image lists charmap print preview, spellchecker',
+    plugins: 'advlist autolink link image lists charmap print preview jbimages',
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
 	width: '99%',
 
 	forced_root_block : false,

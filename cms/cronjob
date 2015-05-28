@@ -1,1 +1,3 @@
-*/30 * * * * wget -q -O /dev/null --no-check-certificate -t 1 http://www.themages.net/cms/run/askdjOLIKSJDoi2o12d09asLL
+$SITE = http://www.themages.net
+
+wget $SITE/admin/run/g0394gj0394kg
