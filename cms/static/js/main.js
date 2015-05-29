@@ -21,6 +21,8 @@ if (logged_in) {
         TM.formInProgress = 1;
         var oldValue = $(this).html();
         $(this).html('Loading...');
+
+        tinymce.triggerSave();
         
         var element = $(this).parents('table');
         
@@ -341,17 +343,23 @@ var TM = {
         //param[2] = variable value
         
         activeLink = param[0].substr(1);
+
+        dataParams = {
+            control: 'showPage'
+        };
+        $.each(param, function(k, v) {
+            if (k === 0) {
+                dataParams['page'] = v;
+            }
+            else {
+                dataParams['var'+k] = v;
+            }
+        });
         
         var query = {
             type: 'POST',
             timeout: 10000,
-            data: {
-                control: 'showPage',
-                page: param[0],
-                var1: param[1],
-                var2: param[2],
-                var3: param[3]
-            },
+            data: dataParams,
             success: function(data) {
                 if (param[0] == '#aexit') {
                     go(TM.site+'/admin');
@@ -529,9 +537,11 @@ tinymce.init({
 	// General options
     selector: 'textarea:not(.noEditor)',
     
-    plugins: 'advlist autolink link image lists charmap print preview jbimages',
-    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
-	width: '99%',
+    plugins: 'advlist autolink link image lists charmap print preview code '+(allowUpload?'jbimages':null),
+    toolbar: 'code undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image '+(allowUpload?'jbimages':null),
+	
+    width: '99%',
+    height : 300,
 
 	forced_root_block : false,
     resize: true,

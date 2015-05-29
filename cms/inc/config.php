@@ -56,6 +56,7 @@ $cfg['availableLoginAttempts'] = 5;
 $cfg['recaptchaSiteKey'] = '';
 $cfg['recaptchaSecretKey'] = '';
 $cfg['demo'] = 0;
+$cfg['allowUpload'] = 1;
 
 // Needed for Language functionality (to add/delete)
 // Add new language table fields here

@@ -23,6 +23,7 @@
         var lang = '<?=$this->user->language?>';
         var logged_in = <?=$this->logged_in?>;
         var redirect = <?=($this->logged_in?$this->user->editRedirect:0)?>;
+        var allowUpload = <?=_cfg('allowUpload')?>;
     </script>
 </head>
 <body>

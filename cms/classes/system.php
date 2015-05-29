@@ -59,6 +59,11 @@ class System
         if (!isset($data['token'])) {
         	$data['token'] = false;
         }
+
+        //Checking if upload allowed, if yes checking if folder have permissions
+        if (_cfg('allowUpload') == 1 && substr(sprintf('%o', fileperms(_cfg('uploads'))), -3) != '777') {
+            $cfg['allowUpload'] = 0;
+        }
         
         $rows = Db::fetchRows('SELECT * FROM `themagescms`');
         if ($rows) {
