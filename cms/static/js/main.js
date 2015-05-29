@@ -529,7 +529,6 @@ tinymce.init({
 	// General options
     selector: 'textarea:not(.noEditor)',
     
-	//plugins : "layer,save,advimage,advlink,iespell,media,contextmenu,paste,pasteAsPlainText,directionality,fullscreen,noneditable,visualchars",
     plugins: 'advlist autolink link image lists charmap print preview jbimages',
     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
 	width: '99%',
@@ -539,11 +538,8 @@ tinymce.init({
     relative_urls: false,
     document_base_url: TM.site+'/web/',
     remove_script_host : false,
-
-	// Drop lists for link/image/media/template dialogs
-    /*content_css: site+"/cms/static/css/tinymce.css",
-	template_external_list_url : "lists/template_list.js",
-	external_link_list_url : "lists/link_list.js",
-	external_image_list_url : "lists/image_list.js",
-	media_external_list_url : "lists/media_list.js"*/
+    
+    external_plugins: {
+        'jbimages': TM.site+'/cms/plugins/tinymce-jbimages/plugin.min.js'
+    }
 });
