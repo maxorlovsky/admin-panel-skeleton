@@ -1,15 +1,19 @@
 <?php
-//CMS TheMages v3.12
-//Credits (dev): MaxOrlovsky
-//Credits (design): MaxOrlovsky, AnyaOrlovsky
+/* 
+ * CMS TheMages v3.13
+ * http://www.themages.net
+ * Credits (dev): Maxtream
+ * Credits (design): Maxtream, AnyaTheEagle
+ * Github: https://github.com/Maxtream/themages-cms
+ */
 
 // Maintenance check
 if (file_exists('../maint_mode')) {
 	die('This site is on maintenance');
 }
 
-if (file_exists('../vendor/autoload.php')) {
-    require_once '../vendor/autoload.php';
+if (file_exists('../cms/vendor/autoload.php')) {
+    require_once '../cms/vendor/autoload.php';
 }
 
 session_start();
@@ -31,13 +35,7 @@ $cfg['root'] = str_replace('\\', '/', __DIR__);
 
 date_default_timezone_set('UTC');
 
-if (!file_exists(dirname(__FILE__).'/cms/inc/config.php')) {
-    exit('Config file not exist, please create '.dirname(__FILE__).'/cms/inc/config.php file from '.dirname(__FILE__).'/cms/inc/config.sample.php');
-}
-else {
-    require_once dirname(__FILE__).'/cms/inc/config.php';
-}
-
+require_once dirname(__FILE__).'/cms/inc/config.php';
 require_once $cfg['cmsinc'].'/functions.php';
 
 //If catching admin variable, running admin system
