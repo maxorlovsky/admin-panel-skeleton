@@ -66,7 +66,13 @@ $cfg['ud_alter'] = array(
 );
 
 // Adding site config
-require_once $cfg['dir'].'/inc/config.php';
+if (!file_exists($cfg['dir'].'/inc/config.php')) {
+    exit('Config file not exist, please create '.$cfg['dir'].'/inc/config.php file from '.$cfg['dir'].'/inc/config.sample.php');
+}
+else {
+    require_once $cfg['dir'].'/inc/config.php';
+}
+
 
 //=====================================================
 // Making some defines for easyer coding (directories)
