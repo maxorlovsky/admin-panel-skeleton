@@ -13,6 +13,7 @@ class Update extends System
             'sql'       => 0,
             'htaccess'  => 0,
             'index'     => 0, 
+			'index'     => 1, 
         );
 
         if (!$params) {
