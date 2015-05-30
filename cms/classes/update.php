@@ -138,8 +138,8 @@ class Update extends System
     }
 
     protected function deleteFiles($files) {
-        foreach($files as $k => $v) {
-            unlink(_cfg('cmsdir').$k);
+        foreach($files as $f) {
+            @unlink(_cfg('cmsdir').$f);
         }
         
         return true;
