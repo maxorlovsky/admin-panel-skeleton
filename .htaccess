@@ -26,7 +26,7 @@ RewriteRule ^web/uploads/? - [L]
 RewriteRule ^updates/? - [L]
 
 # Specific rewrite rules for themages.net, can be removed
-RewriteRule ^admin/updates/CHANGELOG.txt /updates/CHANGELOG.txt [QSA,L]
+RewriteRule ^admin/updates/CHANGELOG.txt https://api.themages.net/changelog.txt [QSA,L]
 RewriteRule ^log.php https://api.themages.net/log.php [R=301,L]
 
 RewriteCond %{SCRIPT_FILENAME} !-f
