@@ -12,8 +12,7 @@ class Update extends System
             'delete'    => 0,
             'sql'       => 0,
             'htaccess'  => 0,
-            'index'     => 0, 
-			'index'     => 1, 
+            'index'     => 0,
         );
 
         if (!$params) {
