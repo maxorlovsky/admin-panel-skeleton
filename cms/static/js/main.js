@@ -349,7 +349,7 @@ var TM = {
         };
         $.each(param, function(k, v) {
             if (k === 0) {
-                dataParams['page'] = v;
+                dataParams.page = v;
             }
             else {
                 dataParams['var'+k] = v;

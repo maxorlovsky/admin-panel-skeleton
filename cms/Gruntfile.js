@@ -76,8 +76,18 @@ module.exports = function(grunt) {
 
         watch: {
             css: {
-				files: ['Gruntfile.js', '<%= dirs.css %>/*.css', '<%= dirs.sass %>/*.scss'],
-				tasks: ['concat:sass', 'sass', 'concat:css', 'cssmin:css']
+				files: [
+                    'Gruntfile.js',
+                    '<%= dirs.css %>/*.css',
+                    '!<%= dirs.css %>/combined.css',
+                    '<%= dirs.sass %>/*.scss'
+                ],
+				tasks: [
+                    'concat:sass',
+                    'sass',
+                    'concat:css',
+                    'cssmin:css'
+                ]
 			}
         }
     });

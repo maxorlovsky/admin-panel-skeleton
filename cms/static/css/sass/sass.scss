@@ -493,8 +493,84 @@ nav {
 .accounts .chosen-container, .settings_div .chosen-container {
     min-width: 50px;
 }
-.links .chosen-container {
-    min-width: 250px;
+
+.links {
+    .chosen-container {
+        min-width: 250px;
+    }
+
+    .sortable {
+        margin: 0;
+        padding: 0;
+        border-spacing: 0;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .link {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        &:after {
+            content: ' ';
+            display: table;
+            clear: both;
+        }
+        li:not(.ui-sortable-handle), div {
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            float: left;
+            margin: 1px;
+            padding: 5px;
+            display: block;
+            min-height: 34px;
+            &.col1 {
+                width: 29.2%;
+            }
+            &.col2 {
+                width: 29.4%;
+            }
+            &.col3 {
+                width: 19.6%;
+                padding: 3px;
+            }
+            &.col4 {
+                width: 11%;
+                padding: 3px;
+            }
+            &.col5 {
+                width: 9.9%;
+                padding: 3px;
+            }
+        }
+        .sublinks {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            float: auto;
+            display: block;
+            li {
+                height: 34px;
+                display: block;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                div {
+                    box-sizing: border-box;
+                    height: auto;
+                }
+            }
+        }
+    }
+
+    .sortable-highlight {
+        float: none;
+        display: block;
+        border: 1px dotted #999;
+        background-color: rgba(200,200,200,0.5) !important;
+    }
 }
 
 .dashboard .chosen-container {
