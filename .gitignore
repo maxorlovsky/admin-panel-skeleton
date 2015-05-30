@@ -1,2 +1,2 @@
-composer.lock
-log.php
+*.sublime-*
+web/uploads/*

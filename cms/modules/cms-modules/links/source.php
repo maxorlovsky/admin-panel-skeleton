@@ -250,14 +250,23 @@ class Links
     	$position = $row->position + 1;
     	Db::query('UPDATE `tm_links` SET `position` = '.($position-1).' WHERE `position` >= '.$position.' LIMIT 1');
     	Db::query('UPDATE `tm_links` SET `position` = '.$position.' WHERE `id` = '.$id);
-    	 
+
     	$this->recalculateLocations();
     
     	$this->system->log('Moving link DOWN <b>('.$id.')</b>', array('module'=>get_class(), 'type'=>'movedown'));
     }
     
     protected function recalculateLocations() {
-    	$rows = Db::fetchRows('SELECT `id` FROM `tm_links` ORDER BY `position`');
+    	$rows = Db::fetchRows('SELECT `id`, `link`, `position` FROM `tm_links` WHERE `main_link` = 0 ORDER BY `position`');
+    	$i = 1;
+    	if ($rows) {
+	    	foreach($rows as $v) {
+	    		Db::query('UPDATE `tm_links` SET position = '.$i.' WHERE id = '.$v->id);
+	    		++$i;
+	    	}
+    	}
+        
+        $rows = Db::fetchRows('SELECT `id`, `link`, `position` FROM `tm_links` WHERE `main_link` != 0 ORDER BY `position`');
     	$i = 1;
     	if ($rows) {
 	    	foreach($rows as $v) {
