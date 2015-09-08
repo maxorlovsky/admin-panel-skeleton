@@ -226,7 +226,7 @@ class System
     	$curlOptions = array (
     		CURLOPT_URL => _cfg('apiUrl'),
     		CURLOPT_FAILONERROR => 0,
-    		CURLOPT_TIMEOUT => 5, //5s
+    		CURLOPT_TIMEOUT => 3, //3s
     		CURLOPT_CONNECTTIMEOUT => 30,
     		CURLOPT_VERBOSE => 1,
     		CURLOPT_SSL_VERIFYPEER => 0,
