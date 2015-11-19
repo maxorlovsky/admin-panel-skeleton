@@ -395,6 +395,43 @@ var TM = {
         url = this.site+'/admin/'+url;
         setTimeout(function(){ window.location = url; }, delay);
     },
+    updateCMS: function() {
+        if (!confirm('WARNING: Be sure to backup your files and database before doing any update, it will fully overwrite existing files!')) {
+            return false;
+        }
+        
+        if (this.formInProgress == 1) {
+            return false;
+        }
+        
+        TM.showMsg(2,'Initializing');
+        this.formInProgress = 1;
+        
+        var query = {
+            type: 'POST',
+            timeout: 120000,
+            data: {
+                control: 'updateCMS'
+            },
+            success: function(data) {
+                console.log(data);
+                answer = data.split(';');
+                TM.cleanMsg();
+                TM.showMsg(answer[0],answer[1]);
+                TM.formInProgress = 0;
+                TM.messageTimer = setTimeout(TM.cleanMsg,15000);
+                if (answer[0] == 1) {
+                    TM.goDelay('', 15000);
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                TM.formInProgress = 0;
+                TM.showMsg(0,'Error timeout');
+                TM.messageTimer = setTimeout(TM.cleanMsg,3000);
+            }
+        };
+        TM.ajax(query);
+    },
     checkCustomAccess: function() {
         if ($('#level').val() === 0) {
             $('.customAccess').show();

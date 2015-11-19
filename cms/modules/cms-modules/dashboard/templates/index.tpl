@@ -89,7 +89,11 @@
 				<?=at('cms_up_to_date')?>
 			<? } else {?>
                 <?=at('cms_outdated')?><br ><br />
-                <p>Run composer update to upgrade to latest version</p>
+                
+                <? if (_cfg('env') != 'dev') { ?>
+                    <p>You're located on <b><?=_cfg('env')?></b> environment, it is highly NOT recommended to do an update on any environment except <b>development</b></p>
+                <? } ?>
+				<a href="javascript:void(0);" id="cmsUpdate"><?=at('update')?></a>
 			<? } ?>
 		</div>
 	</div>
