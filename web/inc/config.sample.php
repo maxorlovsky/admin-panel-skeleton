@@ -2,11 +2,12 @@
 //=====================================================
 // Site config
 //=====================================================
-date_default_timezone_set('Europe/Riga');
+date_default_timezone_set('UTC');
 
 switch ( $cfg['env'] )
 {
     case 'prod':
+    case 'live':
         $cfg['dbHost'] ='';
         $cfg['dbBase'] ='';
         $cfg['dbUser'] ='';
@@ -14,8 +15,8 @@ switch ( $cfg['env'] )
         $cfg['dbPort'] =3306;
         
         //Admin email (in case of errors)
-        $cfg['adminEmail'] = 'max.orlovsky@gmail.com';
-        $cfg['site'] = 'http://www.themages.net';
+        $cfg['adminEmail'] = '';
+        $cfg['site'] = '';
         
         // SMTP config
         $cfg['smtpMailName'] = '';
@@ -28,6 +29,8 @@ switch ( $cfg['env'] )
         
     break;
     case 'test':
+    case 'beta':
+    case 'staging':
         $cfg['dbHost'] ='';
         $cfg['dbBase'] ='';
         $cfg['dbUser'] ='';
@@ -57,8 +60,8 @@ switch ( $cfg['env'] )
         $cfg['dbPort'] =3306;
         
         //Admin email (in case of errors)
-        $cfg['adminEmail'] = 'max.orlovsky@gmail.com';
-        $cfg['site'] = 'http://dev.themages.net';
+        $cfg['adminEmail'] = '';
+        $cfg['site'] = '';
         
         // SMTP config
         $cfg['smtpMailName'] = '';
@@ -103,4 +106,4 @@ $cfg['ud_alter'] = array(
 	array('tm_pages', ''),
 );
 
-$cfg['demo'] = 1;
+$cfg['demo'] = 0;

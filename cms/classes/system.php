@@ -61,7 +61,7 @@ class System
         }
 
         //Checking if upload allowed, if yes checking if folder have permissions
-        if (_cfg('allowUpload') == 1 && substr(sprintf('%o', fileperms(_cfg('uploads'))), -3) != '777') {
+        if (_cfg('allowUpload') == 1 && is_readable(_cfg('uploads')) && substr(sprintf('%o', fileperms(_cfg('uploads'))), -3) != '777') {
             $cfg['allowUpload'] = 0;
         }
         

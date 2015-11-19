@@ -6,16 +6,26 @@ class Db
     
     public static function connect() {
         if (!self::$connection) {
-            self::$connection = new mysqli(_cfg('dbHost'), _cfg('dbUser'), _cfg('dbPass'), _cfg('dbBase'), _cfg('dbPort'));
+            self::$connection = @new mysqli(_cfg('dbHost'), _cfg('dbUser'), _cfg('dbPass'), _cfg('dbBase'), _cfg('dbPort'));
+
             if(self::$connection->connect_error) {
-                system::errorMail(
-        			'[FATAL] '.$_SERVER['SERVER_NAME'].':',
-        			get_class(),
-                    __LINE__,
-        			"Exc: ${msg}\n on: "._cfg('site')."\n Mysql response: ".mysqli_connect_error()." (".self::$connection->connect_errno.") - (".self::$connection->connect_error.")"
-                );
-                
-                exit('SQL Error');
+                if (_cfg('env') != 'dev') {
+                    //Sending email notification in case database is not accessible on test/live servers
+                    system::errorMail(
+                        '[FATAL] '.$_SERVER['SERVER_NAME'].':',
+                        get_class(),
+                        __LINE__,
+                        "Exc: ${msg}\n on: "._cfg('site')."\n Mysql response: (".self::$connection->connect_error.") - (".self::$connection->connect_errno.")"
+                    );
+
+                    exit('SQL Error');
+                }
+                else {
+                    exit(
+                        'Connection to database could not be establid.<br />
+                        Mysql response: '.self::$connection->connect_error.' ('.self::$connection->connect_errno.')'
+                    );
+                }
             }
             
             self::$connection->query('SET NAMES "utf8"');
