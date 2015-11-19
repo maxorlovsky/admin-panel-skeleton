@@ -12,7 +12,6 @@ class Ajax extends System
     	'submitForm',
     	'saveSetting',
         'updateProfile',
-        'updateCMS',
 	);
 	
     public function ajaxRun($data) {
@@ -57,16 +56,6 @@ class Ajax extends System
         else {
             return '0;<p>Page not found</p>';
         }
-    }
-    
-    protected function updateCMS() {
-        $params = array(
-            'control' => 'update',
-            'ver' => $this->data->cmsSettings['version'],
-        );
-        
-        $update = new Update();
-        return $update->run($params);
     }
     
     protected function saveSetting($data) {
