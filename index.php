@@ -12,13 +12,13 @@ if (file_exists('maint_mode')) {
 	die('This site is on maintenance');
 }
 
+//Checking for composer components in cms folder
 if (file_exists(dirname(__FILE__).'/cms/vendor/autoload.php')) {
     require_once dirname(__FILE__).'/cms/vendor/autoload.php';
 }
 
 session_start();
 global $cfg;
-global $astr;
 
 if (isset($_GET['params']) && $_GET['params']) {
     $breakdown = explode('/', $_GET['params']);
@@ -40,6 +40,9 @@ require_once $cfg['cmsinc'].'/functions.php';
 
 //If catching admin variable, running admin system
 if (isset($_GET['language']) && $_GET['language'] == 'admin') {
+    //Global variable with translation for CMS
+    global $astr;
+
     //Loading main class
     require_once _cfg('cmsclasses').'/system.php';
     
