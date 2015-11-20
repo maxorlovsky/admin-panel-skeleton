@@ -6,7 +6,7 @@ class Logs
 	public $logs = array();
     public $pages;
     public $pageNum = 1;
-    public $modules;
+    public $modules = array();
     public $types;
     public $pickedModule;
     public $pickedType;
@@ -42,19 +42,18 @@ class Logs
         if ($this->system->data->settings) {
             foreach($this->system->data->settings as $k => $v) {
                 if (substr($k, 0, 4) != 'site') {
-                    $this->modules[] = $k;
+                    $this->modules[$k] = $k;
                 }
             }
         }
         //Adding additional "modules"
-        $this->modules[] = 'login';
-        $this->modules[] = 'logout';
-        sort($this->modules);
+        $this->modules['login'] = 'login';
+        $this->modules['logout'] = 'logout';
 
         //Getting custom modules
         if ($this->system->data->modules) {
             foreach($this->system->data->modules as $f) {
-                $this->modules[$f->name] = at('custom').': '.ucfirst($f->name);
+                $this->modules[$f->name] = at('custom').':'.$f->displayName;
             }
         }
 
