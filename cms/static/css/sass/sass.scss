@@ -13,7 +13,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 15px;
-    font-family: Visitor_Rus;
+    font-family: $mainFontStyle;
     background-color: #f1f1f1;
 }
 .relative {
@@ -53,7 +53,7 @@ body {
     top: 0;
     left: 0;
     border-radius: 4px;
-    font-family: Open Sans;
+    font-family: $secondFontStyle;
 }
 h1 {
     font-size: 20px;
@@ -65,7 +65,7 @@ small {
 }
 
 input {
-    font-family: Visitor_Rus;
+    font-family: $mainFontStyle;
     font-size: 20px;
 }
 
@@ -139,13 +139,13 @@ button:not([type="button"]), input[type="submit"] {
             input[type="password"] {
                 font-family: Verdana;
                 &::-moz-placeholder {
-                    font-family: Visitor_Rus;
+                    font-family: $mainFontStyle;
                 }
                 &::-webkit-input-placeholder {
-                    font-family: Visitor_Rus;
+                    font-family: $mainFontStyle;
                 }
                 &:-ms-input-placeholder {
-                    font-family: Visitor_Rus;
+                    font-family: $mainFontStyle;
                 }
             }
             input[type="submit"] {
@@ -299,7 +299,7 @@ nav {
 	min-height: 150px;
 	font-size: 16px;
 	font-weight: 400;
-	font-family: 'Open Sans';
+	font-family: $secondFontStyle;
 
     h1 {
         float: left;
@@ -320,7 +320,7 @@ nav {
         padding: 10px;
         font-size: 15px;
         font-weight: bold;
-        font-family: Open Sans;
+        font-family: $secondFontStyle;
         width: 97%;
         &:hover {
             background-color: #eee;
@@ -332,12 +332,12 @@ nav {
         padding: 10px;
         font-size: 15px;
         font-weight: bold;
-        font-family: Open Sans;
+        font-family: $secondFontStyle;
         width: 93% !important;
     }
     button:not([type="button"]), input[type="submit"] {
         font-size: 20px !important;
-        font-family: Open Sans;
+        font-family: $secondFontStyle;
         padding: 5px 0;
     }
 }
@@ -389,7 +389,7 @@ nav {
 	margin-bottom: 5px;
 	padding: 2px;
 	text-align: center;
-	font-family: Open Sans;
+	font-family: $secondFontStyle;
 } 
 #aerrmsg { 
 	border: 2px solid #DF0000;
@@ -408,7 +408,7 @@ nav {
 }
 
 .box {
-	border: 1px solid #ddd;
+	border: 1px solid $borderColor;
 	padding: 5px 10px;
 	margin: 10px;
 	background-color: #fff;
@@ -419,7 +419,7 @@ nav {
 
 .version table td,
 .table td {
-	border: 1px solid #ddd;
+	border: 1px solid $borderColor;
 	padding: 5px 5px 5px 10px;
     background-color: #fff;
 }
@@ -484,7 +484,7 @@ nav {
             padding: 10px;
             font-size: 15px;
             font-weight: bold;
-            font-family: Open Sans;
+            font-family: $secondFontStyle;
             width: 300px;
             margin-left: 10px;
         }
@@ -503,6 +503,16 @@ nav {
 .links {
     .chosen-container {
         min-width: 250px;
+    }
+
+    tr:nth-child(2) {
+        td {
+            padding: 0;
+            border-spacing: 0;
+            p {
+                padding: 5px;
+            }
+        }
     }
 
     .sortable {
@@ -525,39 +535,49 @@ nav {
         }
         li:not(.ui-sortable-handle), div {
             box-sizing: border-box;
-            border: 1px solid #ddd;
+            border: 1px solid $borderColor;
             background-color: #fff;
             float: left;
-            margin: 1px;
+            margin: 0;
             padding: 5px;
             display: block;
-            min-height: 34px;
+            min-height: 35px;
             &.col1 {
-                width: 29.2%;
+                width: 30%;
             }
             &.col2 {
-                width: 29.4%;
+                width: 30%;
             }
             &.col3 {
-                width: 19.6%;
+                width: 20%;
                 padding: 3px;
             }
             &.col4 {
-                width: 11%;
+                width: 10%;
                 padding: 3px;
             }
             &.col5 {
-                width: 9.9%;
+                width: 10%;
                 padding: 3px;
             }
         }
         .sublinks {
+            &:before {
+                clear: both;
+                content: ' ';
+                display: block;
+            }
             margin: 0;
             padding: 0;
             list-style: none;
             float: auto;
             display: block;
             li {
+                &:before {
+                    clear: both;
+                    content: ' ';
+                    display: block;
+                }
                 height: 34px;
                 display: block;
                 margin: 0;
@@ -577,6 +597,12 @@ nav {
         border: 1px dotted #999;
         background-color: rgba(200,200,200,0.5) !important;
     }
+}
+.links-explanation {
+    border: 1px solid $borderColor;
+    background-color: #fff;
+    padding: 10px 0 10px 30px;
+    font-size: 14px;
 }
 
 .dashboard .chosen-container {
@@ -634,7 +660,7 @@ nav {
     }
     span {
         font-size: 13px;
-        font-family: Open Sans;
+        font-family: $secondFontStyle;
     }
 }
 

@@ -8,11 +8,11 @@
 	</tr>
 
 	<tr>
-        <td width="30%" class="b"><?=at('link')?></td>
-        <td width="30%" class="b"><?=at('sublink')?></td>
-        <td width="20%" class="centered b"><?=at('only_for_logged_in')?></td>
-        <td width="10%" class="b"><?=at('enaldisabl')?></td>
-        <td width="10%" class="centered b"><?=at('actions')?></td>
+        <td width="30%" class="b"><p><?=at('link')?></p></td>
+        <td width="30%" class="b"><p><?=at('sublink')?></p></td>
+        <td width="20%" class="centered b"><p><?=at('only_for_logged_in')?></p></td>
+        <td width="10%" class="b"><p><?=at('enaldisabl')?></p></td>
+        <td width="10%" class="centered b"><p><?=at('actions')?></p></td>
     </tr>
 
 	<tr>
@@ -82,6 +82,12 @@
 		</td>
 	</tr>
 </table>
+
+<ul class="links-explanation">
+	<li>For sorting use drag'n'drop approach.</li>
+	<li>You can sort both parent and sub-links</li>
+	<li>Sub-links can only be moved inside of the parent block, if you wan to move it to other parent, click on Edit and change it first</li>
+</ul>
 
 <script>
 	$(function() {
