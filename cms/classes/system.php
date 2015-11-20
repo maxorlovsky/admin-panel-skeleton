@@ -20,7 +20,7 @@ class System
             Db::connect();
     	}
         
-        //As soon as DB class is enabled, checking https staru
+        //As soon as DB class is enabled, checking https start
         $row = Db::fetchRow('SELECT `value` FROM `tm_settings` WHERE `setting` = "https" LIMIT 1');
         //Checking if https always enabled and if user is on http, then redirecting to https
 
@@ -155,7 +155,7 @@ class System
     public static function errorMail($desc, $cls, $line, $fulldesc) {
         $timestamp = strftime('%Y-%m-%d %H:%M:%S %Z');
         
-        $this->sendMail(
+        system::sendMail(
             _cfg('adminEmail'),
             'Error '.$desc,
             "Summary: $desc\n" .
@@ -172,7 +172,7 @@ class System
     //@file - array, optional, attachment to email, required full link, data in array
     //@file['name'] - name of the file with extension
     //@file['content'] - plain text or plain html, it will be converted into attachment
-    public function sendMail($email, $subject, $msg) {
+    public static function sendMail($email, $subject, $msg) {
         if(!_cfg('smtpMailName') || !_cfg('smtpMailPass')) {
             return false;
         }
