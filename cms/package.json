@@ -1,10 +1,10 @@
 {
     "name": "TheMagesCMS",
-    "version": "3.13.6",
+    "version": "3.15.0",
     "description": "TheMages CMS",
     "repository": {
-        "type": "svn",
-        "url": "https://svn.maxorlovsky.net/svn/themages"
+        "type": "git",
+        "url": "https://github.com/Maxtream/themages-cms.git"
     },
     "dependencies": {
         "grunt": "~0.4.5",
@@ -15,9 +15,8 @@
         "grunt-contrib-watch" : "^0.6.1",
         "grunt-sass": "1.0.0"
     },
-    "devDependencies": {
-	},
 	"engines": {
+        "npm": "1.4.21",
 		"node": "0.12.2"
 	}
 }

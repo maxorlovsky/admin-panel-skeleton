@@ -4,10 +4,12 @@
 //Value 2: Mb allowed to upload (Default: 2mb)
 //Extension allowed: PNG/GIF/JPG/JPEG
 function is_image($f, $mb = 2) {
-	if ($f['size'] < 1024*$mb*1024 && ($f['type'] == 'image/gif' || $f['type'] == 'image/jpg' || $f['type'] == 'image/jpeg' || $f['type'] == 'image/png'))
+	if ($f['size'] < 1024*$mb*1024 && ($f['type'] == 'image/gif' || $f['type'] == 'image/jpg' || $f['type'] == 'image/jpeg' || $f['type'] == 'image/png')) {
 		return true;
-	else
+	}
+	else {
 		return false;
+	}
 }
 
 //$data[] = array
@@ -291,4 +293,3 @@ function m_value($p) {
 		return '0'.$p;
 	}
 }
-?>

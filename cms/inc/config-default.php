@@ -23,10 +23,6 @@ else {
     //This is where CMS go live
     $cfg['env'] = 'prod';
 }
-if (!$cfg['env'])
-{
-	die('Configuration Error 0');
-}
 
 // Defining main default variables
 // DB config
@@ -64,37 +60,3 @@ $cfg['ud_alter'] = array(
 	array('tm_strings', ''),
 	array('tm_pages', ''),
 );
-
-// Adding site config
-if (!file_exists($cfg['dir'].'/inc/config.php')) {
-    exit('Config file not exist, please create '.$cfg['dir'].'/inc/config.php file from '.$cfg['dir'].'/inc/config.sample.php');
-}
-else {
-    require_once $cfg['dir'].'/inc/config.php';
-}
-
-
-//=====================================================
-// Making some defines for easyer coding (directories)
-$cfg['cmssite'] = $cfg['site'].'/admin';
-$cfg['cmsinc'] = $cfg['cmsdir'].'/inc';
-$cfg['cmsclasses'] = $cfg['cmsdir'].'/classes';
-$cfg['cmstemplate'] = $cfg['cmsdir'].'/template';
-$cfg['cmslib'] = $cfg['cmsdir'].'/lib';
-$cfg['cmsstatic'] = $cfg['site'].'/cms/static';
-$cfg['cmsimg'] = $cfg['site'].'/cms/static/images';
-$cfg['cmslocale'] = $cfg['cmsdir'].'/locale';
-$cfg['cmsmodules'] = $cfg['cmsdir'].'/modules';
-$cfg['cmslib'] = $cfg['cmsdir'].'/lib';
-$cfg['uploads'] = $cfg['dir'].'/uploads';
-$cfg['imgu'] = $cfg['site'].'/web/uploads';
-$cfg['pages'] = $cfg['dir'].'/pages';
-//=====================================================
-
-//==================================================
-// Needed for dev to change password when changing
-// _SALT
-//==================================================
-// $newPass = '';
-// exit('UPDATE `tm_admins` SET `password` = "'.sha1($newPass.$cfg['salt']).'" WHERE `login` = "dev"');
-//==================================================
