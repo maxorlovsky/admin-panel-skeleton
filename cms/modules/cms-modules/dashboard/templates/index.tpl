@@ -88,12 +88,8 @@
 			<? if (!is_numeric($module->line['version']) || $module->line['version'] == $this->data->cmsSettings['version']) { ?>
 				<?=at('cms_up_to_date')?>
 			<? } else {?>
-                <?=at('cms_outdated')?><br ><br />
-                
-                <? if (_cfg('env') != 'dev') { ?>
-                    <p>You're located on <b><?=_cfg('env')?></b> environment, it is highly NOT recommended to do an update on any environment except <b>development</b></p>
-                <? } ?>
-				<a href="javascript:void(0);" id="cmsUpdate"><?=at('update')?></a>
+                <?=at('cms_outdated')?><br >
+                <p>To update CMS run composer update</b></p>
 			<? } ?>
 		</div>
 	</div>

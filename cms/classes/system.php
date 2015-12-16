@@ -18,6 +18,12 @@ class System
         if ($status != 1) {
             //Making a connection
             Db::connect();
+
+            //Check if database is in place, if not we run installation
+            $q = Db::query('SHOW TABLES LIKE "themagescms"');
+            if ($q->num_rows === 0) {
+                $this->sqlInstall();
+            }
             
             //As soon as DB class is enabled, checking https status
             $row = Db::fetchRow('SELECT `value` FROM `tm_settings` WHERE `setting` = "https" LIMIT 1');
@@ -115,11 +121,14 @@ class System
         if (isset($this->logged_in) && $this->logged_in) {
         	$row = Db::fetchRows('SELECT * FROM `tm_modules`');
             $updatedModulesList = new stdClass();
-            foreach($row as $k => $v) {
-                $v->displayName = preg_replace('/(?<!\ )[A-Z]/', ' $0', ucfirst($v->name));
-                $updatedModulesList->$k = $v;
+            if ($row) {
+                foreach($row as $k => $v) {
+                    $v->displayName = preg_replace('/(?<!\ )[A-Z]/', ' $0', ucfirst($v->name));
+                    $updatedModulesList->$k = $v;
+                }
+                $this->data->modules = $updatedModulesList;
             }
-            $this->data->modules = $updatedModulesList;
+            $this->data->modules = array();
         	
         	$this->language = $this->user->language;
         }
@@ -396,5 +405,33 @@ class System
         }
     
         return true;
+    }
+
+    private function sqlInstall() {
+        //Importing SQL file
+        if (Db::multi_query(file_get_contents(_cfg('root').'/updates/install.sql'))) {
+            do {
+                if ($result = Db::store_result()) {
+                    $result->free();
+                }
+
+                if (!Db::more_results()) {
+                    break;
+                }
+            } while (Db::next_result());
+        }
+
+        echo 'System didn\'t found any databases for CMS so they were automatically created<br />';
+
+        //Creating admin
+        Db::query(
+            'INSERT INTO `tm_admins` SET '.
+            '`login` = "admin", '.
+            '`password` = "'.sha1('admin'._cfg('salt')).'", '.
+            '`level` = 4 '
+        );
+        echo 'New admin was create with nicknamen <b>admin</b>, password <b>admin</b>, please change it as soon as you log in. <br />';
+        echo 'Please refresh the page';
+        exit();
     }
 }

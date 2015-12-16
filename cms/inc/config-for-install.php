@@ -158,4 +158,4 @@ $cfg['uploads'] = $cfg['dir'].'/uploads';
 $cfg['imgu'] = $cfg['site'].'/web/uploads';
 
 //Directory where CMS will be updated, if possible don't use /cms/ or /admin/
-$cfg['pathToDirectory'] = 'admin';
+//$cfg['pathToDirectory'] = 'admin';

@@ -61,7 +61,7 @@ require_once dirname(__FILE__).'/cms/inc/config-post.php';
 require_once $cfg['cmsinc'].'/functions.php';
 
 //If catching admin variable, running admin system
-if (isset($_GET['language']) && $_GET['language'] == 'admin') {
+if (isset($_GET['language']) && $_GET['language'] == $cfg['pathToDirectory']) {
     //Global variable with translation for CMS
     global $astr;
 
