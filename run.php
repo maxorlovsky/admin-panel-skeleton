@@ -83,5 +83,5 @@ else if(isset($_POST['control']) && $_POST['control']) {
 }
 //If not admin and not ajax, opening just website
 else {
-    require_once dirname(__FILE__).'/web/index.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/web/index.php';
 }
