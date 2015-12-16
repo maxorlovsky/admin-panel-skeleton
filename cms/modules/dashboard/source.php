@@ -1,14 +1,21 @@
 <?php
 class Dashboard
 {
-    function __construct() {
+    public $system;
+
+    function __construct($params = array()) {
+        $this->system = $params['system'];
+
         $this->line = $this->fetchChangeLog();
+
+        //Checking for version difference between current version and in changelog, if it is different, run SQL update
+        $this->checkVersions();
         
         return $this;
     }
     
     protected function fetchChangeLog() {
-    	$ccv = file('http://cms.themages.net/admin/updates/CHANGELOG.txt');
+    	$ccv = file('http://api.themages.net/changelog.txt');
         
         if ($ccv[0]) {
             $answer['version'] = trim($ccv[0]);
@@ -34,5 +41,16 @@ class Dashboard
         }
     	
     	return $answer;
+    }
+
+    //This is only logical place for now to check versions and make SQL update. Usually it's something small
+    protected function checkVersions() {
+        //If version is different then trying to find higher version of SQL file
+        if ($this->line['version'] != $this->system->data->cmsSettings['version']) {
+            
+            return true;
+        }
+        
+        return false;
     }
 }

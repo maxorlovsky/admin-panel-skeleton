@@ -7,7 +7,7 @@
         <h4><?=at('cms_latest_changes')?></h4>
         <?=$module->line['changeLog']?>
         
-        <a href="http://cms.themages.net/admin/updates/CHANGELOG.txt" target="_blank"><?=at('view_full')?> <?=at('changelog')?></a>
+        <a href="http://api.themages.net/changelog.txt" target="_blank"><?=at('view_full')?> <?=at('changelog')?></a>
     </div>
 	
 	<div class="clear"></div>
