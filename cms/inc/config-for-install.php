@@ -7,6 +7,14 @@
 //I think it's logical to set it to UTC and then conver however you need
 date_default_timezone_set('UTC');
 
+//Checking if cloudflare used with https or if https is available
+if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])){
+    $cfg['protocol'] = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+}
+else{
+    $cfg['protocol'] = !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+}
+
 //Getting on what environment we on
 //Normaly while developing you have 3-4 environments
 //dev - for local stuff
