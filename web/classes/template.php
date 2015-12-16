@@ -83,6 +83,8 @@ class Template extends System
    		else {
    			echo '<p>Source file for page '.$data->page.'/source.php not found</p>';
             echo '<p>Text page "'.$data->page.'" not found</p>';
+
+            return false;
    		}
    		
     	return $page;

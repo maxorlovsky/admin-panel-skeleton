@@ -19,15 +19,7 @@ RewriteBase /
 
 # Ignoring specific folders for css, js and uploads like image
 RewriteRule ^web/static/? - [L]
-RewriteRule ^cms/static/? - [L]
 RewriteRule ^web/uploads/? - [L]
-
-# Updates folder (specific for cms, for now still required, will be moved to Themages API)
-RewriteRule ^updates/? - [L]
-
-# Specific rewrite rules for themages.net, can be removed
-RewriteRule ^admin/updates/CHANGELOG.txt http://api.themages.net/changelog.txt [QSA,L]
-RewriteRule ^log.php https://api.themages.net/log.php [R=301,L]
 
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d

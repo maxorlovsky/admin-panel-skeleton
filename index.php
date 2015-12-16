@@ -42,36 +42,23 @@ date_default_timezone_set('UTC');
 //Running initial config that will create needed variables for CMS
 //This file must not be touched as it is not a real config
 require_once dirname(__FILE__).'/cms/inc/config-default.php';
-print_r($cfg);
 
-//Adding not so huge functions, used by CMS, written by me for easier usage, half of them minght not be useful anymore, so probably need to clean up a bit.
-//require_once $cfg['cmsinc'].'/functions.php';
-echo $cfg['root'].'/config.php';
 // Adding site config
-if (!file_exists($cfg['root'].'/config.php')) {
-    exit('Config file not exist, please create '.$cfg['dir'].'/inc/config.php file from '.$cfg['dir'].'/inc/config.sample.php');
+// If config does not exist we run install.php
+// It won't create dynamic stuff like wordpress/phpmyadmin do, so it's safe to store this file
+if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/web') || !file_exists($_SERVER['DOCUMENT_ROOT'].'/config-tm.php')) {
+    require_once $cfg['root'].'/install.php';
+    exit();
 }
 else {
-    require_once $cfg['dir'].'/inc/config.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/config-tm.php';
 }
 
+//This file must run after user config is defined as we need to know full url to static files of CMS
+require_once dirname(__FILE__).'/cms/inc/config-post.php';
 
-//=====================================================
-// Making some defines for easyer coding (directories)
-$cfg['cmssite'] = $cfg['site'].'/admin';
-$cfg['cmsinc'] = $cfg['cmsdir'].'/inc';
-$cfg['cmsclasses'] = $cfg['cmsdir'].'/classes';
-$cfg['cmstemplate'] = $cfg['cmsdir'].'/template';
-$cfg['cmslib'] = $cfg['cmsdir'].'/lib';
-$cfg['cmsstatic'] = $cfg['site'].'/cms/static';
-$cfg['cmsimg'] = $cfg['site'].'/cms/static/images';
-$cfg['cmslocale'] = $cfg['cmsdir'].'/locale';
-$cfg['cmsmodules'] = $cfg['cmsdir'].'/modules';
-$cfg['cmslib'] = $cfg['cmsdir'].'/lib';
-$cfg['uploads'] = $cfg['dir'].'/uploads';
-$cfg['imgu'] = $cfg['site'].'/web/uploads';
-$cfg['pages'] = $cfg['dir'].'/pages';
-//=====================================================
+//Adding not so huge functions, used by CMS, written by me for easier usage, half of them minght not be useful anymore, so probably need to clean up a bit.
+require_once $cfg['cmsinc'].'/functions.php';
 
 //If catching admin variable, running admin system
 if (isset($_GET['language']) && $_GET['language'] == 'admin') {

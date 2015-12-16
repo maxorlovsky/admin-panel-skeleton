@@ -13,14 +13,14 @@
     <script src="<?=_cfg('cmsstatic')?>/js/pre-js.js"></script>
     <? } ?>
     
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,600&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,600&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="<?=_cfg('cmsstatic')?>/css/combined.css" />
     
     <script>
     	var site = "<?=_cfg('site')?>";
     	var img = "<?=_cfg('cmsimg')?>";
         var strings = <?=at('cms_json_strings')?>;
-        var lang = '<?=$this->user->language?>';
+        var lang = "<?=(isset($this->user->language)?$this->user->language:'en')?>";
         var logged_in = <?=$this->logged_in?>;
         var redirect = <?=($this->logged_in?$this->user->editRedirect:0)?>;
         var allowUpload = <?=_cfg('allowUpload')?>;

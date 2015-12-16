@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `themagescms` (
 
 INSERT INTO `themagescms` (`setting`, `value`) VALUES
 ('max_level', '4'),
-('version', '3.12');
+('version', '3.15');
 
 -- --------------------------------------------------------
 
@@ -57,14 +57,7 @@ CREATE TABLE IF NOT EXISTS `tm_admins` (
   `last_ip` varchar(40) NOT NULL DEFAULT '',
   `language` char(2) NOT NULL DEFAULT 'en',
   `editRedirect` tinyint(1) unsigned NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_admins`
---
-
-INSERT INTO `tm_admins` (`id`, `login`, `email`, `password`, `level`, `custom_access`, `last_login`, `login_count`, `last_ip`, `language`, `editRedirect`) VALUES
-(1, 'admin', '', '44e6639413f0839cc233f42b735027dea1098b33', 4, NULL, '2015-02-27 23:57:35', 0, '', 'en', 1);
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
