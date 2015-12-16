@@ -7,13 +7,6 @@
  * Github: https://github.com/Maxtream/themages-cms.git
  */
 
-// Maintenance check
-// While moving to composer this won't work, need to implement different approach, probably through SQL
-// Also while moving to composer, this "exit" doesn't make any sence as it was used for SVN, while doing the update
-if (file_exists('maint_mode')) {
-	die('This site is on maintenance');
-}
-
 //Session start if it wasn't still initiated, PHP >= 5.4
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
