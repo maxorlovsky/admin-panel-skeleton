@@ -71,8 +71,8 @@ class Template extends System
             $data['var1'] = 'index';
         }
         
-        if (file_exists(_cfg('cmsmodules').'/cms-modules/'.$data['page'].'/source.php')) {
-            require_once _cfg('cmsmodules').'/cms-modules/'.$data['page'].'/source.php';
+        if (file_exists(_cfg('cmsmodules').'/'.$data['page'].'/source.php')) {
+            require_once _cfg('cmsmodules').'/'.$data['page'].'/source.php';
             
             $module = new $className($data);;
         }
@@ -80,8 +80,8 @@ class Template extends System
             echo '<p>Source file for module '.$data['page'].'/source.php not found</p>';
         }
         
-        if (file_exists(_cfg('cmsmodules').'/cms-modules/'.$data['page'].'/templates/'.$data['var1'].'.tpl')) {
-            require_once _cfg('cmsmodules').'/cms-modules/'.$data['page'].'/templates/'.$data['var1'].'.tpl';
+        if (file_exists(_cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.tpl')) {
+            require_once _cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.tpl';
         }
         else {
             echo '<p>Template file for module '.$data['page'].'/'.$data['var1'].'.tpl not found</p>';
@@ -106,20 +106,20 @@ class Template extends System
     		$data['var1'] = 'index';
     	}
     	
-    	if (file_exists(_cfg('cmsmodules').'/'.$data['page'].'/source.php')) {
-    		require_once _cfg('cmsmodules').'/'.$data['page'].'/source.php';
+    	if (file_exists($_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/source.php')) {
+    		require_once $_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/source.php';
     	
     		$module = new $className($data);
     	}
     	else {
-    		echo '<p>Source file for custom module '.$data['page'].'/source.php not found</p>';
+    		echo '<p>Source file for custom module '.$_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/source.php not found</p>';
     	}
-    	;
-    	if (file_exists(_cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.tpl')) {
-    		require_once _cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.tpl';
+    	
+    	if (file_exists($_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/templates/'.$data['var1'].'.tpl')) {
+    		require_once $_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/templates/'.$data['var1'].'.tpl';
     	}
     	else {
-    		echo '<p>Template file for custom module '.$data['page'].'/'.$data['var1'].'.tpl not found</p>';
+    		echo '<p>Template file for custom module '.$_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/'.$data['var1'].'.tpl not found</p>';
     	}
     }
 }

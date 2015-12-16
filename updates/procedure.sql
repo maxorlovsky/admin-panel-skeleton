@@ -2,11 +2,12 @@
 -- cleanupCmsData procedure
 --
 
-DELIMITER $$
---
--- Procedures
---
-CREATE DEFINER=`max`@`localhost` PROCEDURE `cleanupCmsData`()
+DELIMITER ;;
+
+DROP PROCEDURE IF EXISTS cleanupCmsData;;
+CREATE PROCEDURE cleanupCmsData()
+    LANGUAGE SQL
+    NOT DETERMINISTIC
     MODIFIES SQL DATA
     SQL SECURITY INVOKER
 BEGIN
@@ -27,7 +28,7 @@ BEGIN
         SELECT CONCAT( '... deleted ', v_row_count );
     UNTIL v_row_count < v_delete_limit
     END REPEAT;
-END$$
+END;;
 
 DELIMITER ;
 

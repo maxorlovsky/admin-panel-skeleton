@@ -128,7 +128,9 @@ class System
                 }
                 $this->data->modules = $updatedModulesList;
             }
-            $this->data->modules = array();
+            else {
+                $this->data->modules = array();
+            }
         	
         	$this->language = $this->user->language;
         }
