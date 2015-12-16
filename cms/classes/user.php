@@ -53,13 +53,6 @@ class User
             );
             
             if (!isset($row) || $row === false) {
-                Db::query('UPDATE `tm_admins` '.
-                    'SET '.
-                    '`login_attempts` = `login_attempts` + 1 '.
-                    'WHERE `login` = "'.Db::escape_tags($data['login']).'" '.
-                    'LIMIT 1'
-                );
-                
                 $_SESSION['recaptcha_login'] += 1;
                 
                 unset($_SESSION['token']);
