@@ -96,16 +96,19 @@ class Ajax extends System
         
         $data['system'] = $this;
         
-        if (file_exists(_cfg('cmsmodules').'/cms-modules/'.$data['module'].'/source.php')) {
-            require_once _cfg('cmsmodules').'/cms-modules/'.$data['module'].'/source.php';
+        //Check if this ask for CMS module
+        if (file_exists(_cfg('cmsmodules').'/modules/'.$data['module'].'/source.php')) {
+            require_once _cfg('cmsmodules').'/modules/'.$data['module'].'/source.php';
             
             $module = new $className($data);
         }
-        else if (file_exists(_cfg('cmsmodules').'/'.$data['module'].'/source.php')) {
-        	require_once _cfg('cmsmodules').'/'.$data['module'].'/source.php';
+        //If not found check if this is custom module
+        else if (file_exists($_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['module'].'/source.php')) {
+        	require_once $_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['module'].'/source.php';
         
         	$module = new $className($data);
         }
+        //Module not found
         else {
             return '0;<p>Source file for module '.$data['module'].'/source.php not found</p>';
         }
