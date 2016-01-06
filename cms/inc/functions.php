@@ -152,15 +152,16 @@ function pages($data) {
 function ajaxPages($cpp = 10, $rdc = 3, $pn, $tn, $where = '', $count = 'id') {
     $db = new Db();
 	$pn = abs((int)$pn);
-	if ($pn == 0)
+	if ($pn == 0) {
 		$pn = 1;
+	}
 
 	$strt = $pn.'0'; //must fix this value if you want to make some different value then *0 for example 4 or 8
 	$strt *= ($cpp/10);
 	$strt -= $cpp;
 
-	$q = mysql_query('SELECT COUNT(`'.$count.'`) FROM `'.$tn.'` '.$where.'');
-	$so = mysql_result($q, 0);
+	$rows = Db::fetchRows('SELECT COUNT(`'.$count.'`) AS `count` FROM `'.$tn.'` '.$where.'');
+	$so = $rows->count;
 	
 	if ($so > $cpp) {
 		$so = $so/$cpp;
