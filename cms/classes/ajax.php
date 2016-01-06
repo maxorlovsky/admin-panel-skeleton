@@ -97,8 +97,8 @@ class Ajax extends System
         $data['system'] = $this;
         
         //Check if this ask for CMS module
-        if (file_exists(_cfg('cmsmodules').'/modules/'.$data['module'].'/source.php')) {
-            require_once _cfg('cmsmodules').'/modules/'.$data['module'].'/source.php';
+        if (file_exists(_cfg('cmsmodules').'/'.$data['module'].'/source.php')) {
+            require_once _cfg('cmsmodules').'/'.$data['module'].'/source.php';
             
             $module = new $className($data);
         }
