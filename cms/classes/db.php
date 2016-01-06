@@ -22,7 +22,7 @@ class Db
                 }
                 else {
                     exit(
-                        'Connection to database could not be establid.<br />
+                        'Connection to database could not be established.<br />
                         Mysql response: '.self::$connection->connect_error.' ('.self::$connection->connect_errno.')'
                     );
                 }

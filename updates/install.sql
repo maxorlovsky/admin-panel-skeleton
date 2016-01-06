@@ -556,15 +556,4 @@ INSERT INTO `tm_settings` (`setting`, `value`, `field`, `type`, `position`) VALU
 
 INSERT INTO `tm_strings` (`key`, `status`, `russian`, `english`) VALUES
 ('about_us', 0, 'О насgfdgf', 'About us'),
-('about_you', 0, 'О вас', 'About you'),
-('web-link-111', 1, 'mfxhgm', 'gtcu,'),
-('web-link-121212', 1, '121212', ''),
-('web-link-222', 1, 'sub', 'sub'),
-('web-link-444', 1, '444', '444'),
-('web-link-555', 1, '', ''),
-('web-link-666', 1, '', ''),
-('web-link-777', 1, '', ''),
-('web-link-888', 1, '888', '888'),
-('web-link-999', 1, '999', '999'),
-('web-page-fdf', 1, '', ''),
-('web-page-Monkeys', 1, 'alert(''xss'');', 'Potatoes');
+('about_you', 0, 'О вас', 'About you');
