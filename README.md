@@ -13,18 +13,20 @@ Because I'm working alone and there are no contributions (yet?) there is no need
 
 ## Instalation
 The best and easiest way to install CMS is through composer. It will allow you to keep up with updates. This is the best choise if you want to only develop your own modules, without touching core files.
->{
->    "name": "TheMages CMS Demo",
->    "authors": [
->        {
->            "name": "Maxtream",
->            "email": "max.orlovsky@gmail.com"
->        }
->    ],
->    "require": {
->        "maxtream/themages": "~3.15.0"
->    }
->}
+```
+{
+    "name": "TheMages CMS Demo",
+    "authors": [
+        {
+            "name": "Maxtream",
+            "email": "max.orlovsky@gmail.com"
+        }
+    ],
+    "require": {
+        "maxtream/themages": "~3.15.0"
+    }
+}
+```
 
 ## Demo
 Demo can be found [on website](http://www.themages.net/)
