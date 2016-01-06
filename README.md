@@ -7,3 +7,24 @@ TheMages CMS is my hobby mostly and I just found many existing CMS too bulky or 
 It's 2015 and I still spending time on this CMS and improve it whenever I have time and motivation to do so. But mostly it's right now my "sand-box" where I implement new features that I'm interested in. I wrote bunch of plugins for this CMS while working as a freelancers on bunch of projects for 3 years. But for now, while TheMages CMS is another "unknown CMS" I don't intend to make it super-pretty highly modular.  
 
 If you find this project interesting I wouldn't mind you to join and contribute or just give ideas what could be made to make it better.
+
+## Where is master branch?
+Because I'm working alone and there are no contributions (yet?) there is no need for bunch of branches. Plus tagging is the most important part as installation update goes through composer.
+
+## Instalation
+The best and easiest way to install CMS is through composer. It will allow you to keep up with updates. This is the best choise if you want to only develop your own modules, without touching core files.
+>{
+>    "name": "TheMages CMS Demo",
+>    "authors": [
+>        {
+>            "name": "Maxtream",
+>            "email": "max.orlovsky@gmail.com"
+>        }
+>    ],
+>    "require": {
+>        "maxtream/themages": "~3.15.0"
+>    }
+>}
+
+## Demo
+Demo can be found [on website](http://www.themages.net/)
