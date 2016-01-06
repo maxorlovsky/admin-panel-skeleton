@@ -164,6 +164,8 @@ $cfg['img'] = $cfg['static'].'/images';
 $cfg['uploads'] = $cfg['dir'].'/uploads';
 //web/uploads link for website
 $cfg['imgu'] = $cfg['site'].'/web/uploads';
+//web/pages directory
+$cfg['pages'] = $cfg['dir'].'/pages';
 
 //Directory where CMS will be updated, if possible don't use /cms/ or /admin/
 //$cfg['pathToDirectory'] = 'admin';
