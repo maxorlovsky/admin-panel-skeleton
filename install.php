@@ -64,7 +64,7 @@
 		Step 3 - optional (Linux):<br />
 		<ul>
 			<li>You must give correct right to upload folder or you won't be able to upload files from CMS</li>
-			<li>Run in terminal: sudo chmod -R 0755 <?=$_SERVER['DOCUMENT_ROOT']?>/web/upload</li>
+			<li>Run in terminal: sudo chmod -R 0755 <?=$_SERVER['DOCUMENT_ROOT']?>/web/uploads</li>
 		</ul>
 		<br /><br />
 		After you done, you're ready to go. Refresh this page.<br />
