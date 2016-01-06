@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="<?=_cfg('static')?>/css/style.css" />
 </head>
 
+<body>
+
 <section id="full-site-wrapper" class="default">
 
 <header class="container">

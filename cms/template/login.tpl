@@ -1,6 +1,6 @@
 <section class="login">
 	<header>
-		<a href="http://www.themages.net" target="_blank"><img src="<?=_cfg('cmsimg')?>/logo.png" /></a>
+		<a href="<?=_cfg('site')?>" target="_blank"><img src="<?=_cfg('cmsimg')?>/logo.png" /></a>
 	</header>
     
     <div class="body">
@@ -33,7 +33,7 @@
     
     <footer>
         <div class="fleft"><a href="http://www.themages.net/" target="_blank">CMS Version: <?=$this->data->cmsSettings['version']?></a></div>
-    	<div class="fright"><a href="http://www.maxorlovsky.net" target="_blank">Max Orlovsky <span>&copy;</span> <?=date('Y')?></a></div>
+    	<div class="fright"><a href="http://www.maxorlovsky.net" target="_blank">Max Orlovsky <span>&copy;</span> 2011-<?=date('Y')?></a></div>
     	<div class="clear"></div>
     </footer>
     
