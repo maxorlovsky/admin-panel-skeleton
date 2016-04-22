@@ -9,7 +9,6 @@ class Db
         if (!self::$adapter) {
             self::$adapter = strtolower($adapter);
         }
-        echo self::$adapter;
 
         if (!self::$connection) {
             if (self::$adapter == 'pdo') {
