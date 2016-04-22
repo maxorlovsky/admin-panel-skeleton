@@ -1,4 +1,4 @@
-@media (max-width: 320px) {
+@media (max-width: 768px) {
     #aerrmsg, #asucmsg, #amsg {
         top: 0;
     }
@@ -105,9 +105,6 @@
 	        font-size: 20px;
 	        margin: 0 0 5px 0;
 	    }
-	    input[type="text"], input[type="password"], textarea {
-	    	width: 200px;
-	    }
     }
     
     .dashboard {
@@ -118,24 +115,14 @@
         float: none;
         width: 100%;
     }
-
-    #adminEmail {
-        width: 150px;
-    }
-
     .version table td, .table td {
         padding: 2px;
-    }
-
-    .settings_input {
-        width: 140px !important;
     }
     
     .logged_in_menu {
 	    .account_settings  {
-	        width: 270px;
 	        input[type="text"], input[type="password"] {
-		        width: 150px;
+		        width: 100%;
 		    }
 	    }
     }

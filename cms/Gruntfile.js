@@ -20,7 +20,9 @@ module.exports = function(grunt) {
             /* Gathering all scss files together for easier sass conversion */
             sass: {
                 src: [
-                    '<%= dirs.sass %>/*.scss',
+                    '<%= dirs.sass %>/globals.scss',
+                    '<%= dirs.sass %>/sass.scss',
+                    '<%= dirs.sass %>/mobile.scss',
                 ],
                 dest: '<%= dirs.css %>/combined-sass'
             },
