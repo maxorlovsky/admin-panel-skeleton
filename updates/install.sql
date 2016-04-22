@@ -322,7 +322,7 @@ ALTER TABLE `tm_pages`
 
 INSERT INTO `themagescms` (`setting`, `value`) VALUES
 ('max_level', '4'),
-('version', '3.15');
+('version', '3.16');
 
 --
 -- Dumping data for table `tm_countrys`
