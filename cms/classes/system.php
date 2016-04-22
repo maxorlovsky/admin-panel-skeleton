@@ -10,6 +10,7 @@ class System
     public $language;
     public $defaultPage;
     public $subPageOpen;
+    public $apcEnabled = false;
     
     public function __construct($status = 1) {
     	$this->loadClasses();
@@ -47,6 +48,7 @@ class System
         if (!$this->data) {
             $this->data = new stdClass();
         }
+        $this->apcEnabled = extension_loaded('apc');
         $this->defaultPage = 'dashboard';
         $this->fetchParams($status);
     }
@@ -356,6 +358,32 @@ class System
         }
         
         return true;
+    }
+
+    public function getCache($key) {
+        if ($this->apcEnabled === false) {
+            return false;
+        }
+        
+        $resouse = false;
+        $data = apc_fetch($key, $resouse);
+        return $resouse ? $data : null;
+    }
+    
+    public function setCache($key, $data) {
+        if ($this->apcEnabled === false) {
+            return false;
+        }
+        
+        return apc_store($key, $data, $this->cacheTtl);
+    }
+
+    public function deleteCache($key) {
+        if ($this->apcEnabled === false) {
+            return false;
+        }
+        
+        return (apc_exists($key)) ? apc_delete($key) : true;
     }
     
     protected function getStrings() {

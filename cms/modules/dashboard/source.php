@@ -15,8 +15,31 @@ class Dashboard
     }
     
     protected function fetchChangeLog() {
-    	$ccv = file('http://api.themages.net/changelog.txt');
-        
+    	
+        if ($this->system->getCache('changelog')) {
+            $ccv = $this->system->getCache('changelog');
+        }
+        else {
+            $ch = curl_init();
+            $curlOptions = array (
+                CURLOPT_URL => 'http://api.themages.net/changelog.txt',
+                CURLOPT_FAILONERROR => 0,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_VERBOSE => 1,
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_SSL_VERIFYHOST => FALSE,
+                CURLOPT_POST => 0,
+                CURLOPT_RETURNTRANSFER => 1,
+            );
+            curl_setopt_array($ch, $curlOptions);
+            $ccv = curl_exec($ch); // run the whole process
+
+            //Saving to cache
+            $this->system->setCache('changelog', $ccv);
+        }
+
+        $ccv = explode("\n", $ccv);
         if ($ccv[0]) {
             $answer['version'] = trim($ccv[0]);
             
