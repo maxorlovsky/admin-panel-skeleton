@@ -9,10 +9,6 @@ if (logged_in) {
         TM.runSessionTimeout();
     });
     
-    $(document).on('click', '#cmsUpdate', function() {
-        TM.updateCMS();
-    });
-    
     $(document).on('click', '.submitButton', function(){
         if (TM.formInProgress == 1) {
             return false;
@@ -151,6 +147,7 @@ var TM = {
     editSettingProgress: 0,
     saveSettingId: '',
     saveSettingInput: '',
+    delayTimer: '',
     
     //Functions
     changeOrder: function(module, ids) {
@@ -332,6 +329,9 @@ var TM = {
             window.location.hash = page;
             return false;
         }
+
+        //Kill timeout to make double redirects
+        clearTimeout(TM.delayTimer);
         
         $('textarea').each(function(){
             tinymce.EditorManager.execCommand('mceRemoveEditor', false, $(this).attr('id'));
@@ -393,7 +393,7 @@ var TM = {
             url = '';
         }
         url = this.site+'/admin/'+url;
-        setTimeout(function(){ window.location = url; }, delay);
+        TM.delayTimer = setTimeout(function(){ window.location = url; }, delay);
     },
     checkCustomAccess: function() {
         if ($('#level').val() == '0') {
@@ -514,6 +514,6 @@ tinymce.init({
     remove_script_host : false,
     
     external_plugins: {
-        'jbimages': TM.site+'/cms/plugins/tinymce-jbimages/plugin.min.js'
+        'jbimages': TM.site+'/vendor/maxtream/themages/cms/plugins/tinymce-jbimages/plugin.min.js'
     }
 });
