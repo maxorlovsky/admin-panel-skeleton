@@ -1,13 +1,11 @@
 //Visual things
 if (logged_in) {
+    localStorage.sessionTimer = new Date().getTime();
+
 	$(window).on('hashchange', function() {
 		page = window.location.hash;
 		TM.showPage(page);
 	});
-    
-    $(document).on('click', 'body', function() {
-        TM.runSessionTimeout();
-    });
     
     $(document).on('click', '.submitButton', function(){
         if (TM.formInProgress == 1) {
@@ -132,6 +130,16 @@ $('.hint').mouseover(function(event) {
 $('.hint').mouseout(function(){
 	$('#hint').offset({ top: 0, left: 0 });
 	$('#hint').hide();
+});
+
+// --------------------------------------------------------------------------------------
+//Just things to watch
+
+$(window).bind('storage', function(e) {
+    if (e.originalEvent.key == 'sessionTimer') {
+        TM.cleanMsg();
+        TM.runSessionTimeout();
+    }
 });
 
 // --------------------------------------------------------------------------------------
@@ -309,11 +317,11 @@ var TM = {
         }
     },
     runSessionTimeout: function() {
-        clearInterval(this.sessionTimeout);
+        clearTimeout(TM.sessionTimeout);
         
-        this.sessionTimeout = setInterval(function() {
-            go(TM.site+'/admin/#aexit');
-        }, 1800000); //30 min
+        TM.sessionTimeout = setTimeout(function() {
+            TM.showMsg(0, strings.session_expired);//
+        }, sessionTimeOut * 1000); //Server session timeout, from PHP * 1000 for milliseconds
     },
     deletion: function(url) {
         if(confirm(strings.sure_to_delete)) {
@@ -435,6 +443,9 @@ var TM = {
         $('#fader').height($(document).height());
     },
     ajax: function(object) {
+        //Rerun session on every ajax call, because it's getting updated on server side as well
+        TM.runSessionTimeout();
+
         if (!object.url) {
             object.url = this.site;
         }

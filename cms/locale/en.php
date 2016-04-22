@@ -200,5 +200,6 @@ $astr['cms_json_strings'] = json_encode(
         'loading' => 'Loading...',
         'sure_to_delete' => 'Are you sure you wan\'t to delete this?',
         'will_redirect_auto' => 'will be redirected automatically',
+        'session_expired' => 'Your session have expired! You need to relogin, <a href="'._cfg('cmssite').'" target="_blank">open a second window</a> and re-login to continue working',
     )
 );
