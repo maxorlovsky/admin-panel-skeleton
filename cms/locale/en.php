@@ -169,23 +169,27 @@ $astr['new_password'] = 'New password';
 $astr['update_profile'] = 'Update profile';
 $astr['custom'] = 'Custom';
 $astr['redirect_on_edit'] = 'Auto-redirect after edit';
+$astr['check_strings'] = 'Check strings';
+$astr['check_strings_in_files'] = 'Strings that used in files, but not created in database';
+$astr['check_strings_in_db'] = 'Strings that are in database, but found nowhere in files (be careful deleting them)';
 //--------------------------------------------------//
 
 //Other language strings
-$astr['en']='English';
-$astr['ru']='Русский';
-$astr['disabled_demo']='Disabled in demo';
+$astr['en'] = 'English';
+$astr['ru'] = 'Русский';
+$astr['disabled_demo'] = 'Disabled in demo';
 //--------------------------------------------------//
 
 //Hint language strings
-$astr['hint_site_name']='By clicking this field you can edit site name.';
-$astr['hint_site_description']='By clicking this field you could edit/add website description,<br />this option helps to improve website advertisement.';
-$astr['hint_site_keywords']='By clicking this field you could edit/add website keywords,<br />this option helps to improve website advertisement.';
-$astr['hint_page_loading_type']='Normal=Basic page loading, with refresh of all page.<br />AJAX=Advanced page loading, without refresh of all page.';
-$astr['hint_admin_language']='You can set language for admin panel for your account';
-$astr['hint_admin_email']='To change email, input value in to the field and press &quot;Enter&quot;';
-$astr['hint_maintenance']='Enable maintenance mode for website';
-$astr['hint_admin_password']='To change password, input value in to the field and press &quot;Enter&quot;';
+$astr['hint_site_name'] = 'By clicking this field you can edit site name.';
+$astr['hint_site_description'] = 'By clicking this field you could edit/add website description,<br />this option helps to improve website advertisement.';
+$astr['hint_site_keywords'] = 'By clicking this field you could edit/add website keywords,<br />this option helps to improve website advertisement.';
+$astr['hint_page_loading_type'] = 'Normal=Basic page loading, with refresh of all page.<br />AJAX=Advanced page loading, without refresh of all page.';
+$astr['hint_admin_language'] = 'You can set language for admin panel for your account';
+$astr['hint_admin_email'] = 'To change email, input value in to the field and press &quot;Enter&quot;';
+$astr['hint_maintenance'] = 'Enable maintenance mode for website';
+$astr['hint_admin_password'] = 'To change password, input value in to the field and press &quot;Enter&quot;';
+$astr['hint_check_strings'] = 'You can run this test to check if all strings that are used on website are translated and that all strings existing are used or outdated. Can take some time for page to load.';
 //--------------------------------------------------//
 
 //$astr['']='';

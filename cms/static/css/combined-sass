@@ -438,6 +438,14 @@ nav {
   padding: 4px 15px;
   margin-left: 10px; }
 
+.strings .search button {
+  width: auto;
+  padding: 4px 15px;
+  margin-left: 10px; }
+
+.strings.check {
+  margin-bottom: 40px; }
+
 .accounts .chosen-container, .settings_div .chosen-container {
   min-width: 50px; }
 

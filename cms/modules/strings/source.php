@@ -22,17 +22,18 @@ class Strings
             exit('Default language error');
         }
 
-		if (isset($params['var1']) && $params['var1'] == 'edit' && isset($params['var2'])) {
+        if (isset($params['var1']) && $params['var1'] == 'check') {
+			$this->checkData = $this->checkStrings($language);
+		}
+		else if (isset($params['var1']) && $params['var1'] == 'edit' && isset($params['var2'])) {
 			$this->editData = $this->fetchEditData($params['var2']);
 		}
-		
-		if (isset($params['var1']) && $params['var1'] == 'delete' && isset($params['var2'])) {
+		else if (isset($params['var1']) && $params['var1'] == 'delete' && isset($params['var2'])) {
 			$this->deleteRow($params['var2']);
 			//redirect
 			go(_cfg('cmssite').'/#strings');
 		}
-		
-		if (isset($params['var1']) && $params['var1'] == 'index' && isset($params['var2'])) {
+		else if (isset($params['var1']) && $params['var1'] == 'index' && isset($params['var2'])) {
 			$this->searchString = urldecode($params['var2']);
             $_SESSION['searchString'] = $this->searchString;
 			$this->strings = Db::fetchRows('SELECT `key`, `status`, `'.$language.'` AS `value` '.
@@ -149,6 +150,99 @@ class Strings
 
 	protected function fetchAvailableLanguages() {
 		return Db::fetchRows('SELECT `title`, `flag` FROM `tm_languages`');
+	}
+
+	protected function checkStrings($language) {
+		$directory = $_SERVER['DOCUMENT_ROOT'].'/web';
+    
+        if (!file_exists($directory) && !is_dir($directory)) {
+            exit('Directory does not exists. This check is asuming that /web/ is a correct path, if not probably the whole structure of the website is different, making this check irrelevant');
+        }
+
+        //Folders that will be checked (only real web)
+        $folders = array(
+        	'classes'	=> $directory.'/classes',
+        	'pages'		=> $directory.'/pages',
+        	'template'	=> $directory.'/template',
+    	);
+
+        //Gather all contents in variable
+		$contents = '';
+    	foreach($folders as $value) {
+    		$contents .= $this->loopFolder($value);
+    	}
+
+    	preg_match_all("/t\(\'(.*)\'\)/i", $contents, $output);
+    	$stringsInFiles = $output[1];
+    	unset($contents, $output);
+
+    	//Outputing only custom strings, not generated ones
+    	$stringsInDb = Db::fetchRows('SELECT `key`, `'.$language.'` AS `value` FROM `tm_strings` WHERE `status` = 0');
+
+    	//Searching if strings in files have value in database
+    	$inFilesNotDb = array();
+    	foreach($stringsInFiles as $valueFiles) {
+    		$found = false;
+
+    		foreach($stringsInDb as $valueDb) {
+    			if ($valueFiles == $valueDb->key) {
+    				$found = true;
+    				break;
+    			}
+    		}
+
+    		if ($found === false) {
+    			$inFilesNotDb[] = $valueFiles;
+    		}
+    	}
+
+    	//Now vice versa, search for the ones that in Db, but not used anymore
+    	$inDbNotInFiles = array();
+    	foreach($stringsInDb as $valueDb) {
+    		$found = false;
+
+    		foreach($stringsInFiles as $valueFiles) {
+    			if ($valueFiles == $valueDb->key) {
+    				$found = true;
+    				break(1);
+    			}
+    		}
+
+    		if ($found === false) {
+    			$inDbNotInFiles[] = $valueDb;
+    		}
+    	}
+    	$inDbNotInFiles = (object)$inDbNotInFiles;
+
+    	$stringsList = new stdClass();
+    	$stringsList->inFilesNotDb = $inFilesNotDb;
+    	$stringsList->inDbNotInFiles = $inDbNotInFiles;
+
+    	return $stringsList;
+	}
+
+	protected function loopFolder($folder) {
+		$handler = opendir($folder);
+        $ignoreFiles = array('.svn', '.gitignore', '.git', '.htaccess');
+        $contents = '';
+        while($file = readdir($handler)) {
+            //Checking if not hidden files
+            if ($file != "." && $file != "..") {
+                //Checking if file ignoring is required
+                if(!in_array($file, $ignoreFiles)) {
+                	if (is_dir($folder.'/'.$file)) {
+                		//If directory, re-looping
+                		$contents .= $this->loopFolder($folder.'/'.$file);
+                	}
+                	else {
+                    	$contents .= file_get_contents($folder.'/'.$file);
+                	}
+                }
+            }
+        }
+        closedir($handler);
+
+        return $contents;
 	}
 
 	protected function fetchEditData($key) {

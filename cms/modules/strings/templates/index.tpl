@@ -11,6 +11,7 @@
 			<?=at('find_string')?>: 
 			<input id="search-text" type="text" value="<?=$module->searchString;?>" /> 
 			<input type="submit" id="search" value="<?=at('search');?>" />
+            <a href="<?=_cfg('cmssite').'/#strings/check'?>" class="hint" name="<?=at('hint_check_strings')?>"><button><?=at('check_strings');?></button></a>
 		</td>
 	</tr>
     <tr>

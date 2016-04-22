@@ -390,6 +390,14 @@ nav {
             padding: 4px 15px;
             margin-left: 10px;
         }
+        button {
+            width: auto;
+            padding: 4px 15px;
+            margin-left: 10px;
+        }
+    }
+    &.check {
+        margin-bottom: 40px;
     }
 }
 
