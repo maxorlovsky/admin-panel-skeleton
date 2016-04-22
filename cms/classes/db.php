@@ -3,41 +3,78 @@
 class Db
 {
     private static $connection = NULL;
+    private static $adapter = NULL;
     
-    public static function connect() {
-        if (!self::$connection) {
-            self::$connection = @new mysqli(_cfg('dbHost'), _cfg('dbUser'), _cfg('dbPass'), _cfg('dbBase'), _cfg('dbPort'));
-            
-            if(self::$connection->connect_error) {
-                if (_cfg('env') != 'dev') {
-                    //Sending email notification in case database is not accessible on test/live servers
-                    system::errorMail(
-                        '[FATAL] '.$_SERVER['SERVER_NAME'].':',
-                        get_class(),
-                        __LINE__,
-                        'Webiste: '._cfg('site')."\n".' Mysql response: ('.self::$connection->connect_error.') - ('.self::$connection->connect_errno.')'
-                    );
+    public static function connect($adapter = 'mysqli') {
+        if (!self::$adapter) {
+            self::$adapter = strtolower($adapter);
+        }
+        echo self::$adapter;
 
-                    exit('SQL Error');
+        if (!self::$connection) {
+            if (self::$adapter == 'pdo') {
+                try {
+                    self::$connection = new PDO('mysql:host='._cfg('dbHost').';port='._cfg('dbPort').';dbname='._cfg('dbBase'), _cfg('dbUser'), _cfg('dbPass'));
+                    self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+                    self::$connection->exec('SET NAMES "utf8"');
                 }
-                else {
-                    exit(
-                        'Connection to database could not be established.<br />
-                        Mysql response: '.self::$connection->connect_error.' ('.self::$connection->connect_errno.')'
-                    );
+                catch (PDOException $e) {
+                    if (_cfg('env') != 'dev') {
+                        //Sending email notification in case database is not accessible on test/live servers
+                        system::errorMail(
+                            '[FATAL] '.$_SERVER['SERVER_NAME'].':',
+                            get_class(),
+                            __LINE__,
+                            'Webiste: '._cfg('site')."\n".' Mysql response: ('.$e.')'
+                        );
+
+                        exit('SQL Error');
+                    }
+                    else {
+                        exit(
+                            'Connection to database could not be established.<br />
+                            Mysql response: '.$e
+                        );
+                    }
                 }
             }
-            
-            self::$connection->query('SET NAMES "utf8"');
+            else {
+                self::$connection = @new mysqli(_cfg('dbHost'), _cfg('dbUser'), _cfg('dbPass'), _cfg('dbBase'), _cfg('dbPort'));
+                
+                if(self::$connection->connect_error) {
+                    if (_cfg('env') != 'dev') {
+                        //Sending email notification in case database is not accessible on test/live servers
+                        system::errorMail(
+                            '[FATAL] '.$_SERVER['SERVER_NAME'].':',
+                            get_class(),
+                            __LINE__,
+                            'Webiste: '._cfg('site')."\n".' Mysql response: ('.self::$connection->connect_error.') - ('.self::$connection->connect_errno.')'
+                        );
+
+                        exit('SQL Error');
+                    }
+                    else {
+                        exit(
+                            'Connection to database could not be established.<br />
+                            Mysql response: '.self::$connection->connect_error.' ('.self::$connection->connect_errno.')'
+                        );
+                    }
+                }
+                
+                self::$connection->query('SET NAMES "utf8"');
+            }
         }
         
         return self::$connection;
     }
     
     public static function close() {
-        $answer = self::$connection->close();
+        if (self::$adapter == 'mysqli') {
+            $answer = self::$connection->close();
+        }
         self::$connection = NULL;
-        return $answer;
+
+        return true;
     }
     
     public static function query($query) {
