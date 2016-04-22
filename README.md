@@ -23,7 +23,7 @@ The best and easiest way to install CMS is through composer. It will allow you t
         }
     ],
     "require": {
-        "maxtream/themages": "~3.15.0"
+        "maxtream/themages": "~3.16.0"
     }
 }
 ```

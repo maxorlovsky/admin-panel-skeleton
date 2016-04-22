@@ -1,0 +1,1 @@
+UPDATE `themagescms` SET `value` = '3.16' WHERE `themagescms`.`setting` = 'version';
