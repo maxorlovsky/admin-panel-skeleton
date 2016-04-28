@@ -172,7 +172,7 @@ class Strings
     		$contents .= $this->loopFolder($value);
     	}
 
-    	preg_match_all("/t\(\'(.*)\'\)/i", $contents, $output);
+    	preg_match_all("/\bt\(\'(.*)\'\)/U", $contents, $output);
     	$stringsInFiles = $output[1];
     	unset($contents, $output);
 
