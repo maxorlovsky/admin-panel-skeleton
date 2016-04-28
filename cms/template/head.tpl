@@ -24,7 +24,7 @@
         var logged_in = <?=$this->logged_in?>;
         var redirect = <?=($this->logged_in?$this->user->editRedirect:0)?>;
         var allowUpload = <?=_cfg('allowUpload')?>;
-        var sessionTimeOut = <?=ini_get('session.gc_maxlifetime')?>;
+        var sessionTimeOut = <?=ini_get('session.gc_maxlifetime')?> * 1000;
     </script>
 </head>
 <body>
