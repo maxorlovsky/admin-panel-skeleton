@@ -117,7 +117,7 @@ class Ajax extends System
         	if (!isset($data['form'])) {
         		$data['form'] = NULL;
         	}
-            return $module->$data['action']($data['form']);
+            return $module->{$data['action']}($data['form']);
         }
         else {
             return '0;Method <u>'.$data['action'].'</u> in class <u>'.$className.'</u> does not exist';
