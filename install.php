@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>TheMages CMS - Install</title>
+    <title>The M.A.G.E.S. CMS - Install</title>
         
     <style>
     	html, body {
@@ -30,7 +30,7 @@
 
 <section id="main" class="wrapper">
 	<div class="content">
-		It seems that your website have TheMages CMS but it wasn't installed or cleaned up.<br />
+		It seems that your website have The M.A.G.E.S. CMS but it wasn't installed or cleaned up.<br />
 		Instalation process is more or less straight forward and not automated, which is better for developer, but not so friendly for plain user<br />
 		<br />
 		Step 1 (Linux):<br />

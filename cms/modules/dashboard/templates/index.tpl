@@ -95,7 +95,7 @@
 	</div>
 
 	<div class="credits_block box">
-		<h4>TheMages CMS</h4>
+		<h4>The M.A.G.E.S. CMS</h4>
 		<?=at('cms_detailed_info')?><br />
 		Web: <a href="http://www.maxorlovsky.net" target="_blank">www.maxorlovsky.net</a><br />
 		CMS Web: <a href="http://www.themages.net" target="_blank">www.themages.net</a><br />

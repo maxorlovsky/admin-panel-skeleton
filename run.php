@@ -1,6 +1,6 @@
 <?php
 /* 
- * CMS TheMages v3.16
+ * CMS The M.A.G.E.S. v3.16
  * http://www.themages.net
  * Credits (dev): Maxtream
  * Credits (design): Maxtream, AnyaTheEagle

@@ -3,7 +3,7 @@
 		<a class="logo" href="<?=_cfg('site')?>/admin/#<?=$this->defaultPage?>"><img src="<?=_cfg('cmsimg')?>/logo.png" /></a>
         <p>v <?=$this->data->cmsSettings['version']?></p>
         <div class="copyrights">
-            <a href="http://www.maxorlovsky.net" target="_blank"><span>&copy;</span> TheMages CMS 2011-<?=date('Y')?><br />
+            <a href="http://www.maxorlovsky.net" target="_blank"><span>&copy;</span> The M.A.G.E.S. CMS 2011-<?=date('Y')?><br />
             by Max &amp; Anya Orlovsky</a>
         </div>
 	</header>

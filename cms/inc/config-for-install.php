@@ -100,7 +100,7 @@ switch ( $cfg['env'] )
     break;
 }
 
-//This variables required for TheMages API
+//This variables required for The M.A.G.E.S. API
 //It's used for external logs, but I don't know if people need it and if this should be improved, for now leaving as I'm using it
 //Clients usually did stupid stuff in the past and told me that they "didn't do it". For this case you usually needed external logs.
 $cfg['apiUsername'] = '';

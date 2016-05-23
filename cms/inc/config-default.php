@@ -1,6 +1,6 @@
 <?php
 //*===================================================*//
-//*CMS TheMages Configuration file					  *//
+//*CMS The M.A.G.E.S. Configuration file					  *//
 //*===================================================*//
 
 //=====================================================
@@ -53,7 +53,7 @@ $cfg['recaptchaSecretKey'] = '';
 $cfg['demo'] = 0;
 $cfg['allowUpload'] = 1;
 
-//Url for TheMages API, required mostly to get changelog file inside of CMS
+//Url for The M.A.G.E.S. API, required mostly to get changelog file inside of CMS
 //It's also used for external logs, but I don't know if people need it and if this should be improved, for now leaving as I'm using it
 //Clients usually did stupid stuff in the past and told me that they "didn't do it". For this case you usually needed external logs.
 $cfg['apiUrl'] = 'https://api.themages.net';

@@ -6,7 +6,7 @@
     <meta name="keywords" content="<?=$this->data->settings['site_keywords']?>" />
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?=$this->data->settings['site_name']?> - CMS</title>
+    <title><?=$this->data->settings['site_name']?> - The M.A.G.E.S. CMS</title>
     
     <script src="<?=_cfg('cmsstatic')?>/js/scripts.js"></script>
     <? if ($this->logged_in) { ?>
