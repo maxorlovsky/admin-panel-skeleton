@@ -16,12 +16,6 @@ The best and easiest way to install CMS is through composer. It will allow you t
 ```
 {
     "name": "The M.A.G.E.S. CMS Demo",
-    "authors": [
-        {
-            "name": "Maxtream",
-            "email": "max.orlovsky@gmail.com"
-        }
-    ],
     "require": {
         "maxtream/themages": "~3.16.0"
     }
@@ -29,4 +23,4 @@ The best and easiest way to install CMS is through composer. It will allow you t
 ```
 
 ## Demo
-Demo can be found [on website](http://www.themages.net/)
+Demo can be found [on website](https://www.themages.net/)
