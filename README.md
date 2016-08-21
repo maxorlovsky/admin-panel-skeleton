@@ -1,3 +1,7 @@
+# Project discontinued
+UPDATE: I stopped working on this project in favor of WordPress / Craft CMS. There are no development anymore.
+Support will be provided until 1st September 2017.
+
 # The M.A.G.E.S. CMS
 This is "The M.A.G.E.S. CMS". I created long time ago in 2011, for now the project is more or less stable and I worked in SVN all my time, so decided to make the switch.  
 
