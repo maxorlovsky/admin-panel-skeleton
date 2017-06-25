@@ -35,7 +35,7 @@ class Template extends System
     }
     
     public function getMainTemplate($page) {
-        include _cfg('cmstemplate').'/'.$page.'.tpl';
+        include _cfg('cmstemplate').'/'.$page.'.php';
     }
     
     public function loadModule($data) {
@@ -80,11 +80,11 @@ class Template extends System
             echo '<p>Source file for module '.$data['page'].'/source.php not found</p>';
         }
         
-        if (file_exists(_cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.tpl')) {
-            require_once _cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.tpl';
+        if (file_exists(_cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.php')) {
+            require_once _cfg('cmsmodules').'/'.$data['page'].'/templates/'.$data['var1'].'.php';
         }
         else {
-            echo '<p>Template file for module '.$data['page'].'/'.$data['var1'].'.tpl not found</p>';
+            echo '<p>Template file for module '.$data['page'].'/'.$data['var1'].'.php not found</p>';
         }
     }
     
@@ -115,11 +115,11 @@ class Template extends System
     		echo '<p>Source file for custom module '.$_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/source.php not found</p>';
     	}
     	
-    	if (file_exists($_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/templates/'.$data['var1'].'.tpl')) {
-    		require_once $_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/templates/'.$data['var1'].'.tpl';
+    	if (file_exists($_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/templates/'.$data['var1'].'.php')) {
+    		require_once $_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/templates/'.$data['var1'].'.php';
     	}
     	else {
-    		echo '<p>Template file for custom module '.$_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/'.$data['var1'].'.tpl not found</p>';
+    		echo '<p>Template file for custom module '.$_SERVER['DOCUMENT_ROOT'].'/tm-modules/'.$data['page'].'/'.$data['var1'].'.php not found</p>';
     	}
     }
 }

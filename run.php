@@ -1,9 +1,8 @@
 <?php
 /* 
- * CMS The M.A.G.E.S. v3.16
- * http://www.themages.net
- * Credits (dev): Maxtream
- * Credits (design): Maxtream, AnyaTheEagle
+ * CMS The M.A.G.E.S. v4
+ * https://www.themages.net
+ * Credits: Maxtream
  * Github: https://github.com/Maxtream/themages-cms.git
  */
 
@@ -79,8 +78,5 @@ if (php_sapi_name() != 'cli') {
         $system = new System(0);
         $system->ajax($_POST);
     }
-    //If not admin and not ajax, opening just website
-    else {
-        require_once $_SERVER['DOCUMENT_ROOT'].'/web/index.php';
-    }
+    //If not admin and not ajax, do nothing and probably opening website
 }

@@ -1,1 +1,0 @@
-<?=t('maintenance_txt')?>
