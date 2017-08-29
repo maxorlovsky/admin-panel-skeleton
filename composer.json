@@ -2,7 +2,6 @@
     "name": "maxtream/themages",
     "type": "cms",
     "description": "cms",
-    "version": "4.0",
     "keywords": ["cms","php"],
     "homepage": "https://cms.maxorlovsky.com",
     "license": "MIT",
