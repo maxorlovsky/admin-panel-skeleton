@@ -1,10 +1,10 @@
 {
     "name": "maxtream/themages",
     "type": "cms",
-    "description": "TheMages CMS",
+    "description": "cms",
     "version": "4.0",
     "keywords": ["cms","php"],
-    "homepage": "https://www.themages.net",
+    "homepage": "https://cms.maxorlovsky.com",
     "license": "MIT",
     "authors": [
         {
@@ -33,5 +33,8 @@
         "psr-0": {
             "Monolog": "src"
         }
+    },
+    "scripts": {
+        "post-install-cmd": []
     }
 }
