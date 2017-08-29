@@ -2,8 +2,6 @@
 //=====================================================
 // Site config
 //=====================================================
-date_default_timezone_set('UTC');
-
 switch ( $cfg['env'] )
 {
     case 'prod':
@@ -75,6 +73,8 @@ switch ( $cfg['env'] )
         
     break;
 }
+
+$cfg['dir'] = $_SERVER['DOCUMENT_ROOT'];
 
 $cfg['href'] = $cfg['site'].'/%lang%';
 

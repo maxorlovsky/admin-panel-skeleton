@@ -1,25 +1,12 @@
 <?php
-//Easy image check function
-//Value 1: temporary file data
-//Value 2: Mb allowed to upload (Default: 2mb)
-//Extension allowed: PNG/GIF/JPG/JPEG
-function is_image($f, $mb = 2) {
-	if ($f['size'] < 1024*$mb*1024 && ($f['type'] == 'image/gif' || $f['type'] == 'image/jpg' || $f['type'] == 'image/jpeg' || $f['type'] == 'image/png')) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-//$data[] = array
-//countPerPage - Count per page
-//maxNumShow - Maximum number to show before ...
-//pageNum - current page number
-//tableName - for sql query
-//where - for sql query WHERE column
-//field to count - (WARNING: MUST NOT USE `*` IN THIS FUNCTION) default: id
-//cms - if 1, adding html for cms pages
+// $data[] = array
+// countPerPage - Count per page
+// maxNumShow - Maximum number to show before ...
+// pageNum - current page number
+// tableName - for sql query
+// where - for sql query WHERE column
+// field to count - (WARNING: MUST NOT USE `*` IN THIS FUNCTION) default: id
+// cms - if 1, adding html for cms pages
 function pages($data) {
     $data['pageNum'] = abs((int)$data['pageNum']);
     $return = new stdClass();
@@ -143,12 +130,12 @@ function pages($data) {
     return $return;
 }
 
-//Count per page
-//Return data count/Maximum number to show before ...
-//Page number
-//Table name
-//If needed WHERE parameter
-//Count parameter (WARNING: MUST NOT USE `*` IN THIS FUNCTION)
+// Count per page
+// Return data count/Maximum number to show before ...
+// Page number
+// Table name
+// If needed WHERE parameter
+// Count parameter (WARNING: MUST NOT USE `*` IN THIS FUNCTION)
 function ajaxPages($cpp = 10, $rdc = 3, $pn, $tn, $where = '', $count = 'id') {
     $db = new Db();
 	$pn = abs((int)$pn);
@@ -230,23 +217,20 @@ function _cfg($key = '') {
     return $cfg[$key];
 }
 
-//Writting strings
+// Writting strings
 function t($key) {
 	global $str;
 	
 	$key = strtolower($key);
     
 	if (isset($str[$key])) {
-        if (_cfg('language') == 'lv') {
-            return html_entity_decode($str[$key]);
-        }
         return $str[$key];
     }
 	
     return $key;
 }
 
-//Writing admin strings
+// Writing admin strings
 function at($key = '') {
 	global $astr;
     

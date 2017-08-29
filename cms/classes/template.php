@@ -35,7 +35,8 @@ class Template extends System
     }
     
     public function getMainTemplate($page) {
-        include _cfg('cmstemplate').'/'.$page.'.php';
+        echo './'.$page.'.php';
+        include './'.$page.'.php';
     }
     
     public function loadModule($data) {

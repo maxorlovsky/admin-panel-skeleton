@@ -25,24 +25,6 @@ class System
             if ($q->num_rows === 0) {
                 $this->sqlInstall();
             }
-            
-            //As soon as DB class is enabled, checking https status
-            $row = Db::fetchRow('SELECT `value` FROM `tm_settings` WHERE `setting` = "https" LIMIT 1');
-            
-            $httpsOn = 0;
-            //Checking first if cloudflare exist, we must do different checks
-            if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-                $httpsOn = 1;
-            }
-            //If not cloudflare, use default PHP check
-            else if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-                $httpsOn = 1;
-            }
-            
-            //Checking if https always enabled and if user is on http, then redirecting to https
-            if ( $row->value == 1 && extension_loaded('openssl') && $httpsOn === 0) {
-                go(str_replace('http', 'https', _cfg('cmssite')));
-            }
         }
 
         if (!$this->data) {
@@ -324,7 +306,7 @@ class System
     
     /*Protected functions*/
     protected function loadClasses() {
-        $directory = _cfg('cmsclasses');
+        $directory = '../vendor/cms/classes';
     
         if (!file_exists($directory) && !is_dir($directory)) {
             exit('Directory does not exists');
@@ -390,10 +372,10 @@ class System
         global $astr;
         
         if ($this->language) {
-        	require_once(_cfg('cmslocale').'/'.$this->language.'.php');
+        	require_once('../vendor/cms/locale/'.$this->language.'.php');
         }
         else {
-        	require_once(_cfg('cmslocale').'/'._cfg('defaultLanguage').'.php');
+        	require_once('../vendor/cms/locale/en.php');
         }
     }
     

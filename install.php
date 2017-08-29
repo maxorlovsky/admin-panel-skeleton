@@ -30,20 +30,10 @@
 
 <section id="main" class="wrapper">
 	<div class="content">
-		It seems that your website have The M.A.G.E.S. CMS but it wasn't installed or cleaned up.<br />
+		It seems that your website have The M.A.G.E.S. CMS but it wasn't installed or cleaned up properly.<br />
 		Instalation process is more or less straight forward and not automated, which is better for developer, but not so friendly for plain user<br />
 		<br />
-		Step 1 (Linux):<br />
-		<ul>
-			<li>Run in terminal: sudo cp -R <?=$cfg['root']?>/web/ <?=$_SERVER['DOCUMENT_ROOT']?>/web</li>
-		</ul>
-		Step 1 (Windows):<br />
-		<ul>
-			<li>Go to folder <?=$cfg['root']?></li>
-			<li>Copy folder /web/ to <?=$_SERVER['DOCUMENT_ROOT']?>/web</li>
-		</ul>
-		<br />
-		Step 2 (Linux):<br />
+		Step 1 (Linux/Apache):<br />
 		<ul>
 			<li>Run in terminal: sudo cp <?=$cfg['root']?>/.htaccess <?=$_SERVER['DOCUMENT_ROOT']?>/.htaccess</li>
 			<li>Run in terminal: sudo cp <?=$cfg['cmsdir']?>/inc/config-for-install.php <?=$_SERVER['DOCUMENT_ROOT']?>/config-tm.php</li>
@@ -51,7 +41,7 @@
 			<li>Go through it and configure as you see fit, there are comments for each variables, so additional guide/FAQ not required</li>
 		</ul>
 		<br />
-		Step 2 (Windows):<br />
+		Step 1 (Windows):<br />
 		<ul>
 			<li>Copy file from <?=$cfg['root']?>.htaccess to <?=$_SERVER['DOCUMENT_ROOT']?>/.htaccess</li>
 			<li>Create config-tm.php file in your root directory (<?=$_SERVER['DOCUMENT_ROOT']?>/config-tm.php)</li>
@@ -61,7 +51,7 @@
 		<br />
 		<textarea><?=file_get_contents($cfg['cmsdir'].'/inc/config-for-install.php')?></textarea>
 		<br />
-		Step 3 - optional (Linux):<br />
+		Step 2 - optional (Linux):<br />
 		<ul>
 			<li>You must give correct right to upload folder or you won't be able to upload files from CMS</li>
 			<li>Run in terminal: sudo chmod -R 0755 <?=$_SERVER['DOCUMENT_ROOT']?>/web/uploads</li>
