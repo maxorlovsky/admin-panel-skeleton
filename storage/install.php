@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>The M.A.G.E.S. CMS - Install</title>
+    <title>MOCMS - Install</title>
         
     <style>
     	html, body {
@@ -30,7 +30,7 @@
 
 <section id="main" class="wrapper">
 	<div class="content">
-		It seems that your website have The M.A.G.E.S. CMS but it wasn't installed or cleaned up properly.<br />
+		It seems that your website have MOCMS but it wasn't installed or cleaned up properly.<br />
 		Instalation process is more or less straight forward and not automated, which is better for developer, but not so friendly for plain user<br />
 		<br />
 		Step 1 (Linux/Apache):<br />

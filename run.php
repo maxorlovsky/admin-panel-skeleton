@@ -1,9 +1,9 @@
 <?php
 /* 
- * TM CMS v4
+ * MOCMS v4
  * https://cms.maxorlovsky.com
  * Credits: Max Orlovsky
- * Github: https://github.com/Maxtream/themages-cms.git
+ * Github: https://github.com/maxorlovsky/cms
  */
 
 // This check is required if CMS will be injected in projects like Laravel.
@@ -13,23 +13,18 @@ if (php_sapi_name() != 'cli') {
     
     require_once 'vendor/autoload.php';
 
-    // Session start if it wasn't still initiated
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-
     // Adding general functions, used by CMS.
-    require_once 'cms/inc/functions.php';
+    require_once 'api/inc/functions.php';
 
     // Adding site config
     // If config does not exist we run install.php
     // It won't create dynamic stuff like wordpress/phpmyadmin do, so it's safe to store this file
-    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/tmcms/config.php')) {
-        require_once 'install.php';
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/mocms/config.php')) {
+        require_once 'storage/install.php';
         exit();
     }
     else {
-        require_once $_SERVER['DOCUMENT_ROOT'].'/tmcms/config.php';
+        require_once $_SERVER['DOCUMENT_ROOT'].'/mocms/config.php';
     }
 
     // Initiate app
@@ -41,34 +36,35 @@ if (php_sapi_name() != 'cli') {
     $container = $app->getContainer();
 
     // Add monolog logger
-    require 'cms/inc/logger.php';
+    require 'api/inc/logger.php';
     // DB/PDO connection
-    require 'cms/inc/db.php';
+    require 'api/inc/db.php';
     // Global params inside pages
-    require 'cms/inc/params.php';
-    require 'cms/inc/404.php';
-    require 'cms/inc/500.php';
-    require 'cms/inc/log.php';
+    require 'api/inc/params.php';
+    require 'api/inc/404.php';
+    require 'api/inc/500.php';
+    require 'api/inc/log.php';
 
     // SlimPHP specific middlewares
-    require 'cms/middleware/auth.php';
-    require 'cms/middleware/cors.php';
+    require 'api/middleware/auth.php';
+    require 'api/middleware/cors.php';
+    require 'api/middleware/multisite.php';
 
     // Routing / Modules
-    require 'cms/modules/login.php';
-    require 'cms/modules/logout.php';
-    require 'cms/modules/users.php';
-    require 'cms/modules/logs.php';
-    require 'cms/modules/user-data.php';
-    require 'cms/modules/permissions.php';
+    require 'api/modules/login.php';
+    require 'api/modules/logout.php';
+    require 'api/modules/users.php';
+    require 'api/modules/logs.php';
+    require 'api/modules/user-data.php';
+    require 'api/modules/permissions.php';
 
     // Adding site modules
-    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/tmcms/modules.php')) {
-        require_once $_SERVER['DOCUMENT_ROOT'].'/tmcms/modules.php';
+    if (file_exists($_SERVER['DOCUMENT_ROOT'].'/mocms/modules.php')) {
+        require_once $_SERVER['DOCUMENT_ROOT'].'/mocms/modules.php';
     }
 
     // Routing, home page
-    require 'cms/modules/home.php';
+    require 'api/modules/home.php';
 
     // Loading the whole system
     $app->run();
