@@ -2,11 +2,26 @@ const gulp = require('gulp');
 const browserSync = require('browser-sync').create();
 
 gulp.task('watch', ['serve'], () => {
-	gulp.watch(['./fe/src/**/*.js', './fe/src/**/*.vue', '../tmcms/**/*.vue', '../tmcms/**/*.js'], ['lint:script', 'scripts', browserSync.reload])
-		.on("change", watchChange)
-		.on("error", watchError);
+	gulp.watch(
+		[
+			'./fe/src/**/*.js',
+			'./fe/src/**/*.vue',
+			'!./fe/src/custom-components/**/*.vue',
+			'!./fe/src/custom-components/**/*.js',
+			'../mocms/**/*.vue',
+			'../mocms/**/*.js'
+		],
+		[
+			'custom-modules',
+			'lint:script',
+			'scripts',
+			browserSync.reload
+		]
+	)
+	.on("change", watchChange)
+	.on("error", watchError);
 
-	gulp.watch(['./fe/styles/*.scss', './fe/src/**/*.scss', '../tmcms/**/*.scss'], ['styles', browserSync.reload])
+	gulp.watch(['./fe/styles/*.scss', './fe/src/**/*.scss', '../mocms/**/*.scss'], ['styles', browserSync.reload])
 		.on("change", watchChange)
 		.on("error", watchError);
 
