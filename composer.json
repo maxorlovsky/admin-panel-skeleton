@@ -1,7 +1,7 @@
 {
-    "name": "maxtream/themages",
+    "name": "maxorlovsky/cms",
     "type": "cms",
-    "description": "cms",
+    "description": "mocms",
     "keywords": ["cms","php"],
     "homepage": "https://cms.maxorlovsky.com",
     "license": "MIT",
