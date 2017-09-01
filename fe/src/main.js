@@ -29,17 +29,17 @@ import pagesEditPage from './components/pages/pages-edit.vue';
 import logoutPage from './components/logout/logout.vue';
 
 // Website custom config, those files must exist no matter what
-import websiteConfig from '../../../tmcms/config.json';
-import * as customItems from '../../../tmcms/custom.js';
+import websiteConfig from '../../../mocms/config.json';
+import * as customItems from './custom-components/custom.js';
 
 functions.storageCacheBuster();
 
 if (location.host.indexOf('dev') === 0) {
-    tm.env = 'dev';
+    mo.env = 'dev';
 }
 
 // Add <any> URLs to router, to push to /login
-tm.routes.push({
+mo.routes.push({
     path: '*',
     redirect: '/'
 });
@@ -47,16 +47,16 @@ tm.routes.push({
 // Initiate the router
 const router = new VueRouter({
     mode: 'history',
-    routes: tm.routes
+    routes: mo.routes
 });
 
 Vue.use(VueRouter);
 Vue.use(vueTinymce);
 
 router.beforeEach((to, from, next) => {
-    tm.loginCheckError = false;
-    if (to.meta.loggedIn && !tm.loggedIn) {
-        tm.loginCheckError = true;
+    mo.loginCheckError = false;
+    if (to.meta.loggedIn && !mo.loggedIn) {
+        mo.loginCheckError = true;
     }
     window.scrollTo(0, 0);
     
@@ -74,7 +74,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-    if (tm.loginCheckError) {
+    if (mo.loginCheckError) {
         // Displaying error message to the user
         router.app.authRequired();
         return false;
@@ -126,7 +126,7 @@ function loadApp() {
                 functions.storage('remove', 'token');
                 functions.storage('remove', 'structure-user-data');
                 delete(axios.defaults.headers.common.sessionToken);
-                tm.loggedIn = false;
+                mo.loggedIn = false;
                 this.loggedIn = false;
                 this.$router.push('/');
             },
@@ -165,6 +165,7 @@ function loadApp() {
                 this.$router.push('/');
             },
             authRequiredState: function(error) {
+                console.log(error.response);
                 if (error.response.status === 401) {
                     this.displayMessage('You must be logged in to enter this page', 'danger');
                     this.logout();

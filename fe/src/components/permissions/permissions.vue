@@ -5,58 +5,65 @@
     </div>
     
     <form class="table-responsive" v-on:submit.prevent="submitForm()">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Key</th>
-                    <th>Page name</th>
-                    <th>Icons classes</th>
-                    <th>Level</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-if="loading">
-                    <td colspan="5"><loading></loading></td>
-                </tr>
-                <tr v-for="(permission, index) in permissions">
-                    <td v-if="permission.new">
-                        <input type="text"
-                            v-model="permission.key"
-                            :class="{ error: errorClasses[permission.key] }"
-                        />
-                    </td>
-                    <td v-else>{{permission.key}}</td>
-                    <td>
-                        <input type="text"
-                            v-model="permission.name"
-                            :class="{ error: errorClasses[permission.key] }"
-                        />
-                    </td>
-                    <td>
-                        <input type="text"
-                            v-model="permission.icon_classes"
-                            :class="{ error: errorClasses[permission.key] }"
-                        />
-                    </td>
-                    <td align="center">
-                        <select v-model="permission.level" :disabled="permission.strict">
-                            <option v-for="level in maxLevel" v-bind:key="level">{{level}}</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger"
-                            v-on:click="removeRow(index)"
-                            :disabled="permission.strict">-</button>
-                    </td>
-                </tr>
-                <tr v-if="!loading">
-                    <td colspan="5" align="center">
-                        <button class="btn btn-success" v-on:click="addRow()">+</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row head">
+            <div class="col-2 column">Key</div>
+            <div class="col-4 column">Page name</div>
+            <div class="col-3 column">Icon classes</div>
+            <div class="col-1 column centered">Level</div>
+            <div class="col-2 column centered">Actions</div>
+        </div>
+
+        <div class="row" v-if="loading">
+            <div class="col-12 column"><loading></loading></div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 column ghost"></div>
+        </div>
+
+        <draggable
+            class="permissions-list"
+            v-model="permissions"
+            :options="{ group:'nav', ghostClass: 'ghost', animation: 50 }"
+        >
+            <div v-for="(permission, index) in permissions" class="row">
+                <div v-if="permission.new" class="col-2 column">
+                    <input type="text"
+                        v-model="permission.key"
+                        :class="{ error: errorClasses[permission.key] }"
+                    />
+                </div>
+                <div v-else class="col-2 column">{{permission.key}}</div>
+                <div class="col-4 column">
+                    <input type="text"
+                        v-model="permission.name"
+                        :class="{ error: errorClasses[permission.key] }"
+                    />
+                </div>
+                <div class="col-3 column">
+                    <input type="text"
+                        v-model="permission.icon_classes"
+                        :class="{ error: errorClasses[permission.key] }"
+                    />
+                </div>
+                <div class="col-1 column centered">
+                    <select v-model="permission.level" :disabled="permission.strict">
+                        <option v-for="level in maxLevel" v-bind:key="level">{{level}}</option>
+                    </select>
+                </div>
+                <div class="col-2 column centered">
+                    <button class="btn btn-danger"
+                        v-on:click="removeRow(index)"
+                        :disabled="permission.strict">-</button>
+                </div>
+            </div>
+        </draggable>
+
+        <div class="row" v-if="!loading">
+            <div class="col-12 column centered">
+                <button class="btn btn-success" v-on:click="addRow()">+</button>
+            </div>
+        </div>
 
         <button class="btn btn-primary" :disabled="formLoading">Update permissions</button>
     </form>
@@ -66,22 +73,23 @@
 <script>
 // Components
 import loading from '../loading/loading.vue';
+import draggable from 'vuedraggable';
 
 // 3rd party libs
 import axios from 'axios';
 
 const permissionsPage = {
     components: {
-        loading
+        loading,
+        draggable
     },
     data: function() {
         return {
-            permissions: {},
+            permissions: [],
             maxLevel: 0,
             formLoading: false,
             loading: true,
-            errorClasses: {},
-            updateMenu: false
+            errorClasses: {}
         };
     },
     created: function() {
@@ -110,7 +118,6 @@ const permissionsPage = {
 
             for (let item of this.permissions) {
                 if (item.new && item.key && item.name) {
-                    this.updateMenu = true;
                     delete item.new;
                 }
             }
@@ -119,15 +126,10 @@ const permissionsPage = {
             .then(function (response) {
                 self.$parent.displayMessage(response.data.message, 'success');
                 self.formLoading = false;
-
-                if (self.updateMenu) {
-                    self.$parent.fetchLoggedInData();
-                    self.updateMenu = false;
-                }
+                self.$parent.fetchLoggedInData();
             })
             .catch(function (error) {
                 self.formLoading = false;
-                self.updateMenu = false;
 
                 // Display error message from API
                 self.$parent.displayMessage(error.response.data.message, 'danger');
@@ -160,7 +162,6 @@ const permissionsPage = {
         },
         removeRow: function(index) {
             this.permissions.splice(index, 1);
-            this.updateMenu = true;
 
             event.preventDefault();
 
@@ -170,7 +171,7 @@ const permissionsPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/permissions',
     component: permissionsPage,
     meta: {
