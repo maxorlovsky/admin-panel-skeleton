@@ -108,7 +108,7 @@ const logsPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/logs',
     component: logsPage,
     meta: {

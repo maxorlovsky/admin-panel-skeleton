@@ -18,7 +18,7 @@ const dashboardPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/dashboard',
     component: dashboardPage,
     meta: {

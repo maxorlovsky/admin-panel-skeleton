@@ -194,7 +194,7 @@ const usersEditPage = {
 };
 
 // Routing
-tm.routes.push(
+mo.routes.push(
     {
         path: '/users/add',
         component: usersEditPage,

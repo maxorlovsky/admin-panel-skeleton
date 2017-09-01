@@ -101,7 +101,7 @@ const usersPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/users',
     component: usersPage,
     meta: {

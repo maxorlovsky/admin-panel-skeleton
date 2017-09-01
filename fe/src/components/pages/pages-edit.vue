@@ -180,7 +180,7 @@ const pagesEditPage = {
 };
 
 // Routing
-tm.routes.push(
+mo.routes.push(
     {
         path: '/pages/add',
         component: pagesEditPage,

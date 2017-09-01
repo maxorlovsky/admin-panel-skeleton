@@ -58,13 +58,13 @@ const loginPage = {
             formLoading: false,
             displayCaptcha: false,
             demo: false,
-            version: tm.version,
+            version: mo.version,
             year: 0,
             recaptchaSiteKey: ''
         };
     },
     created: function() {
-        if (tm.loggedIn) {
+        if (mo.loggedIn) {
             this.$router.push('dashboard');
         } else {
             this.year = new Date().getFullYear();
@@ -103,7 +103,7 @@ const loginPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/',
     component: loginPage,
     meta: {

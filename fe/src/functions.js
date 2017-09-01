@@ -20,7 +20,7 @@ const functions = {
             let saveData = {
                 data: args[0],
                 time: (new Date().getTime() + timeoutSeconds),
-                version: tm.version
+                version: mo.version
             };
 
             localStorage.setItem(key, JSON.stringify(saveData));
@@ -36,7 +36,7 @@ const functions = {
                 // If older than 30 min
                 (returnValue.time <= new Date().getTime()) ||
                 // Or if version is now different, ignoring session token
-                (returnValue.version !== tm.version && key !== 'token')
+                (returnValue.version !== mo.version && key !== 'token')
                ) {
                 // Cleanup
                 functions.storage('remove', key);
@@ -56,12 +56,12 @@ const functions = {
         const storagesKeys = ['structure-data', 'structure-user-data'];
 
         // If version was bumped, we might still use outdated localStorage data, doing full cleanup
-        if (localStorage.getItem('version') !== tm.version) {
+        if (localStorage.getItem('version') !== mo.version) {
             for (let value of storagesKeys) {
                 localStorage.removeItem(value);
             }
             // Saving version to not cleaup everything again until the next bump
-            localStorage.setItem('version', tm.version);
+            localStorage.setItem('version', mo.version);
         }
 
         return true;
@@ -70,11 +70,11 @@ const functions = {
         const token = functions.storage('get', 'token');
 
         if (token.sessionToken) {
-            tm.loggedIn = true;
+            mo.loggedIn = true;
             axios.defaults.headers.common.sessionToken = token.sessionToken;
         }
 
-        return tm.loggedIn;
+        return mo.loggedIn;
     }
 };
 

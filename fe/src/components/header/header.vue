@@ -6,9 +6,9 @@
 
     <router-link to="/dashboard" class="logo"></router-link>
 
-    <!-- <select class="multi-brand">
-        <option></option>
-    </select> -->
+    <select class="multi-brand">
+        <option>floweradmin.maxorlovsky.net</option>
+    </select>
 </header>
 </template>
 

@@ -20,7 +20,7 @@ const logoutPage = {
         axios.post('/api/logout')
         .then(function (response) {
             delete(axios.defaults.headers.common.sessionToken);
-            tm.loggedIn = false;
+            mo.loggedIn = false;
             self.$parent.loggedIn = false;
             self.$router.push('/');
         })
@@ -31,7 +31,7 @@ const logoutPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/logout',
     component: logoutPage,
     meta: {

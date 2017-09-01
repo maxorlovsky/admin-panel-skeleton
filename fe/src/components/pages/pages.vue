@@ -95,7 +95,7 @@ const pagesPage = {
 };
 
 // Routing
-tm.routes.push({
+mo.routes.push({
     path: '/pages',
     component: pagesPage,
     meta: {
