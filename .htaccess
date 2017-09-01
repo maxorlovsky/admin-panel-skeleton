@@ -1,28 +1,29 @@
-# must be always utf-8
-AddDefaultCharset UTF-8
-
-# adding options
-Options -Indexes
-Options +FollowSymLinks
-Options -MultiViews
-
-# hiding all packages files
-<Files ~ "(.tpl|composer.json|composer.lock|composer.phar|Gruntfile.js|package.json)">
-    Order allow,deny
-    Deny from all
-    Require all denied
-</Files>
-
 # Rewritting rules
 RewriteEngine On
 RewriteBase /
 
 # Ignoring specific folders for css, js and uploads like image
-RewriteRule ^web/static/? - [L]
-RewriteRule ^web/uploads/? - [L]
+RewriteRule ^vendor/dist/? - [L]
+#RewriteRule ^api/? /index.php [L]
 
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteCond %{SCRIPT_FILENAME} !-d
 
 # fetching all links params in one variable and breaking it down in index.php
-RewriteRule (.*) /index.php?params=$1 [L]
+RewriteRule . /index.php [L]
+
+SetEnvIf Origin "^https?://[^/]*(teleflor)\.net$" ORIGIN=$0
+Header always set Access-Control-Allow-Origin %{ORIGIN}e env=ORIGIN
+Header always set Access-Control-Allow-Credentials "true" env=ORIGIN
+Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+#Header always set Access-Control-Max-Age "1728000"
+Header always set Access-Control-Max-Age "1000"
+Header always set Access-Control-Allow-Headers "Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With,sessionToken"
+# Always set Vary: Origin when it's possible you may send CORS headers
+Header merge Vary Origin
+# Remove merge shit..
+Header unset Access-Control-Allow-Origin
+Header unset Access-Control-Allow-Credentials
+
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=204,L]
