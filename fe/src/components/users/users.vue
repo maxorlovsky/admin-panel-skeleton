@@ -84,6 +84,10 @@ const usersPage = {
         deleteAdmin: function(id) {
             const self = this;
 
+            if (!confirm('Are you sure to delete?')) {
+                return false;
+            }
+
             this.formLoading = true;
 
             axios.delete(`/api/users/delete/${id}`)
