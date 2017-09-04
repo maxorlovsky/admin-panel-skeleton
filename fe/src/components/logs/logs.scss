@@ -1,0 +1,13 @@
+.logs {
+    padding: 1rem;
+
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+}

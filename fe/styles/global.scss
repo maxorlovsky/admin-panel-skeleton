@@ -1,0 +1,39 @@
+/* Project variables */
+$mainColor: #444 !default;
+$secondaryColor: #f1f1f1 !default;
+$bgColor: #f1f1f1 !default;
+$defaultBorderRadius: 8px;
+$font: 'Open Sans';
+$header-width: 100%;
+$header-height: 60px;
+
+/* Boostrap variables */
+$link-hover-decoration: none;
+$link-color: $mainColor;
+$link-hover-color: #bbb;
+$link-hover-decoration: none;
+$font-family-base: $font;
+$nav-link-padding: 0;
+$table-border-width: 0;
+$nav-link-padding-y: 0;
+$nav-link-padding-x: 0;
+
+/* Font-Awesome variables */
+$fa-font-path: '../assets/font/';
+
+// Rewriting variables
+@import '../../../../../mocms/variables.scss';
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../../node_modules/font-awesome/scss/font-awesome.scss';
+@import '../../node_modules/vue-directive-tooltip/src/css/index.scss';
+@import '../../node_modules/@deveodk/vue-tinymce/dist/@deveodk/vue-tinymce.css';
+
+@import './fonts.scss';
+@import './styles.scss';
+
+// Import CMS "default" styles
+@import '../src/components/**/*.scss';
+
+// Import styles outside of CMS
+@import '../../../../../mocms/components/**/*.scss';

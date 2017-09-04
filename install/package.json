@@ -1,0 +1,11 @@
+{
+  "name": "modemo",
+  "description": "MO CMS Demo",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "cd vendor/maxtream/themages && yarn install && gulp build",
+    "watch": "cd vendor/maxtream/themages && gulp watch"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

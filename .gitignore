@@ -1,2 +1,4 @@
-*.sublime-*
-web/uploads/*
+/node_modules
+/vendor
+/dist
+/fe/src/custom-components
