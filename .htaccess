@@ -12,7 +12,7 @@ RewriteCond %{SCRIPT_FILENAME} !-d
 # fetching all links params in one variable and breaking it down in index.php
 RewriteRule . /index.php [L]
 
-SetEnvIf Origin "^https?://[^/]*(teleflor)\.net$" ORIGIN=$0
+SetEnvIf Origin "^https?://[^/]*(maxorlovsky)\.com$" ORIGIN=$0
 Header always set Access-Control-Allow-Origin %{ORIGIN}e env=ORIGIN
 Header always set Access-Control-Allow-Credentials "true" env=ORIGIN
 Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
