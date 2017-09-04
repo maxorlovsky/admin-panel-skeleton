@@ -11,6 +11,7 @@ module.exports = {
             "vue",
             "vue-router",
             "vue-directive-tooltip",
+            "vuedraggable",
             "@deveodk/vue-tinymce",
 			"axios",
             "marked",
