@@ -1,7 +1,7 @@
 {
-  "name": "tmcms",
-  "description": "TM CMS",
-  "version": "4.0.0",
+  "name": "mocms",
+  "description": "MO CMS",
+  "version": "4.0.0-alpha02",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "webpack": "3.5.1"
   },
   "devDependencies": {
-    "@deveodk/vue-tinymce": "^1.0.0",
+    "@deveodk/vue-tinymce": "1.0.0",
     "babel-core": "6.25.0",
     "babel-loader": "7.1.1",
     "babel-preset-env": "1.6.0",
@@ -38,6 +38,7 @@
     "gulp-rename": "1.2.2",
     "gulp-sass": "3.1.0",
     "gulp-sass-glob": "1.0.8",
+    "gulp-string-replace": "0.4.0",
     "gulp-uglify": "3.0.0",
     "gulp-uglifycss": "1.0.8",
     "gulp-webpack": "1.5.0",
@@ -47,7 +48,8 @@
     "require-dir": "0.3.2",
     "run-sequence": "2.1.0",
     "vue-loader": "13.0.4",
-    "vue-template-compiler": "^2.4.2",
+    "vue-template-compiler": "2.4.2",
+    "vuedraggable": "2.14.1",
     "whatwg-fetch": "2.0.3"
   },
   "engines": {

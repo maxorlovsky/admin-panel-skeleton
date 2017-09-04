@@ -1,0 +1,11 @@
+{
+  "name": "modemo",
+  "description": "MO CMS Demo",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "cd vendor && gulp build",
+    "watch": "cd vendor && gulp watch"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,5 +1,5 @@
 # MOCMS
-"MO" - CMS that I started in 2011, I use it as an sandbox project of applying stuff that I recently learned.
+"MOCMS" - CMS that I started in 2011, I use it as an sandbox project of applying stuff that I recently learned.
 
 MOCMS is my hobby mostly and something that I use when client ask to not use WordPress or other CMS. I also found many existing CMS too bulky or hard to understand, I don't think that my CMS is some kind of solution for this. But it's definetely less than majority of what out there.
 Right now as there are tons of separations between RESTful API, Backend CMS system and Frontend webapps. I can't find any proper CMS that will be able mostly working with API without including MySQL. Previously I was trying to make my CMS light as much as possible.
