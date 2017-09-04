@@ -22,7 +22,7 @@ $nav-link-padding-x: 0;
 $fa-font-path: '../assets/font/';
 
 // Rewriting variables
-@import '../../../mocms/variables.scss';
+@import '../../../../../mocms/variables.scss';
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../../node_modules/font-awesome/scss/font-awesome.scss';
@@ -36,4 +36,4 @@ $fa-font-path: '../assets/font/';
 @import '../src/components/**/*.scss';
 
 // Import styles outside of CMS
-@import '../../../mocms/components/**/*.scss';
+@import '../../../../../mocms/components/**/*.scss';
