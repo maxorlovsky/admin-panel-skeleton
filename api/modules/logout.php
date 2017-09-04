@@ -3,19 +3,15 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->post('/api/logout', function (Request $request, Response $response) {
-    if (!$request->getAttribute('isLogged')) {
-        $response = $response->withStatus(401);
-        $data = array('message' => 'Authorization required');
-    } else {
-        $user = $request->getAttribute('user'); 
+    $data = [];
 
+    $user = $request->getAttribute('user');
+    if ($user) {
         // Define controller, fill up main variables
         $logoutController = new LogoutController($this->params, $this->db, $user);
 
         // Authenticating user and in case of success return token
         $logoutController->logout();
-
-        $data = array('state' => 'success');
 
         Log::save($this->db, [
             'module'=> 'logout',
