@@ -17,7 +17,7 @@
 
 <script>
 // Website custom config
-import websiteConfig from '../../../../../mocms/config.json';
+import websiteConfig from '../../../../../../../mocms/config.json';
 
 // 3rd party libs
 import axios from 'axios';

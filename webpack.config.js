@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        bundle: ['../vendor/fe/src/main.js'],
+        bundle: ['./fe/src/main.js'],
         vendors: [
             'babel-polyfill',
             'promise-polyfill',

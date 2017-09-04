@@ -29,7 +29,7 @@ import pagesEditPage from './components/pages/pages-edit.vue';
 import logoutPage from './components/logout/logout.vue';
 
 // Website custom config, those files must exist no matter what
-import websiteConfig from '../../../mocms/config.json';
+import websiteConfig from '../../../../../mocms/config.json';
 import * as customItems from './custom-components/custom.js';
 
 functions.storageCacheBuster();
