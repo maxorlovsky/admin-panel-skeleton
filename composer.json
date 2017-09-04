@@ -2,7 +2,7 @@
     "name": "maxorlovsky/cms",
     "type": "cms",
     "description": "MOCMS",
-    "keywords": ["cms","php"],
+    "keywords": ["cms","php","vue","slim"],
     "homepage": "https://cms.maxorlovsky.com",
     "license": "MIT",
     "authors": [
