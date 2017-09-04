@@ -10,11 +10,12 @@
     .logo {
         margin: 0;
         display: block;
-        width: 15%;
-        height: 60px;
+        width: $header-width;
+        height: $header-height;
         position: relative;
         background-repeat: no-repeat;
         background-position: center;
+        background-image: url('/vendor/maxtream/themages/dist/assets/images/logo.png');
 
         @include media-breakpoint-down(sm) {
             background-size: cover;

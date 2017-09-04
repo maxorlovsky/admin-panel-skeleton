@@ -54,7 +54,7 @@ select {
 
 .wrapper {
     display: flex;
-    min-height: calc(100vh - 110px);
+    min-height: calc(100vh - $header-height);
     flex-direction: row-reverse;
     flex-wrap: wrap;
     margin: 0;
