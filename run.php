@@ -46,6 +46,7 @@ if (php_sapi_name() != 'cli') {
     require 'api/inc/log.php';
 
     // SlimPHP specific middlewares
+    require 'api/middleware/db-check.php';
     require 'api/middleware/auth.php';
     require 'api/middleware/cors.php';
     require 'api/middleware/multisite.php';
