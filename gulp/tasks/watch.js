@@ -8,8 +8,8 @@ gulp.task('watch', ['serve'], () => {
 			'./fe/src/**/*.vue',
 			'!./fe/src/custom-components/**/*.vue',
 			'!./fe/src/custom-components/**/*.js',
-			'../mocms/**/*.vue',
-			'../mocms/**/*.js'
+			'../../../mocms/**/*.vue',
+			'../../../mocms/**/*.js'
 		],
 		[
 			'custom-modules',
@@ -21,7 +21,13 @@ gulp.task('watch', ['serve'], () => {
 	.on("change", watchChange)
 	.on("error", watchError);
 
-	gulp.watch(['./fe/styles/*.scss', './fe/src/**/*.scss', '../mocms/**/*.scss'], ['styles', browserSync.reload])
+	gulp.watch(
+		[
+			'./fe/styles/*.scss',
+			'./fe/src/**/*.scss',
+			'../../../mocms/**/*.scss'
+		],
+		['styles', browserSync.reload])
 		.on("change", watchChange)
 		.on("error", watchError);
 
