@@ -1,7 +1,7 @@
 {
   "name": "mocms",
   "description": "MO CMS",
-  "version": "4.0.0-alpha4",
+  "version": "4.0.0-beta1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
     "promise-polyfill": "6.0.2",
     "require-dir": "0.3.2",
     "run-sequence": "2.1.0",
+    "tinymce": "4.6.6",
     "vue-loader": "13.0.4",
     "vue-template-compiler": "2.4.2",
     "vuedraggable": "2.14.1",

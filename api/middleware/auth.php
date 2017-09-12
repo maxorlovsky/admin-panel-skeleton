@@ -22,25 +22,25 @@ $auth = function ($request, $response, $next) {
         if ($user) {
             $request = $request->withAttribute('isLogged', true);
             $request = $request->withAttribute('user', $user);
-        }
 
-        $breakdown = explode('/', $request->getUri()->getPath());
-        $path = $breakdown[2];
+            $breakdown = explode('/', $request->getUri()->getPath());
+            $path = $breakdown[2];
+        
+            // Fetching permissions
+            $q = $this->db->query('SELECT `value` FROM `mocms` WHERE `setting` = "menu"');
+            $q->execute();
+            $permissions = $q->fetch();
+            $permissions = json_decode($permissions['value']);
+            $key = array_search($path, array_column($permissions, 'key'));
+            $level = $permissions[$key]->level;
     
-        // Fetching permissions
-        $q = $this->db->query('SELECT `value` FROM `mocms` WHERE `setting` = "menu"');
-        $q->execute();
-        $permissions = $q->fetch();
-        $permissions = json_decode($permissions['value']);
-        $key = array_search($path, array_column($permissions, 'key'));
-        $level = $permissions[$key]->level;
-
-        // Check if user level is enough to use this API endpoint
-        if ($user->level < $level) {
-            $response = $response->withStatus(403);
-            $data = array('message' => 'Access denied');
-            
-            return $response->withJson($data);
+            // Check if user level is enough to use this API endpoint
+            if ($user->level < $level) {
+                $response = $response->withStatus(403);
+                $data = array('message' => 'Access denied');
+                
+                return $response->withJson($data);
+            }
         }
     }
 
