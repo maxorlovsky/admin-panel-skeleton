@@ -4,7 +4,6 @@ import { functions } from './functions.js';
 // VUE
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import vueTinymce from '@deveodk/vue-tinymce';
 
 // 3rd party libs
 import axios from 'axios';
@@ -50,7 +49,6 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
-Vue.use(vueTinymce);
 
 router.beforeEach((to, from, next) => {
     mo.loginCheckError = false;

@@ -15,7 +15,8 @@ module.exports = {
             "@deveodk/vue-tinymce",
 			"axios",
             "marked",
-            "hammerjs"
+            "hammerjs",
+            "tinymce"
 		]
     },
     output: {

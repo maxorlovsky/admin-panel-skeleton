@@ -6,7 +6,7 @@ const runSequence = require('run-sequence');
 gulp.task('copy', (cb) => {
 	return runSequence(
 		['copy:assets', 'copy:html', 'copy:index'],
-		'copy:fontawesome',
+		['copy:fontawesome', 'copy:tinymce'], // after assets folder have been created
 	cb);
 });
 
@@ -40,4 +40,10 @@ gulp.task('copy:index', () => {
 gulp.task('copy:fontawesome', () => {
 	return gulp.src('./node_modules/font-awesome/fonts/*')
         .pipe(gulp.dest('./dist/assets/font/'));
+});
+
+// TinyMCE themes
+gulp.task('copy:tinymce', () => {
+	return gulp.src('./node_modules/tinymce/skins/lightgray/**')
+        .pipe(gulp.dest('./dist/styles/tinymce-skins/'));
 });

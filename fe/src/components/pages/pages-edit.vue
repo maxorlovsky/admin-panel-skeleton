@@ -40,13 +40,10 @@
         <div class="form-group row">
             <label for="text-field" class="col-2 col-form-label">Page text</label>
             <div class="col-10">
-                <vue-tinymce v-model="form.text"
+                <tinymce v-model="form.text"
                     :class="{ error: errorClasses.text }"
-                    class="form-control"
-                    type="text"
                     id="text-field"
-                    height="300"
-                ></vue-tinymce>
+                ></tinymce>
             </div>
         </div>
 
@@ -59,6 +56,7 @@
 <script>
 // Components
 import loading from '../loading/loading.vue';
+import tinymce from '../tinymce/tinymce.vue';
 
 // 3rd party libs
 import axios from 'axios';
@@ -66,7 +64,8 @@ import vueTinymce from '@deveodk/vue-tinymce';
 
 const pagesEditPage = {
     components: {
-        loading
+        loading,
+        tinymce
     },
     data: function() {
         return {
@@ -115,6 +114,8 @@ const pagesEditPage = {
             this.formLoading = true;
 
             this.errorClasses = {};
+
+            console.log(this.form);
 
             // Frontend check
             if (this.add && (!this.form.login || !this.form.password || !this.form.level)) {
