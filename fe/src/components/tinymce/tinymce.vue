@@ -52,9 +52,8 @@ export default {
 				'undo redo | code | restoredraft | fullscreen | bullist numlist | link unlink image'
 			],
 			fontsize_formats: '8px 9px 10px 11px 12px 13px 14px 15px 16px 17px 18px 19px 20px 24px 36px',
-			plugins: ['code', 'fullscreen', 'lists', 'link', 'autosave', 'image', 'imagetools', 'textcolor', 'colorpicker'],
-			imagetools_cors_hosts: ['mydomain.com', 'otherdomain.com'],
-  imagetools_proxy: 'proxy.php'
+			plugins: ['code', 'fullscreen', 'lists', 'link', 'autosave', 'image', 'imagetools', 'textcolor', 'colorpicker']
+			//https://www.tinymce.com/docs/plugins/imagetools/
 		};
 
 		let config = (editor) => {
