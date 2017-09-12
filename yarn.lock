@@ -4845,6 +4845,10 @@ tinymce@^4.6.3:
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.5.tgz#b5ea976738e819bf07a44f7d5653fb160880b9ee"
 
+tinymce@^4.6.6:
+  version "4.6.6"
+  resolved "https://sto-proget-01.bde.local/npm/OBG-NPM/tinymce/-/tinymce-4.6.6.tgz#d9282f35707bee29d3e1542fded249e0a86cafd4"
+
 to-array@0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/to-array/-/to-array-0.1.4.tgz#17e6c11f73dd4f3d74cda7a4ff3238e9ad9bf890"

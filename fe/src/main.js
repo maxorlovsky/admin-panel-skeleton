@@ -14,7 +14,6 @@ import Hammer from 'hammerjs';
 import headerComponent from './components/header/header.vue';
 import loading from './components/loading/loading.vue';
 import leftSide from './components/left-side/left-side.vue';
-
 import floatMessage from './components/float-message/float-message.vue';
 
 // Pages
