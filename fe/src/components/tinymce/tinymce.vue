@@ -31,16 +31,7 @@ export default {
 			required: true
 		},
 		options: Object,
-		content: {
-			type: String,
-			default: ''
-		},
 		value: String
-	},
-   	watch: {
-		content() {
-			tinymce.get(this.id).setContent(this.content);
-		}
 	},
     mounted () {
 		let options = {
@@ -63,8 +54,10 @@ export default {
 			});
 
 			editor.on('init', (e) => {
-				if(this.content != undefined) tinymce.get(this.id).setContent(this.content);
-				this.$emit('input', this.content);
+				if(this.value != undefined) {
+					tinymce.get(this.id).setContent(this.value);
+				}
+				this.$emit('input', this.value);
 			});
 		}
 
