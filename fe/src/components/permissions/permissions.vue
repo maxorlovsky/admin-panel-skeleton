@@ -24,9 +24,9 @@
         <draggable
             class="permissions-list"
             v-model="permissions"
-            :options="{ group:'nav', ghostClass: 'ghost', animation: 50 }"
+            :options="{ handle: '.sort-handle', group:'nav', ghostClass: 'ghost', animation: 50 }"
         >
-            <div v-for="(permission, index) in permissions" class="row">
+            <div v-for="(permission, index) in permissions" :key="permission.key" class="row">
                 <div v-if="permission.new" class="col-2 column">
                     <input type="text"
                         v-model="permission.key"
@@ -52,6 +52,7 @@
                     </select>
                 </div>
                 <div class="col-2 column centered">
+                    <button class="btn btn-info sort-handle"><i class="fa fa-sort"></i></button>
                     <button class="btn btn-danger"
                         v-on:click="removeRow(index)"
                         :disabled="permission.strict">-</button>

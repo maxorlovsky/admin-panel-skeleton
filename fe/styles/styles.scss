@@ -75,3 +75,7 @@ select {
 
     @include clearfix();
 }
+
+.sort-handle {
+    cursor: n-resize;
+}
