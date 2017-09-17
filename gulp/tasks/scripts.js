@@ -6,7 +6,7 @@ const runSequence = require('run-sequence');
 const gwebpack = require('gulp-webpack');
 const webpack = require('webpack');
 
-gulp.task('scripts', () => {
+gulp.task('scripts', ['custom-modules'], () => {
 	const webpackConfig = require('../../webpack.config.js');
 
     return gulp.src('./vendor/fe/src/main.js')
