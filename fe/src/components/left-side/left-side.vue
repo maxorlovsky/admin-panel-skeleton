@@ -7,8 +7,8 @@
                 :key="link.url"
             >
                 <router-link :to="link.url" :class="{ 'collapsed': menuCollapsed }">
-                    <span :class="link.icon_classes"></span>
-                    <label v-if="!menuCollapsed">{{link.title}}</label>
+                    <i :class="link.icon_classes"></i>
+                    <span v-if="!menuCollapsed">{{link.title}}</span>
                 </router-link>
 
                 <!-- <ul class="nav-sub" v-if="link.sublinks">
@@ -18,14 +18,17 @@
                     </li>
                 </ul> -->
             </li>
+
+            <li class="nav-link collapser">
+                <a href="javascript:;" v-on:click="menuCollapserClick()">
+                    <i class="fa"
+                        :class="{ 'fa-angle-double-right': menuCollapsed, 'fa-angle-double-left': !menuCollapsed }"
+                    ></i>
+                    <span v-if="!menuCollapsed">Collapse menu</span>
+                </a>
+            </li>
         </ul>
     </nav>
-    
-    <div class="collapser" v-on:click="menuCollapserClick()">
-        <i class="fa"
-            :class="{ 'fa-angle-double-right': menuCollapsed, 'fa-angle-double-left': !menuCollapsed }"
-        ></i>
-    </div>
 
     <div class="side-menu-cover" v-on:click="triggerClick()"><i class="fa fa-times burger-closer"></i></div>
 </section>
