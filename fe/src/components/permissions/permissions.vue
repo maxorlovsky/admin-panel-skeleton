@@ -24,9 +24,9 @@
         <draggable
             class="permissions-list"
             v-model="permissions"
-            :options="{ handle: '.sort-handle', group:'nav', ghostClass: 'ghost', animation: 50 }"
+            :options="{ handle: '.parent-sort-handle', group:'nav', ghostClass: 'ghost', animation: 50 }"
         >
-            <div v-for="(permission, index) in permissions" :key="permission.key" class="row">
+            <div v-for="(permission, index) in permissions" class="row">
                 <div v-if="permission.new" class="col-2 column">
                     <input type="text"
                         v-model="permission.key"
@@ -52,11 +52,69 @@
                     </select>
                 </div>
                 <div class="col-2 column centered">
-                    <button class="btn btn-info sort-handle"><i class="fa fa-sort"></i></button>
+                    <button class="btn btn-info"
+                        v-on:click="makeRowSub(index)"
+                        :disabled="permission.strict"><i class="fa fa-arrow-right"></i></button>
+                        
+                    <button class="btn btn-info sort-handle parent-sort-handle"
+                        :disabled="permission.strict"
+                        v-on:click.stop.prevent><i class="fa fa-sort"></i></button>
+
                     <button class="btn btn-danger"
                         v-on:click="removeRow(index)"
                         :disabled="permission.strict">-</button>
                 </div>
+
+                <draggable
+                    class="subpermissions-list"
+                    v-model="permission.subCategories"
+                    :options="{ handle: '.sub-sort-handle', group:'sub-nav', animation: 50 }"
+                    :class="{ 'drag-on': drag }"
+                    @start="drag=true"
+                >
+                    <div v-for="(subpermission, subindex) in permission.subCategories" class="row sub-row">
+                        <div class="col-1 column">
+                            <i class="fa fa-arrow-right"></i>
+                        </div>
+                        <div v-if="subpermission.new" class="col-1 column">
+                            <input type="text"
+                                v-model="subpermission.key"
+                                :class="{ error: errorClasses[subpermission.key] }"
+                            />
+                        </div>
+                        <div v-else class="col-2 column">{{subpermission.key}}</div>
+                        <div class="col-3 column">
+                            <input type="text"
+                                v-model="subpermission.name"
+                                :class="{ error: errorClasses[subpermission.key] }"
+                            />
+                        </div>
+                        <div class="col-3 column">
+                            <input type="text"
+                                v-model="subpermission.icon_classes"
+                                :class="{ error: errorClasses[subpermission.key] }"
+                            />
+                        </div>
+                        <div class="col-1 column centered">
+                            <select v-model="subpermission.level" :disabled="subpermission.strict">
+                                <option v-for="level in maxLevel" v-bind:key="level">{{level}}</option>
+                            </select>
+                        </div>
+                        <div class="col-2 column centered">
+                            <button class="btn btn-info"
+                                v-on:click="makeRowParent(index, subindex)"
+                                :disabled="subpermission.strict"><i class="fa fa-arrow-left"></i></button>
+
+                            <button class="btn btn-info sort-handle sub-sort-handle"
+                                :disabled="subpermission.strict"
+                                v-on:click.stop.prevent><i class="fa fa-sort"></i></button>
+
+                            <button class="btn btn-danger"
+                                v-on:click="removeSubRow(index, subindex)"
+                                :disabled="subpermission.strict">-</button>
+                        </div>
+                    </div>
+                </draggable>
             </div>
         </draggable>
 
@@ -90,7 +148,8 @@ const permissionsPage = {
             maxLevel: 0,
             formLoading: false,
             loading: true,
-            errorClasses: {}
+            errorClasses: {},
+            drag: false
         };
     },
     created: function() {
@@ -103,6 +162,10 @@ const permissionsPage = {
             axios.get('/api/permissions')
             .then(function (response) {
                 self.permissions = response.data.permissions;
+
+                // Required for drag-n-drop functionality
+                self.addEmptySubCategories();
+
                 self.maxLevel = parseInt(response.data.maxLevel);
                 self.loading = false;
             })
@@ -117,6 +180,7 @@ const permissionsPage = {
             this.formLoading = true;
             this.errorClasses = {};
 
+            // On submit, remove "new" parameter from all
             for (let item of this.permissions) {
                 if (item.new && item.key && item.name) {
                     delete item.new;
@@ -148,23 +212,89 @@ const permissionsPage = {
             });
         },
         addRow: function() {
+            event.preventDefault();
+
             this.permissions.push({
                 key: '',
                 name: '',
                 icon_classes: '',
                 strict: false,
                 level: 1,
-                new: true
+                new: true,
+                subCategories: []
             });
-
-            event.preventDefault();
 
             return true;
         },
         removeRow: function(index) {
+            event.preventDefault();
+
+            if (!confirm('Are you sure to delete?')) {
+                return false;
+            }
+            
+            // Remove row from menu
             this.permissions.splice(index, 1);
 
+            return true;
+        },
+        makeRowSub: function(index) {
             event.preventDefault();
+
+            // In case it's already a parent with subs, forbid to move make it sub as well
+            if (this.permissions[index].subCategories.length !== 0) {
+                this.$parent.displayMessage('This category have subcategories, please move all subcategories first', 'danger');
+                return false;
+            }
+
+            // If subCategories parameter for some reason is empty, define it
+            if (this.permissions[index - 1].subCategories === undefined) {
+                this.permissions[index - 1].subCategories = [];
+            }
+
+            // Add to subs
+            this.permissions[index - 1].subCategories.push(this.permissions[index]);
+
+            // Remove from parent menu
+            this.permissions.splice(index, 1);
+
+            return true;
+        },
+        makeRowParent: function(index, subindex) {
+            // Make row from parent to Sub
+            event.preventDefault();
+
+            // Saving row, as after permission removal indexing will be messed up
+            const row = this.permissions[index].subCategories[subindex];
+
+            // Remove row from subs
+            this.permissions[index].subCategories.splice(subindex, 1);
+
+            // Add to parent menu
+            this.permissions.splice(index + 1, 0, row);
+
+            return true;
+        },
+        removeSubRow: function(index, subindex) {
+            // Sub row removal required different indexes
+            event.preventDefault();
+
+            if (!confirm('Are you sure to delete?')) {
+                return false;
+            }
+            
+            // Remove from subs
+            this.permissions[index].subCategories.splice(subindex, 1);
+
+            return true;
+        },
+        addEmptySubCategories: function() {
+            // Add empty subcategories for drag-n-drop porpouses
+            for (let i = 0; i < this.permissions.length; ++i) {
+                if (this.permissions[i].subCategories === undefined) {
+                    this.permissions[i].subCategories = [];
+                }
+            }
 
             return true;
         }
