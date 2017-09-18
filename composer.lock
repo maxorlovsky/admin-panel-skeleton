@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "690d50839dff17976efca090062d444c",
+    "content-hash": "d8fb3fadd2cffbaea5b5dd378288ba98",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -117,28 +117,28 @@
         },
         {
             "name": "neomerx/cors-psr7",
-            "version": "v1.0.11",
+            "version": "v1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/neomerx/cors-psr7.git",
-                "reference": "cc0413d6843ca27f90d15dbaf3bc6f9f972476f0"
+                "reference": "24944f39483d1a89f66ae9d58cca9f82b8815b35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/neomerx/cors-psr7/zipball/cc0413d6843ca27f90d15dbaf3bc6f9f972476f0",
-                "reference": "cc0413d6843ca27f90d15dbaf3bc6f9f972476f0",
+                "url": "https://api.github.com/repos/neomerx/cors-psr7/zipball/24944f39483d1a89f66ae9d58cca9f82b8815b35",
+                "reference": "24944f39483d1a89f66ae9d58cca9f82b8815b35",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.0",
+                "php": ">=5.6.0",
                 "psr/http-message": "^1.0",
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "mockery/mockery": "^0.9.4",
-                "phpunit/phpunit": "^4.8",
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "^5.7",
                 "scrutinizer/ocular": "^1.1",
-                "squizlabs/php_codesniffer": "^2.5"
+                "squizlabs/php_codesniffer": "^3.0"
             },
             "type": "library",
             "autoload": {
@@ -168,7 +168,7 @@
                 "w3.org",
                 "www.w3.org"
             ],
-            "time": "2016-08-03T16:32:06+00:00"
+            "time": "2017-09-03T22:31:57+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -479,52 +479,6 @@
                 "router"
             ],
             "time": "2017-03-19T17:55:20+00:00"
-        },
-        {
-            "name": "tinymce/tinymce",
-            "version": "4.6.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tinymce/tinymce-dist.git",
-                "reference": "a874c512a61a353e80809f5e4ffb5e12869aa177"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/a874c512a61a353e80809f5e4ffb5e12869aa177",
-                "reference": "a874c512a61a353e80809f5e4ffb5e12869aa177",
-                "shasum": ""
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "scripts": [
-                        "tinymce.js",
-                        "plugins/*/plugin.js",
-                        "themes/*/theme.js"
-                    ],
-                    "files": [
-                        "tinymce.min.js",
-                        "plugins/*/plugin.min.js",
-                        "themes/*/theme.min.js",
-                        "skins/**"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "description": "Web based JavaScript HTML WYSIWYG editor control.",
-            "homepage": "http://www.tinymce.com",
-            "keywords": [
-                "editor",
-                "html",
-                "javascript",
-                "richtext",
-                "tinymce",
-                "wysiwyg"
-            ],
-            "time": "2017-08-02T14:08:17+00:00"
         },
         {
             "name": "tuupola/cors-middleware",

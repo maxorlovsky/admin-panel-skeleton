@@ -106,14 +106,14 @@ function loadApp() {
         },
         methods: {
             burgerMenu: function() {
-                /* if (this.leftSideMenu) {
+                if (this.leftSideMenu) {
                     this.leftSideMenu = false;
                     document.querySelector('body').className = document.querySelector('body').className.replace('open left', '').trim();
                 } else {
                     this.leftSideMenu = true;
-                    window.location.hash = '#side-menu-open';
+                    //window.location.hash = '#side-menu-open';
                     document.querySelector('body').className = document.querySelector('body').className + ' open left'.trim();
-                } */
+                }
             },
             login: function() {
                 this.loggedIn = functions.checkUserAuth();
