@@ -33,17 +33,21 @@
 <div id="app">
     <header-component
         v-if="loggedIn"
-        v-on:nav-menu="burgerMenu()"
+        v-on:nav-menu="burgerMenu"
+        v-on:update-multisite="updateMultiSite"
     ></header-component>
     
     <div class="wrapper">
         <section class="page">
-            <router-view v-bind:user-data="userData"></router-view>
+            <router-view
+                v-bind:user-data="userData"
+                v-bind:multi-site-id="multiSiteId"
+            ></router-view>
         </section>
 
         <left-side
             v-if="loggedIn"
-            v-on:nav-menu="burgerMenu()"
+            v-on:nav-menu="burgerMenu"
             v-bind:menu="menu"
         ></left-side>
     </div>

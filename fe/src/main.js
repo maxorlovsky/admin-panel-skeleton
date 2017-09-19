@@ -93,7 +93,8 @@ function loadApp() {
             leftSideMenu: false,
             loggedIn: functions.checkUserAuth(),
             userData: {},
-            floatingMessage: {}
+            floatingMessage: {},
+            multiSiteId: 0
         },
         mounted() {
             let self = this;
@@ -114,6 +115,9 @@ function loadApp() {
                     //window.location.hash = '#side-menu-open';
                     document.querySelector('body').className = document.querySelector('body').className + ' open left'.trim();
                 }
+            },
+            updateMultiSite: function(value) {
+                this.multiSiteId = parseInt(value);
             },
             login: function() {
                 this.loggedIn = functions.checkUserAuth();
