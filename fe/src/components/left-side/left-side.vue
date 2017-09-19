@@ -6,17 +6,29 @@
                 v-for="link in menu"
                 :key="link.url"
             >
-                <router-link :to="link.url" :class="{ 'collapsed': menuCollapsed }">
+                <router-link :to="link.url"
+                    :class="{ 'collapsed': menuCollapsed }"
+                    v-if="checkUrl(link.url)"
+                >
                     <i :class="link.icon_classes"></i>
-                    <span v-if="!menuCollapsed">{{link.title}}</span>
+                    <span>{{link.title}}</span>
                 </router-link>
+                <a href="javascript:;" :class="{ 'collapsed': menuCollapsed }" v-else>
+                    <i :class="link.icon_classes"></i>
+                    <span>{{link.title}}</span>
+                </a>
 
-                <!-- <ul class="nav-sub" v-if="link.sublinks">
-                    <li :class="'nav-sublink ' + sublink.css_classes" v-for="(sublink, subkey) in link.sublinks">
-                        <a v-if="sublink.target" :href="sublink.url" :target="sublink.target">{{sublink.title}}</a>
-                        <router-link v-else :to="sublink.url" :target="sublink.target">{{sublink.title}}</router-link>
+                <ul class="nav-sub" v-if="link.sublinks">
+                    <li class="nav-link"
+                        v-for="sublink in link.sublinks"
+                        v-bind:key="sublink.url"
+                    >
+                        <router-link :to="sublink.url">
+                            <i :class="sublink.icon_classes"></i>
+                            <span>{{sublink.title}}</span>
+                        </router-link>
                     </li>
-                </ul> -->
+                </ul>
             </li>
 
             <li class="nav-link collapser">
@@ -64,6 +76,13 @@ export default {
         },
         triggerClick: function() {
             this.$emit('nav-menu');
+        },
+        checkUrl: function(url) {
+            if (url.indexOf('nourl-') > 0) {
+                return false;
+            }
+
+            return true;
         }
     }
 }
