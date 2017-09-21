@@ -1,0 +1,31 @@
+.file-upload {
+    .drop-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: 4px dashed #eee; /* the dash box */
+        outline-offset: -10px;
+        background: rgba(125, 125, 125, 0.7);
+        color: #000;
+        padding: 10px 10px;
+        position: relative;
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(125, 125, 125, 0.6);
+        }
+
+        p {
+            text-align: center;
+            margin: 0;
+        }
+    }
+
+    input[type="file"] {
+        opacity: 0; /* invisible but it's there! */
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        position: absolute;
+        cursor: pointer;
+    }
+}
