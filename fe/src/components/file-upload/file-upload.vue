@@ -24,7 +24,12 @@
 // 3rd party libs
 import axios from 'axios';
 
-const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
+const status = {
+    initial: 0,
+    saving: 1,
+    success: 2,
+    failed: 3
+};
 
 export default {
     name: 'file-upload',
@@ -47,40 +52,40 @@ export default {
 	},
     computed: {
         isInitial() {
-            return this.currentStatus === STATUS_INITIAL;
+            return this.currentStatus === status.initial;
         },
         isSaving() {
-            return this.currentStatus === STATUS_SAVING;
+            return this.currentStatus === status.saving;
         },
         isSuccess() {
-            return this.currentStatus === STATUS_SUCCESS;
+            return this.currentStatus === status.success;
         },
         isFailed() {
-            return this.currentStatus === STATUS_FAILED;
+            return this.currentStatus === status.failed;
         }
     },
     methods: {
         reset() {
             // reset form to initial state
-            this.currentStatus = STATUS_INITIAL;
+            this.currentStatus = status.initial;
             this.uploadedFiles = [];
             this.uploadError = null;
         },
         save(formData) {
             const self = this;
 
-            this.currentStatus = STATUS_SAVING;
+            this.currentStatus = status.saving;
 
             axios.post(this.apiEndPoint, formData)
             .then(function (response) {
                 //response.map(img => Object.assign({}, img, { url: `/images/${img.id}` }))
                 console.log(response);
                 //self.uploadedFiles = [].concat(x);
-                self.currentStatus = STATUS_SUCCESS;
+                self.currentStatus = status.success;
             })
             .catch(function (error) {
                 self.uploadError = err.response;
-                self.currentStatus = STATUS_FAILED;
+                self.currentStatus = status.failed;
             });
         },
         filesChange(fieldName, fileList) {
