@@ -250,7 +250,7 @@ class UserDataController
         $q->execute();
         $menu = $q->fetch();
 
-        $menu =  json_decode($menu['value']);
+        $menu = json_decode($menu['value']);
         
         $returnMenu = [];
         foreach($menu as $value) {
@@ -261,6 +261,20 @@ class UserDataController
                     'title'         => $value->name,
                     'icon_classes'  => $value->icon_classes,
                 ];
+
+                if (isset($value->subCategories) && $value->subCategories) {
+                    $returnMenu[$value->key]['sublinks'] = [];
+
+                    foreach($value->subCategories as $subValue) {
+                        if ($value->level <= $this->user->level) {
+                            $returnMenu[$value->key]['sublinks'][$subValue->key] = [
+                                'url'           => '/' . $subValue->key,
+                                'title'         => $subValue->name,
+                                'icon_classes'  => $subValue->icon_classes,
+                            ];
+                        }
+                    }
+                }
             }
         }
 

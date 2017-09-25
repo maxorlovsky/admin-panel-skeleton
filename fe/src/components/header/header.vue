@@ -6,7 +6,7 @@
 
     <router-link to="/dashboard" class="logo"></router-link>
 
-    <select class="multi-brand" v-if="enableBrands">
+    <select class="multi-brand" v-if="enableBrands" v-model="multiSiteId">
         <option v-for="brand in multisite"
             :value="brand.id"
             v-bind:key="brand.id"
@@ -29,11 +29,17 @@ export default {
             burgerStatus: this.$parent.leftSideMenu,
             loggedIn: false,
             enableBrands: websiteConfig.multiBrands,
-            multisite: []
+            multisite: [],
+            multiSiteId: 0
         };
     },
     created: function() {
         return this.fetchData();
+    },
+    watch: {
+        'multiSiteId': function() {
+            this.$emit('update-multisite', this.multiSiteId);
+        }
     },
     methods: {
         fetchData: function() {
@@ -42,6 +48,7 @@ export default {
             axios.get('/api/multisite')
             .then(function (response) {
                 self.multisite = response.data;
+                self.multiSiteId = self.multisite[0].id;
             });
         },
         burgerMenu: function() {

@@ -1,7 +1,9 @@
+$left-side-border-color: rgba(0, 0, 0, 0.3);
+$left-side-border: 2px solid $left-side-border-color;
+
 .left-side {
     width: 15%;
     font-size: 1rem;
-    position: relative;
     transition: .5s;
 
     @include media-breakpoint-down(sm) {
@@ -35,11 +37,11 @@
         z-index: 50;
         transition: .5s;
         transform: translate(0, 0);
-        overflow-y: auto;
 
         @include media-breakpoint-down(sm) {
             width: 45%;
             transform: translate(-100%, 0);
+            overflow-y: auto;
         }
 
         .open & {
@@ -55,6 +57,8 @@
     }
 
     .nav-link {
+        position: relative;
+
         > a {
             white-space: nowrap;
             color: #ddd;
@@ -67,6 +71,10 @@
 
             &.collapsed {
                 text-overflow: initial;
+
+                span {
+                    display: none;
+                }
             }
 
             i {
@@ -79,20 +87,42 @@
             }
 
             &.router-link-active {
-                background-color: rgba(0, 0, 0, 0.3);
+                background-color: $left-side-border-color;
                 color: #fff;
                 border-left: 3px solid #E4C812;
             }
         }
+
+        &:hover .nav-sub {
+            display: block;
+        }
     }
 
-    .nav-sublink  {
-        border-top: 1px solid #fff;
+    .nav-sub {
+        position: absolute;
+        display: none;
+        top: 0;
+        right: 0;
+        transform: translateX(100%);
+        outline: $left-side-border;
+        background-color: $mainColor;
 
-        > a {
-            display: block;
-            padding: 10px 20px;
-            font-size: 0.8rem;
+        &:before,
+        &:after {
+            right: 100%;
+            top: 1.5em;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        &:before {
+            border-right-color: $left-side-border-color;
+            border-width: 1em;
+            margin-top: -1em;
         }
     }
 

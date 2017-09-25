@@ -14,6 +14,7 @@ import headerComponent from './components/header/header.vue';
 import loading from './components/loading/loading.vue';
 import leftSide from './components/left-side/left-side.vue';
 import floatMessage from './components/float-message/float-message.vue';
+import fileUpload from './components/file-upload/file-upload.vue';
 
 // Pages
 import loginPage from './components/login/login.vue';
@@ -86,14 +87,16 @@ function loadApp() {
             headerComponent,
             loading,
             leftSide,
-            floatMessage
+            floatMessage,
+            fileUpload
         },
         data: {
             menu: {},
             leftSideMenu: false,
             loggedIn: functions.checkUserAuth(),
             userData: {},
-            floatingMessage: {}
+            floatingMessage: {},
+            multiSiteId: 0
         },
         mounted() {
             let self = this;
@@ -114,6 +117,9 @@ function loadApp() {
                     //window.location.hash = '#side-menu-open';
                     document.querySelector('body').className = document.querySelector('body').className + ' open left'.trim();
                 }
+            },
+            updateMultiSite: function(value) {
+                this.multiSiteId = parseInt(value);
             },
             login: function() {
                 this.loggedIn = functions.checkUserAuth();
