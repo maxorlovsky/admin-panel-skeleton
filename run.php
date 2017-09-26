@@ -20,7 +20,7 @@ if (php_sapi_name() != 'cli') {
     // If config does not exist we run install.php
     // It won't create dynamic stuff like wordpress/phpmyadmin do, so it's safe to store this file
     if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/mocms/config.php')) {
-        require_once 'storage/install.php';
+        require_once 'install/install.php';
         exit();
     }
     else {
