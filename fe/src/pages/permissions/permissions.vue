@@ -185,6 +185,12 @@ const permissionsPage = {
                 if (item.new && item.key && item.name) {
                     delete item.new;
                 }
+
+                for (let subitem of item.subCategories) {
+                    if (subitem.new && subitem.key && subitem.name) {
+                        delete subitem.new;
+                    }
+                }
             }
 
             axios.put('/api/permissions', this.permissions)
