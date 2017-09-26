@@ -131,7 +131,7 @@
 
 <script>
 // Components
-import loading from '../loading/loading.vue';
+import loading from '../../components/loading/loading.vue';
 import draggable from 'vuedraggable';
 
 // 3rd party libs

@@ -38,7 +38,7 @@ import { functions } from '../../functions.js';
 import VueRouter from 'vue-router';
 
 // Components
-import loading from '../loading/loading.vue';
+import loading from '../../components/loading/loading.vue';
 
 // 3rd party libs
 import axios from 'axios';

@@ -42,7 +42,7 @@
 
 <script>
 // Components
-import loading from '../loading/loading.vue';
+import loading from '../../components/loading/loading.vue';
 
 // 3rd party libs
 import axios from 'axios';

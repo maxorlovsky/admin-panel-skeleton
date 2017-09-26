@@ -17,15 +17,15 @@ import floatMessage from './components/float-message/float-message.vue';
 import fileUpload from './components/file-upload/file-upload.vue';
 
 // Pages
-import loginPage from './components/login/login.vue';
-import dashboardPage from './components/dashboard/dashboard.vue';
-import usersPage from './components/users/users.vue';
-import usersEditPage from './components/users/users-edit.vue';
-import permissionsPage from './components/permissions/permissions.vue';
-import logsPage from './components/logs/logs.vue';
-import pagesPage from './components/pages/pages.vue';
-import pagesEditPage from './components/pages/pages-edit.vue';
-import logoutPage from './components/logout/logout.vue';
+import loginPage from './pages/login/login.vue';
+import dashboardPage from './pages/dashboard/dashboard.vue';
+import usersPage from './pages/users/users.vue';
+import usersEditPage from './pages/users/users-edit.vue';
+import permissionsPage from './pages/permissions/permissions.vue';
+import logsPage from './pages/logs/logs.vue';
+import pagesPage from './pages/pages/pages.vue';
+import pagesEditPage from './pages/pages/pages-edit.vue';
+import logoutPage from './pages/logout/logout.vue';
 
 // Website custom config, those files must exist no matter what
 import websiteConfig from '../../../../../mocms/config.json';

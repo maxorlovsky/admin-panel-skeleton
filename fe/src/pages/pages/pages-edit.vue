@@ -55,8 +55,8 @@
 
 <script>
 // Components
-import loading from '../loading/loading.vue';
-import tinymce from '../tinymce/tinymce.vue';
+import loading from '../../components/loading/loading.vue';
+import tinymce from '../../components/tinymce/tinymce.vue';
 
 // 3rd party libs
 import axios from 'axios';
