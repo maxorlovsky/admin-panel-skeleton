@@ -59,7 +59,7 @@ router.beforeEach((to, from, next) => {
     window.scrollTo(0, 0);
     
     // Set up meta title
-    let metaTitle = 'TM CMS';
+    let metaTitle = 'MO CMS';
     if (websiteConfig.title) {
         metaTitle = websiteConfig.title;
     }
