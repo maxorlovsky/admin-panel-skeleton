@@ -87,7 +87,8 @@ CREATE TABLE `mo_multisite` (
 
 CREATE TABLE `mo_pages` (
   `id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` varchar(160) DEFAULT NULL,
   `link` varchar(300) NOT NULL,
   `logged_in` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   `text` text,
