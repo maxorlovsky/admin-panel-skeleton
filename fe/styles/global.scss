@@ -33,6 +33,7 @@ $fa-font-path: '../assets/font/';
 
 // Import CMS "default" styles
 @import '../src/components/**/*.scss';
+@import '../src/pages/**/*.scss';
 
 // Import styles outside of CMS
 @import '../../../../../mocms/components/**/*.scss';

@@ -47,8 +47,8 @@
 
 <script>
 // Components
-import loading from '../loading/loading.vue';
-import pagination from '../pagination/pagination.vue';
+import loading from '../../components/loading/loading.vue';
+import pagination from '../../components/pagination/pagination.vue';
 
 // 3rd party libs
 import axios from 'axios';

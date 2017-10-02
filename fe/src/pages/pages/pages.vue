@@ -13,7 +13,7 @@
     <table class="table table-striped table-responsive">
         <thead>
             <tr>
-                <th>Page name</th>
+                <th>Meta title</th>
                 <th>Page link</th>
                 <th>Actions</th>
             </tr>
@@ -23,7 +23,7 @@
                 <td colspan="3"><loading></loading></td>
             </tr>
             <tr v-for="page in pages" v-bind:key="page.id">
-                <td>{{page.name}}</td>
+                <td>{{page.title}}</td>
                 <td>{{page.link}}</td>
                 <td>
                     <router-link :to="'/pages/edit/' + page.id"><button class="btn btn-success"><span class="fa fa-pencil"></span></button></router-link>
@@ -42,7 +42,7 @@
 
 <script>
 // Components
-import loading from '../loading/loading.vue';
+import loading from '../../components/loading/loading.vue';
 
 // 3rd party libs
 import axios from 'axios';

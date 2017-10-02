@@ -131,7 +131,7 @@
 
 <script>
 // Components
-import loading from '../loading/loading.vue';
+import loading from '../../components/loading/loading.vue';
 import draggable from 'vuedraggable';
 
 // 3rd party libs
@@ -184,6 +184,12 @@ const permissionsPage = {
             for (let item of this.permissions) {
                 if (item.new && item.key && item.name) {
                     delete item.new;
+                }
+
+                for (let subitem of item.subCategories) {
+                    if (subitem.new && subitem.key && subitem.name) {
+                        delete subitem.new;
+                    }
                 }
             }
 
