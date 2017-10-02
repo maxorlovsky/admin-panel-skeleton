@@ -8,7 +8,7 @@
         </h2>
         <router-link to="/pages">
             <button class="btn btn-info">
-                <span class="fa fa-step-backward"></span> Back to list
+                <span class="fa fa-file-text"></span> Back to list
             </button>
         </router-link>
     </div>
@@ -16,34 +16,54 @@
     <loading v-if="loading"></loading>
     <form method="post" v-on:submit.prevent="submitForm()" v-else>
         <div class="form-group row">
-            <label for="title-field" class="col-2 col-form-label">Title/Link</label>
-            <div class="col-10">
-                <input v-model="form.title"
-                    :class="{ error: errorClasses.title }"
-                    class="form-control"
-                    type="text"
-                    id="title-field"
-                />
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="name-field" class="col-2 col-form-label">Page name</label>
-            <div class="col-10">
+            <label for="name-field" class="col-3 col-form-label">Name</label>
+            <div class="col-9">
                 <input v-model="form.name"
                     :class="{ error: errorClasses.name }"
                     class="form-control"
                     type="text"
-                    id="name-field"
+                    id="name-field" 
                 />
             </div>
         </div>
         <div class="form-group row">
-            <label for="text-field" class="col-2 col-form-label">Page text</label>
-            <div class="col-10">
+            <label for="link-field" class="col-3 col-form-label">Link</label>
+            <div class="col-9">
+                <input v-model="form.link"
+                    :class="{ error: errorClasses.link }"
+                    class="form-control"
+                    type="text"
+                    id="link-field" 
+                />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="text-field" class="col-3 col-form-label">Text</label>
+            <div class="col-9">
                 <tinymce v-model="form.text"
                     :class="{ error: errorClasses.text }"
                     id="text-field"
                 ></tinymce>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="logged_in-field" class="col-3 col-form-label">Logged In only</label>
+            <div class="col-9">
+                <input v-model="form.logged_in"
+                    :class="{ error: errorClasses.logged_in }"
+                    type="checkbox"
+                    id="logged_in-field"
+                />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="enabled-field" class="col-3 col-form-label">Enabled</label>
+            <div class="col-9">
+                <input v-model="form.enabled"
+                    :class="{ error: errorClasses.enabled }"
+                    type="checkbox"
+                    id="enabled-field"
+                />
             </div>
         </div>
 
@@ -60,7 +80,6 @@ import tinymce from '../../components/tinymce/tinymce.vue';
 
 // 3rd party libs
 import axios from 'axios';
-import vueTinymce from '@deveodk/vue-tinymce';
 
 const pagesEditPage = {
     components: {
@@ -74,14 +93,18 @@ const pagesEditPage = {
             loading: true,
             formLoading: false,
             form: {
-                title: '',
                 name: '',
-                text: ''
+                link: '',
+                text: '',
+                logged_in: false,
+                enabled: false
             },
             errorClasses: {}
         };
     },
     created: function() {
+        const self = this;
+
         // Define if we add or edit
         if (this.$route.params.id) {
             this.edit = true;
@@ -97,9 +120,11 @@ const pagesEditPage = {
 
             axios.get(`/api/pages/${id}`)
             .then(function (response) {
-                self.form.login = response.data.admin.login;
-                self.form.email = response.data.admin.email;
-                self.form.level = response.data.admin.level;
+                self.form.name = response.data.page.name;
+                self.form.link = response.data.page.link;
+                self.form.text = response.data.page.text;
+                self.form.logged_in = response.data.page.logged_in == 1 ? true : false;
+                self.form.enabled = response.data.page.enabled == 1 ? true : false;
 
                 self.loading = false;
             })
@@ -115,19 +140,15 @@ const pagesEditPage = {
 
             this.errorClasses = {};
 
-            console.log(this.form);
-
             // Frontend check
-            if (this.add && (!this.form.login || !this.form.password || !this.form.level)) {
+            if (!this.form.name || !this.form.link) {
                 // Generic error message
                 this.$parent.displayMessage('Please fill in the form', 'danger');
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
-                    login: !this.form.login ? true : false,
-                    password: !this.form.password ? true : false,
-                    email: false,
-                    level: !this.form.level ? true : false
+                    name: !this.form.name ? true : false,
+                    link: !this.form.link ? true : false
                 };
 
                 return false;
@@ -135,19 +156,22 @@ const pagesEditPage = {
 
             let apiUrl = '/api/pages/add';
             let apiAttributes = {
-                login: this.form.login,
-                password: this.form.password,
-                email: this.form.email,
-                level: this.form.level
+                name: this.form.name,
+                link: this.form.link,
+                text: this.form.text,
+                logged_in: this.form.logged_in,
+                enabled: this.form.enabled
             };
 
             if (this.edit) {
                 apiUrl = '/api/pages/edit';
                 apiAttributes = {
                     id: this.$route.params.id,
-                    password: this.form.password,
-                    email: this.form.email,
-                    level: this.form.level
+                    name: this.form.name,
+                    link: this.form.link,
+                    text: this.form.text,
+                    logged_in: this.form.logged_in,
+                    enabled: this.form.enabled
                 };
             }
 

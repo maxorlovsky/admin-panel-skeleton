@@ -54,7 +54,7 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
             'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
             'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
             'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
-            'text'      => filter_var($body['text'], FILTER_SANITIZE_STRING),
+            'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
             'enabled'   => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
         );
         
@@ -111,7 +111,7 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
             'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
             'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
             'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
-            'text'      => filter_var($body['text'], FILTER_SANITIZE_STRING),
+            'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
             'enabled'   => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
         );
 
@@ -225,7 +225,7 @@ class PagesController
     public function getPages() {
         $q = $this->db->query(
             'SELECT `id`, `name`, `link`, `logged_in`, `enabled` '.
-            'FROM `mo_pages` AS '.
+            'FROM `mo_pages` '.
             'WHERE `deleted` = 0 '
         );
         $q->execute();
@@ -246,6 +246,8 @@ class PagesController
         $q->execute();
 
         $page = $q->fetch();
+
+        $page['text'] = html_entity_decode($page['text'], ENT_QUOTES);
         
         return $page;
     }
@@ -299,8 +301,8 @@ class PagesController
             'WHERE `id` = :id '
         );
 
+        $logged_in = $attributes['logged_in'] ? true : false;
         $enabled = $attributes['enabled'] ? true : false;
-        $dates = json_encode($attributes['dates']);
 
         $q->bindParam(':name', $attributes['name'], PDO::PARAM_STR);
         $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
