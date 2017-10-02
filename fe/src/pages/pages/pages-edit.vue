@@ -8,7 +8,7 @@
         </h2>
         <router-link to="/pages">
             <button class="btn btn-info">
-                <span class="fa fa-file-text"></span> Back to list
+                <span class="fa fa-step-backward"></span> Back to list
             </button>
         </router-link>
     </div>
