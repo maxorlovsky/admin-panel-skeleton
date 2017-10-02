@@ -51,7 +51,8 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
         $user = $request->getAttribute('user');
 
         $attributes = array(
-            'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
+            'title'     => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
+            'description'=> filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
             'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
             'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
             'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
@@ -108,7 +109,8 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
 
         $attributes = array(
             'id'        => filter_var($body['id'], FILTER_SANITIZE_NUMBER_INT),
-            'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
+            'title'     => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
+            'description'=> filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
             'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
             'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
             'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
@@ -224,7 +226,7 @@ class PagesController
 
     public function getPages() {
         $q = $this->db->query(
-            'SELECT `id`, `name`, `link`, `logged_in`, `enabled` '.
+            'SELECT `id`, `title`, `link`, `logged_in`, `enabled` '.
             'FROM `mo_pages` '.
             'WHERE `deleted` = 0 '
         );
@@ -237,7 +239,7 @@ class PagesController
 
     public function getPage($id) {
         $q = $this->db->prepare(
-            'SELECT `id`, `name`, `link`, `logged_in`, `text`, `enabled` '.
+            'SELECT `id`, `title`, `description`, `link`, `logged_in`, `text`, `enabled` '.
             'FROM `mo_pages` '.
             'WHERE `id` = :id AND `deleted` = 0 '.
             'LIMIT 1'
@@ -262,7 +264,8 @@ class PagesController
 
         $q = $this->db->prepare(
             'INSERT INTO `mo_pages` SET '.
-            '`name` = :name, '.
+            '`title` = :title, '.
+            '`description` = :description, '.
             '`link` = :link, '.
             '`logged_in` = :logged_in, '.
             '`text` = :text, '.
@@ -272,7 +275,8 @@ class PagesController
         $logged_in = $attributes['logged_in'] ? true : false;
         $enabled = $attributes['enabled'] ? true : false;
 
-        $q->bindParam(':name', $attributes['name'], PDO::PARAM_STR);
+        $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
+        $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
         $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
         $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
@@ -293,7 +297,8 @@ class PagesController
 
         $q = $this->db->prepare(
             'UPDATE `mo_pages` SET '.
-            '`name` = :name, '.
+            '`title` = :title, '.
+            '`description` = :description, '.
             '`link` = :link, '.
             '`logged_in` = :logged_in, '.
             '`text` = :text, '.
@@ -304,7 +309,8 @@ class PagesController
         $logged_in = $attributes['logged_in'] ? true : false;
         $enabled = $attributes['enabled'] ? true : false;
 
-        $q->bindParam(':name', $attributes['name'], PDO::PARAM_STR);
+        $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
+        $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
         $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
         $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
@@ -317,12 +323,17 @@ class PagesController
     }
 
     private function checkForm($attributes, $type) {
-        if (!$attributes['name']) {
-            $this->message .= 'Name is empty<br />';
-            $this->fields[] = 'name';
-        } else if (strlen($attributes['name']) > 100) {
-            $this->message .= 'Name is too long<br />';
-            $this->fields[] = 'name';
+        if (!$attributes['title']) {
+            $this->message .= 'Meta title is empty<br />';
+            $this->fields[] = 'title';
+        } else if (strlen($attributes['title']) > 100) {
+            $this->message .= 'Meta title is too long<br />';
+            $this->fields[] = 'title';
+        }
+
+        if ($attributes['description'] && strlen($attributes['description']) > 160) {
+            $this->message .= 'Meta description is too long<br />';
+            $this->fields[] = 'description';
         }
 
         if (!$attributes['link']) {

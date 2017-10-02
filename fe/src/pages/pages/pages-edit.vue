@@ -16,13 +16,25 @@
     <loading v-if="loading"></loading>
     <form method="post" v-on:submit.prevent="submitForm()" v-else>
         <div class="form-group row">
-            <label for="name-field" class="col-3 col-form-label">Name</label>
+            <label for="meta_title-field" class="col-3 col-form-label">Meta title</label>
             <div class="col-9">
-                <input v-model="form.name"
-                    :class="{ error: errorClasses.name }"
+                <input v-model="form.meta_title"
+                    :class="{ error: errorClasses.meta_title }"
                     class="form-control"
                     type="text"
-                    id="name-field" 
+                    id="meta_title-field" 
+                />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="meta_description-field" class="col-3 col-form-label">Meta description</label>
+            <div class="col-9">
+                <input v-model="form.meta_description"
+                    :class="{ error: errorClasses.meta_description }"
+                    class="form-control"
+                    type="text"
+                    id="meta_description-field" 
+                    maxlength="160"
                 />
             </div>
         </div>
@@ -93,7 +105,8 @@ const pagesEditPage = {
             loading: true,
             formLoading: false,
             form: {
-                name: '',
+                meta_title: '',
+                meta_description: '',
                 link: '',
                 text: '',
                 logged_in: false,
@@ -120,7 +133,8 @@ const pagesEditPage = {
 
             axios.get(`/api/pages/${id}`)
             .then(function (response) {
-                self.form.name = response.data.page.name;
+                self.form.meta_title = response.data.page.meta_title;
+                self.form.meta_description = response.data.page.meta_description;
                 self.form.link = response.data.page.link;
                 self.form.text = response.data.page.text;
                 self.form.logged_in = response.data.page.logged_in == 1 ? true : false;
@@ -141,13 +155,13 @@ const pagesEditPage = {
             this.errorClasses = {};
 
             // Frontend check
-            if (!this.form.name || !this.form.link) {
+            if (!this.form.meta_title || !this.form.link) {
                 // Generic error message
                 this.$parent.displayMessage('Please fill in the form', 'danger');
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
-                    name: !this.form.name ? true : false,
+                    meta_title: !this.form.meta_title ? true : false,
                     link: !this.form.link ? true : false
                 };
 
@@ -156,7 +170,8 @@ const pagesEditPage = {
 
             let apiUrl = '/api/pages/add';
             let apiAttributes = {
-                name: this.form.name,
+                meta_title: this.form.meta_title,
+                meta_description: this.form.meta_description,
                 link: this.form.link,
                 text: this.form.text,
                 logged_in: this.form.logged_in,
@@ -167,7 +182,8 @@ const pagesEditPage = {
                 apiUrl = '/api/pages/edit';
                 apiAttributes = {
                     id: this.$route.params.id,
-                    name: this.form.name,
+                    meta_title: this.form.meta_title,
+                    meta_description: this.form.meta_description,
                     link: this.form.link,
                     text: this.form.text,
                     logged_in: this.form.logged_in,
