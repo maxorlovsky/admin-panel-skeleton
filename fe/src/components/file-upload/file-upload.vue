@@ -4,7 +4,7 @@
             <input type="file"
                 :id="inputId"
                 :accept="inputAccept"
-                :name="inputName"
+                :name="inputName + '[]'"
                 :disabled="isSaving"
                 @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
                 multiple
@@ -75,17 +75,15 @@ export default {
             const self = this;
 
             this.currentStatus = status.saving;
-
             axios.post(this.apiEndPoint, formData)
             .then(function (response) {
-                //response.map(img => Object.assign({}, img, { url: `/images/${img.id}` }))
-                console.log(response);
-                //self.uploadedFiles = [].concat(x);
                 self.currentStatus = status.success;
+                self.$emit('upload-complete', response);
             })
             .catch(function (error) {
-                self.uploadError = err.response;
+                self.uploadError = error.response;
                 self.currentStatus = status.failed;
+                self.$emit('upload-complete', error);
             });
         },
         filesChange(fieldName, fileList) {

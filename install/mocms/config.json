@@ -1,5 +1,6 @@
 {
     "title": "",
     "captcha": "",
-    "multiBrands": false
+    "multiBrands": false,
+    "nodeModulesPath": "../../../../../../../node_modules"
 }
