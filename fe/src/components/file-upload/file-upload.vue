@@ -79,11 +79,17 @@ export default {
             .then(function (response) {
                 self.currentStatus = status.success;
                 self.$emit('upload-complete', response);
+
+                // Clearing file field with just Javascript as type="file" does not support v-model
+                document.querySelector(`#${self.inputId}`).value = '';
             })
             .catch(function (error) {
                 self.uploadError = error.response;
                 self.currentStatus = status.failed;
                 self.$emit('upload-complete', error);
+                
+                // Clearing file field with just Javascript as type="file" does not support v-model
+                document.querySelector(`#${self.inputId}`).value = '';
             });
         },
         filesChange(fieldName, fileList) {
