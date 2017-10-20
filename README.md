@@ -13,7 +13,7 @@ Using composer.
 ```
 {
     "require": {
-        "maxtream/themages": "4.0.0-alpha4"
+        "maxtream/themages": "4.0.0"
     }
 }
 ```
