@@ -1,11 +1,12 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const rename = require("gulp-rename");
+const uglify = require('gulp-uglify');
 const runSequence = require('run-sequence');
 
 gulp.task('copy', (cb) => {
 	return runSequence(
-		['copy:assets', 'copy:html', 'copy:index'],
+		['copy:assets', 'copy:html', 'copy:index', 'copy:iefix'],
 		['copy:fontawesome', 'copy:tinymce'], // after assets folder have been created
 	cb);
 });
@@ -25,15 +26,13 @@ gulp.task('copy:html', () => {
 			path.dirname = '';
 			path.basename = newName;
 		}))
-    	.pipe(gulp.dest('./dist/html/'));
+		.pipe(gulp.dest('./dist/html/'));
 });
 
 // index.html
 gulp.task('copy:index', () => {
-	return gulp.src([
-			'./fe/index.html',
-		])
-        .pipe(gulp.dest('./dist/'));
+	return gulp.src('./fe/index.html')
+		.pipe(gulp.dest('./dist/'));
 });
 
 // FontAwesome fonts
@@ -46,4 +45,11 @@ gulp.task('copy:fontawesome', () => {
 gulp.task('copy:tinymce', () => {
 	return gulp.src('./node_modules/tinymce/skins/lightgray/**')
         .pipe(gulp.dest('./dist/styles/tinymce-skins/'));
+});
+
+// iefix.html
+gulp.task('copy:iefix', () => {
+	return gulp.src('./fe/src/iefix.js')
+		.pipe(uglify())
+		.pipe(gulp.dest('./dist/js/'));
 });
