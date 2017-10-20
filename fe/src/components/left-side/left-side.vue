@@ -24,6 +24,7 @@
                         v-bind:key="sublink.url"
                     >
                         <router-link :to="sublink.url">
+                            <i class="fa fa-angle-right"></i>
                             <i :class="sublink.icon_classes"></i>
                             <span>{{sublink.title}}</span>
                         </router-link>
