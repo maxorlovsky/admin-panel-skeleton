@@ -80,7 +80,7 @@
         </div>
 
         <button class="btn btn-primary" v-if="add" :disabled="formLoading">Add page</button>
-        <button class="btn btn-success" v-else :disabled="formLoading">Edit page</button>
+        <button class="btn btn-primary" v-else :disabled="formLoading">Edit page</button>
     </form>
 </section>
 </template>
