@@ -65,7 +65,7 @@
         </div>
 
         <button class="btn btn-primary" v-if="add" :disabled="formLoading">Add admin</button>
-        <button class="btn btn-success" v-else :disabled="formLoading">Edit admin</button>
+        <button class="btn btn-primary" v-else :disabled="formLoading">Edit admin</button>
     </form>
 </section>
 </template>

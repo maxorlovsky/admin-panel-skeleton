@@ -74,6 +74,11 @@ select {
     transition: .5s;
 
     @include clearfix();
+
+    form .btn.btn-primary {
+        margin-top: 0.5rem;
+        width: 100%;
+    }
 }
 
 .sort-handle {

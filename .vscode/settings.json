@@ -7,6 +7,7 @@
         "**/.DS_Store": true,
         "**/node_modules": true,
         "**/vendor": true,
-        "**/dist": true
+        "**/dist": true,
+        "**/fe/src/custom-components": true
     }
 }

@@ -107,6 +107,12 @@ $left-side-border: 2px solid $left-side-border-color;
         outline: $left-side-border;
         background-color: $mainColor;
 
+        @include media-breakpoint-down(sm) {
+            position: initial;
+            display: initial;
+            transform: initial;
+        }
+
         &:before,
         &:after {
             right: 100%;
@@ -123,6 +129,15 @@ $left-side-border: 2px solid $left-side-border-color;
             border-right-color: $left-side-border-color;
             border-width: 1em;
             margin-top: -1em;
+        }
+
+        .fa-angle-right {
+            display: none;
+            padding-right: 0.5em;
+
+            @include media-breakpoint-down(sm) {
+                display: inline-block;
+            }
         }
     }
 
