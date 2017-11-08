@@ -100,6 +100,7 @@ $app->post('/api/users/add', function(Request $request, Response $response) {
             'password'  => filter_var($body['password'], FILTER_SANITIZE_STRING),
             'email'     => filter_var($body['email'], FILTER_SANITIZE_STRING),
             'level'     => filter_var($body['level'], FILTER_SANITIZE_NUMBER_INT),
+            'permissions'=> $body['permissions'],
         );
         
         // Define controller, fill up main variables
@@ -155,6 +156,7 @@ $app->post('/api/users/edit', function(Request $request, Response $response) {
             'password'  => filter_var($body['password'], FILTER_SANITIZE_STRING),
             'email'     => filter_var($body['email'], FILTER_SANITIZE_STRING),
             'level'     => filter_var($body['level'], FILTER_SANITIZE_NUMBER_INT),
+            'permissions'=> $body['permissions'],
         );
         
         // Define controller, fill up main variables
@@ -241,7 +243,7 @@ class UsersController
 
     public function getAdmin($id) {
         $q = $this->db->prepare(
-            'SELECT `id`, `login`, `email`, `level` '.
+            'SELECT `id`, `login`, `email`, `level`, `custom_access` '.
             'FROM `mo_admins` '.
             'WHERE `id` = :id '.
             'AND `deleted` = 0 '.
@@ -249,8 +251,12 @@ class UsersController
         );
         $q->bindParam(':id', $id, PDO::PARAM_INT);
         $q->execute();
+
+        $user = $q->fetch();
+
+        $user['custom_access'] = json_decode($user['custom_access']);
         
-        return $q->fetch();
+        return $user;
     }
 
     public function getAdmins() {
@@ -276,17 +282,20 @@ class UsersController
             '`login` = :login, '.
             '`password` = :password, '.
             '`email` = :email, '.
-            '`level` = :level'
+            '`level` = :level, '.
+            '`custom_access` = :permissions'
         );
 
         // Converting password from plain text to proper encrypted text
         $convertedPassword = UsersController::passwordConvert($attributes['password']);
+        $permissions = json_encode($attributes['permissions']);
         $level = (int)$attributes['level'];
 
         $q->bindParam(':login', $attributes['login'], PDO::PARAM_STR);
         $q->bindParam(':password', $convertedPassword, PDO::PARAM_STR);
         $q->bindParam(':email', $attributes['email'], PDO::PARAM_STR);
         $q->bindParam(':level', $level, PDO::PARAM_INT);
+        $q->bindParam(':permissions', $permissions, PDO::PARAM_STR);
         $q->execute();
         
         return true;
@@ -306,21 +315,26 @@ class UsersController
                 'UPDATE `mo_admins` SET '.
                 '`password` = :password, '.
                 '`email` = :email, '.
-                '`level` = :level '.
+                '`level` = :level, '.
+                '`custom_access` = :permissions '.
                 'WHERE `id` = :id'
             );
         } else {
             $q = $this->db->prepare(
                 'UPDATE `mo_admins` SET '.
                 '`email` = :email, '.
-                '`level` = :level '.
+                '`level` = :level, '.
+                '`custom_access` = :permissions '.
                 'WHERE `id` = :id'
             );
         }
         
         $level = (int)$attributes['level'];
+        $permissions = json_encode($attributes['permissions']);
+
         $q->bindParam(':email', $attributes['email'], PDO::PARAM_STR);
         $q->bindParam(':level', $level, PDO::PARAM_INT);
+        $q->bindParam(':permissions', $permissions, PDO::PARAM_STR);
         $q->bindParam(':id', $attributes['id'], PDO::PARAM_INT);
 
         // Update in case if password is set
@@ -330,7 +344,11 @@ class UsersController
             $q->bindParam(':password', $convertedPassword, PDO::PARAM_STR);
         }
 
-        $q->execute();
+        try {
+            $q->execute();
+        } catch(Exception $e) {
+            ddump($e->getMessage());
+        }
         
         return true;
     }

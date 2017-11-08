@@ -137,6 +137,9 @@ import draggable from 'vuedraggable';
 // 3rd party libs
 import axios from 'axios';
 
+// Website custom config
+import websiteConfig from '../../../../../../../mocms/config.json';
+
 const permissionsPage = {
     components: {
         loading,
@@ -145,11 +148,11 @@ const permissionsPage = {
     data: function() {
         return {
             permissions: [],
-            maxLevel: 0,
             formLoading: false,
             loading: true,
             errorClasses: {},
-            drag: false
+            drag: false,
+            maxLevel: websiteConfig.maxLevel
         };
     },
     created: function() {
@@ -166,7 +169,6 @@ const permissionsPage = {
                 // Required for drag-n-drop functionality
                 self.addEmptySubCategories();
 
-                self.maxLevel = parseInt(response.data.maxLevel);
                 self.loading = false;
             })
             .catch(function (error) {

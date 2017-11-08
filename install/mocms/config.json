@@ -3,5 +3,6 @@
     "version": "1.0.0",
     "captcha": "",
     "multiBrands": false,
-    "nodeModulesPath": "../../../../../../../node_modules"
+    "nodeModulesPath": "../../../../../../../node_modules",
+    "maxLevel": 3
 }

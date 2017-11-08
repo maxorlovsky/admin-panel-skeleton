@@ -10,11 +10,10 @@ $app->get('/api/permissions', function(Request $request, Response $response) {
         // Define controller, fill up main variables
         $permissionsController = new PermissionsController($this->db, $this->params, $request->getAttribute('user'));
 
-        $config = $permissionsController->getConfig();
+        $permissions = $permissionsController->getPermissions();
 
         $data = array(
-            'permissions'   => $config['permissions'],
-            'maxLevel'      => $config['maxLevel'],
+            'permissions'   => $permissions
         );
     }
 
@@ -91,17 +90,12 @@ class PermissionsController
         return array_unique($this->fields);
     }
 
-    public function getConfig() {
-        $q = $this->db->query('SELECT * FROM `mocms` WHERE `setting` = "menu" OR `setting` = "max_level"');
+    public function getPermissions() {
+        $q = $this->db->query('SELECT `value` FROM `mocms` WHERE `setting` = "menu" LIMIT 1');
         $q->execute();
-        $configData = $q->fetchAll();
+        $row = $q->fetch();
 
-        $config = [
-            'permissions'   => json_decode($configData[1]['value']),
-            'maxLevel'      => $configData[0]['value'],
-        ];
-
-        return $config;
+        return json_decode($row['value']);
     }
 
     public function updatePermissions($attributes) {
