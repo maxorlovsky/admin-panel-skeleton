@@ -36,28 +36,30 @@ if (php_sapi_name() != 'cli') {
     $container = $app->getContainer();
 
     // Add monolog logger
-    require 'api/inc/logger.php';
+    require_once 'api/inc/logger.php';
     // DB/PDO connection
-    require 'api/inc/db.php';
+    require_once 'api/inc/db.php';
     // Global params inside pages
-    require 'api/inc/params.php';
-    require 'api/inc/404.php';
-    require 'api/inc/500.php';
-    require 'api/inc/log.php';
+    require_once 'api/inc/params.php';
+    require_once 'api/inc/404.php';
+    require_once 'api/inc/500.php';
+    require_once 'api/inc/log.php';
 
     // SlimPHP specific middlewares
-    require 'api/middleware/db-check.php';
-    require 'api/middleware/auth.php';
-    require 'api/middleware/cors.php';
-    require 'api/middleware/multisite.php';
+    require_once 'api/middleware/db-check.php';
+    require_once 'api/middleware/auth.php';
+    require_once 'api/middleware/cors.php';
+    require_once 'api/middleware/multisite.php';
 
     // Routing / Modules
-    require 'api/modules/login.php';
-    require 'api/modules/logout.php';
-    require 'api/modules/users.php';
-    require 'api/modules/logs.php';
-    require 'api/modules/user-data.php';
-    require 'api/modules/permissions.php';
+    require_once 'api/modules/login.php';
+    require_once 'api/modules/logout.php';
+    require_once 'api/modules/users.php';
+    require_once 'api/modules/logs.php';
+    require_once 'api/modules/user-data.php';
+    require_once 'api/modules/permissions.php';
+    require_once 'api/modules/pages.php';
+    require_once 'api/modules/labels.php';
 
     // Adding site modules
     if (file_exists($_SERVER['DOCUMENT_ROOT'].'/mocms/modules.php')) {
