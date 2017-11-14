@@ -25,6 +25,8 @@ import permissionsPage from './pages/permissions/permissions.vue';
 import logsPage from './pages/logs/logs.vue';
 import pagesPage from './pages/pages/pages.vue';
 import pagesEditPage from './pages/pages/pages-edit.vue';
+import labelsPage from './pages/labels/labels.vue';
+import labelsEditPage from './pages/labels/labels-edit.vue';
 import logoutPage from './pages/logout/logout.vue';
 
 // Website custom config, those files must exist no matter what
