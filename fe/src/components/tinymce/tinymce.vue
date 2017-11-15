@@ -31,7 +31,8 @@ export default {
 			required: true
 		},
 		options: Object,
-		value: String
+		value: String,
+		noParagraph: Boolean
 	},
     mounted () {
 		let options = {
@@ -43,7 +44,8 @@ export default {
 				'undo redo | code | restoredraft | fullscreen | bullist numlist | link unlink image'
 			],
 			fontsize_formats: '8px 9px 10px 11px 12px 13px 14px 15px 16px 17px 18px 19px 20px 24px 36px',
-			plugins: ['code', 'fullscreen', 'lists', 'link', 'autosave', 'image', 'imagetools', 'textcolor', 'colorpicker']
+			plugins: ['code', 'fullscreen', 'lists', 'link', 'autosave', 'image', 'imagetools', 'textcolor', 'colorpicker'],
+			forced_root_block : this.noParagraph ? '' : 'p'
 			//https://www.tinymce.com/docs/plugins/imagetools/
 		};
 
