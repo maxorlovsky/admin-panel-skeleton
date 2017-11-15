@@ -57,10 +57,45 @@
                     class="form-control"
                     id="level-field"
                 >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    <option v-for="level in maxLevel"
+                        :value="level"
+                        v-bind:key="level"
+                    >{{level}}</option>
+                    <option value="0">Custom</option>
                 </select>
+            </div>
+        </div>
+        <div class="form-group row" v-if="form.level == 0">
+            <label for="permissions-field" class="col-2 col-form-label">Access permissions</label>
+            <div class="col-10">
+                <div v-for="permission in permissions"
+                    :key="permission.key"
+                    class="inline-element"
+                >
+                    <label :for="'permission'+permission.key">
+                        <input type="checkbox"
+                            :value="permission.key"
+                            :id="'permission'+permission.key"
+                            :disabled="permission.key === defaultPage"
+                            v-model="form.permissions"
+                        />
+                        {{permission.name}}
+                    </label>
+
+                    <label v-for="subpermission in permission.subCategories"
+                        :key="subpermission.key"
+                        :for="'permission'+subpermission.key"
+                        class="inline-element"
+                    >
+                        <input type="checkbox"
+                            :value="subpermission.key"
+                            :id="'permission'+subpermission.key"
+                            :disabled="subpermission.key === defaultPage"
+                            v-model="form.permissions"
+                        />
+                        {{subpermission.name}}
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -77,6 +112,9 @@ import loading from '../../components/loading/loading.vue';
 // 3rd party libs
 import axios from 'axios';
 
+// Website custom config
+import websiteConfig from '../../../../../../../mocms/config.json';
+
 const usersEditPage = {
     components: {
         loading
@@ -87,12 +125,16 @@ const usersEditPage = {
             edit: false,
             loading: true,
             formLoading: false,
+            defaultPage: 'dashboard',
             form: {
                 login: '',
                 password: '',
                 email: '',
-                level: 1
+                level: 1,
+                permissions: ['dashboard']
             },
+            permissions: [],
+            maxLevel: websiteConfig.maxLevel,
             errorClasses: {}
         };
     },
@@ -103,24 +145,47 @@ const usersEditPage = {
             this.fetchEditData(this.$route.params.id);
         } else {
             this.add = true;
-            this.loading = false;
+            this.fetchAddData();
         }
     },
     methods: {
         fetchEditData: function(id) {
             const self = this;
 
-            axios.get(`/api/users/${id}`)
-            .then(function (response) {
-                self.form.login = response.data.admin.login;
-                self.form.email = response.data.admin.email;
-                self.form.level = response.data.admin.level;
+            axios.all([
+                axios.get(`/api/users/${id}`),
+                axios.get('/api/permissions'),
+            ])
+            .then(axios.spread((
+                userData,
+                permissionsData
+            ) => {
+                self.form.login = userData.data.admin.login;
+                self.form.email = userData.data.admin.email;
+                self.form.level = userData.data.admin.level;
+                self.form.permissions = (userData.data.admin.custom_access ? userData.data.admin.custom_access : [self.defaultPage]);
 
+                self.permissions = permissionsData.data.permissions;
+
+                self.loading = false;
+            }))
+            .catch((error) => {
+                self.$parent.authRequiredState(error);
+                self.$parent.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'danger');
+                console.log('Error fetching user resources: ' + error);
+            });
+        },
+        fetchAddData: function() {
+            const self = this;
+
+            axios.get('/api/permissions')
+            .then(function (response) {
+                self.permissions = response.data.permissions;
                 self.loading = false;
             })
             .catch(function (error) {
+                self.$parent.authRequiredState(error);
                 self.loading = false;
-                console.log(error);
             });
         },
         submitForm: function() {
@@ -140,7 +205,8 @@ const usersEditPage = {
                     login: !this.form.login ? true : false,
                     password: !this.form.password ? true : false,
                     email: false,
-                    level: !this.form.level ? true : false
+                    level: !this.form.level ? true : false,
+                    permissions: false
                 };
 
                 return false;
@@ -151,7 +217,8 @@ const usersEditPage = {
                 login: this.form.login,
                 password: this.form.password,
                 email: this.form.email,
-                level: this.form.level
+                level: this.form.level,
+                permissions: this.form.permissions
             };
 
             if (this.edit) {
@@ -160,7 +227,8 @@ const usersEditPage = {
                     id: this.$route.params.id,
                     password: this.form.password,
                     email: this.form.email,
-                    level: this.form.level
+                    level: this.form.level,
+                    permissions: this.form.permissions
                 };
             }
 

@@ -255,7 +255,7 @@ class UserDataController
         $returnMenu = [];
         foreach($menu as $value) {
             // Check if access level allow user to see menu item
-            if ($value->level <= $this->user->level) {
+            if ($value->level <= $this->user->level || ($this->user->level == 0 && in_array($value->key, $this->user->custom_access))) {
                 $returnMenu[$value->key] = [
                     'url'           => '/' . $value->key,
                     'title'         => $value->name,
@@ -266,7 +266,7 @@ class UserDataController
                     $returnMenu[$value->key]['sublinks'] = [];
 
                     foreach($value->subCategories as $subValue) {
-                        if ($value->level <= $this->user->level) {
+                        if ($value->level <= $this->user->level || ($this->user->level == 0 && in_array($value->key, $this->user->custom_access))) {
                             $returnMenu[$value->key]['sublinks'][$subValue->key] = [
                                 'url'           => '/' . $subValue->key,
                                 'title'         => $subValue->name,

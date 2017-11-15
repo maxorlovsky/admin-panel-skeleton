@@ -23,6 +23,8 @@ $auth = function ($request, $response, $next) {
             $request = $request->withAttribute('isLogged', true);
             $request = $request->withAttribute('user', $user);
 
+            $user->custom_access = json_decode($user->custom_access);
+
             $breakdown = explode('/', $request->getUri()->getPath());
             $path = $breakdown[2];
         
@@ -33,9 +35,18 @@ $auth = function ($request, $response, $next) {
             $permissions = json_decode($permissions['value']);
             $key = array_search($path, array_column($permissions, 'key'));
             $level = $permissions[$key]->level;
-    
+
+            // Special cases, to fetch stats with custom access
+            if ($user->level == 0) {
+                $user->custom_access[] = 'multisite';
+                $user->custom_access[] = 'menu';
+                
+                // Just for the sake of being secure, add dashboard so there wouldn't be unexpected errors
+                $user->custom_access[] = 'dashboard';
+            }
+
             // Check if user level is enough to use this API endpoint
-            if ($user->level < $level) {
+            if ($user->level < $level && ($user->level == 0 && !in_array($path, $user->custom_access))) {
                 $response = $response->withStatus(403);
                 $data = array('message' => 'Access denied');
                 

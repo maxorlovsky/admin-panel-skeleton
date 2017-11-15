@@ -30,9 +30,7 @@ CREATE TABLE `mocms` (
 --
 
 INSERT INTO `mocms` (`setting`, `value`) VALUES
-('max_level', '3'),
-('menu', '[{"key":"dashboard","name":"Home","icon_classes":"fa fa-book","strict":true,"level":1},{"key":"users","name":"Users","icon_classes":"fa fa-users","strict":false,"level":"3"},{"key":"permissions","name":"Permissions","icon_classes":"fa fa-universal-access","strict":false,"level":"3"},{"key":"logs","name":"Logs","icon_classes":"fa fa-list","strict":false,"level":"3"},{"key":"pages","name":"Pages","icon_classes":"fa fa-file-text","strict":false,"level":"2"}]'),
-('version', '4');
+('menu', '[{"key":"dashboard","name":"Home","icon_classes":"fa fa-book","strict":true,"level":1},{"key":"users","name":"Users","icon_classes":"fa fa-users","strict":false,"level":"3"},{"key":"permissions","name":"Permissions","icon_classes":"fa fa-universal-access","strict":false,"level":"3"},{"key":"logs","name":"Logs","icon_classes":"fa fa-list","strict":false,"level":"3"},{"key":"pages","name":"Pages","icon_classes":"fa fa-file-text","strict":false,"level":"2"}]');
 
 -- --------------------------------------------------------
 

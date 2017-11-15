@@ -28,7 +28,7 @@
                 <tr v-for="admin in admins" v-bind:key="admin.id">
                     <td>{{admin.login}}</td>
                     <td>{{admin.email}}</td>
-                    <td>{{admin.level}}</td>
+                    <td><span v-if="admin.level != 0">{{admin.level}}</span><span v-else>Custom</span></td>
                     <td>{{admin.last_login}}</td>
                     <td>
                         <router-link :to="'/users/edit/' + admin.id"><button class="btn btn-success"><span class="fa fa-pencil"></span></button></router-link>
