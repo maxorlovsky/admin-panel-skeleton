@@ -84,3 +84,9 @@ select {
 .sort-handle {
     cursor: n-resize;
 }
+
+span.small {
+    display: block;
+    color: #777;
+    font-size: 0.7rem;
+}
