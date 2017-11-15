@@ -105,12 +105,8 @@ $app->post('/api/labels/edit', function(Request $request, Response $response) {
 
         $attributes = array(
             'id'        => filter_var($body['id'], FILTER_SANITIZE_NUMBER_INT),
-            'title'     => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
-            'description'=> filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
-            'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
-            'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
-            'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-            'enabled'   => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
+            'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
+            'output'    => filter_var($body['output'], FILTER_SANITIZE_STRING),
         );
 
         // Define controller, fill up main variables
@@ -222,7 +218,7 @@ class LabelsController
 
     public function getLabels() {
         $q = $this->db->query(
-            'SELECT `id`, `title`, `link`, `logged_in`, `enabled` '.
+            'SELECT `id`, `name`, `output` '.
             'FROM `mo_labels` '.
             'WHERE `deleted` = 0 '
         );
@@ -250,21 +246,24 @@ class LabelsController
         return $label;
     }
 
-    public function getLabelByName($name) {
+    public function checkIfLabelExist($name, $id = 0) {
         $q = $this->db->prepare(
-            'SELECT `id`, `name`, `output` '.
+            'SELECT `id` '.
             'FROM `mo_labels` '.
-            'WHERE `name` = :name AND `deleted` = 0 '.
+            'WHERE `name` = :name '.
+            'AND `deleted` = 0 '.
+            'AND `id` != :id '.
             'LIMIT 1'
         );
         $q->bindParam(':name', $name, PDO::PARAM_STR);
+        $q->bindParam(':id', $id, PDO::PARAM_INT);
         $q->execute();
 
-        $label = $q->fetch();
+        if ($q->fetch()) {
+            return true;
+        }
 
-        $label['output'] = html_entity_decode($label['output'], ENT_QUOTES);
-        
-        return $label;
+        return false;
     }
 
     public function addLabel($attributes) {
@@ -299,24 +298,13 @@ class LabelsController
 
         $q = $this->db->prepare(
             'UPDATE `mo_labels` SET '.
-            '`title` = :title, '.
-            '`description` = :description, '.
-            '`link` = :link, '.
-            '`logged_in` = :logged_in, '.
-            '`text` = :text, '.
-            '`enabled` = :enabled '.
+            '`name` = :name, '.
+            '`output` = :output '.
             'WHERE `id` = :id '
         );
 
-        $logged_in = $attributes['logged_in'] ? true : false;
-        $enabled = $attributes['enabled'] ? true : false;
-
-        $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
-        $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
-        $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
-        $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
-        $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
-        $q->bindParam(':enabled', $enabled, PDO::PARAM_BOOL);
+        $q->bindParam(':name', $attributes['name'], PDO::PARAM_STR);
+        $q->bindParam(':output', $attributes['output'], PDO::PARAM_STR);
         $q->bindParam(':id', $attributes['id'], PDO::PARAM_INT);
 
         $q->execute();
@@ -331,8 +319,13 @@ class LabelsController
         } else if (strlen($attributes['name']) > 100) {
             $this->message .= 'Name is too long<br />';
             $this->fields[] = 'name';
-        }
-        else if ($type === 'add' && $this->getLabelByName($attributes['name'])) {
+        } else if (preg_match('/\s/',$attributes['name'])) {
+            $this->message .= 'Name must not have spaces<br />';
+            $this->fields[] = 'name';
+        } else if ($type === 'add' && $this->checkIfLabelExist($attributes['name'])) {
+            $this->message .= 'Label with this key name is already in use<br />';
+            $this->fields[] = 'name';
+        } else if ($type === 'edit' && $this->checkIfLabelExist($attributes['name'], $attributes['id'])) {
             $this->message .= 'Label with this key name is already in use<br />';
             $this->fields[] = 'name';
         }

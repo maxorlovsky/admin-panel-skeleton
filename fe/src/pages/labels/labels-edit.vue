@@ -27,11 +27,12 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="output-field" class="col-3 col-form-label">Text</label>
+            <label for="output-field" class="col-3 col-form-label">Text <span class="small">Unlike in other places, this text won't be wrapper in "paragraph" tag</span></label>
             <div class="col-9">
                 <tinymce v-model="form.output"
                     :class="{ error: errorClasses.output }"
                     id="output-field"
+                    :no-paragraph="true"
                 ></tinymce>
             </div>
         </div>
