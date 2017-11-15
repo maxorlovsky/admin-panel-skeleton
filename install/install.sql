@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Oct 02, 2017 at 05:54 AM
+-- Generation Time: Nov 15, 2017 at 08:07 AM
 -- Server version: 5.6.37
 -- PHP Version: 7.1.6
 
@@ -11,8 +11,36 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `floweradminv2`
+-- Database: `cms`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`max`@`localhost` PROCEDURE `cleanupCmsData` ()  MODIFIES SQL DATA
+    SQL SECURITY INVOKER
+BEGIN
+    DECLARE v_delete_limit INT DEFAULT 1000;
+    DECLARE v_row_count INT DEFAULT 0;
+    
+    SELECT 'Cleaning CMS User Auth...';
+    REPEAT
+        -- SELECT '.';
+        START TRANSACTION;
+        DELETE FROM tm_user_auth
+            WHERE `timestamp` < DATE_SUB( NOW(), INTERVAL 1 MONTH )
+            ORDER BY `id`
+            LIMIT v_delete_limit;
+        SET v_row_count = ROW_COUNT();
+        COMMIT;
+        
+        SELECT CONCAT( '... deleted ', v_row_count );
+    UNTIL v_row_count < v_delete_limit
+    END REPEAT;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -30,7 +58,7 @@ CREATE TABLE `mocms` (
 --
 
 INSERT INTO `mocms` (`setting`, `value`) VALUES
-('menu', '[{"key":"dashboard","name":"Home","icon_classes":"fa fa-book","strict":true,"level":1},{"key":"users","name":"Users","icon_classes":"fa fa-users","strict":false,"level":"3"},{"key":"permissions","name":"Permissions","icon_classes":"fa fa-universal-access","strict":false,"level":"3"},{"key":"logs","name":"Logs","icon_classes":"fa fa-list","strict":false,"level":"3"},{"key":"pages","name":"Pages","icon_classes":"fa fa-file-text","strict":false,"level":"2"}]');
+('menu', '[{"key":"dashboard","name":"Home","icon_classes":"fa fa-book","strict":true,"level":1,"subCategories":[]},{"key":"users","name":"Users","icon_classes":"fa fa-users","strict":false,"level":"3","subCategories":[]},{"key":"permissions","name":"Permissions","icon_classes":"fa fa-universal-access","strict":false,"level":"3","subCategories":[]},{"key":"logs","name":"Logs","icon_classes":"fa fa-list","strict":false,"level":"3","subCategories":[]},{"key":"labels","name":"Labels","icon_classes":"fa fa-list-alt","strict":false,"level":1,"subCategories":[]},{"key":"pages","name":"Pages","icon_classes":"fa fa-file-text","strict":false,"level":"2","subCategories":[]}]');
 
 -- --------------------------------------------------------
 
@@ -47,6 +75,26 @@ CREATE TABLE `mo_admins` (
   `custom_access` text,
   `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_ip` varchar(40) DEFAULT '',
+  `deleted` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `mo_admins`
+--
+
+INSERT INTO `mo_admins` (`id`, `login`, `email`, `password`, `level`, `custom_access`, `last_login`, `last_ip`, `deleted`) VALUES
+(1, 'admin', '', '$2y$10$KEav.eSLlb2dcxDdeNLda.udY4.atgLuQBUgL8RPMrNxJRVG2/0O2', 5, '["dashboard"]', '2017-11-15 09:06:39', '127.0.0.1', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mo_labels`
+--
+
+CREATE TABLE `mo_labels` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `output` text,
   `deleted` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -118,48 +166,6 @@ CREATE TABLE `mo_users_auth_attempts` (
   `attempts` smallint(3) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tm_languages`
---
-
-CREATE TABLE `tm_languages` (
-  `id` smallint(5) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `flag` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tm_links`
---
-
-CREATE TABLE `tm_links` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `link` varchar(255) NOT NULL DEFAULT '',
-  `value` varchar(255) NOT NULL,
-  `main_link` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `position` tinyint(3) NOT NULL DEFAULT '0',
-  `able` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
-  `block` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
-  `logged_in` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tm_strings`
---
-
-CREATE TABLE `tm_strings` (
-  `key` varchar(255) NOT NULL,
-  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
-  `russian` text,
-  `english` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --
 -- Indexes for dumped tables
 --
@@ -175,6 +181,13 @@ ALTER TABLE `mocms`
 --
 ALTER TABLE `mo_admins`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mo_labels`
+--
+ALTER TABLE `mo_labels`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `mo_logs`
@@ -207,24 +220,6 @@ ALTER TABLE `mo_users_auth_attempts`
   ADD UNIQUE KEY `ip` (`ip`);
 
 --
--- Indexes for table `tm_languages`
---
-ALTER TABLE `tm_languages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tm_links`
---
-ALTER TABLE `tm_links`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tm_strings`
---
-ALTER TABLE `tm_strings`
-  ADD PRIMARY KEY (`key`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -232,29 +227,24 @@ ALTER TABLE `tm_strings`
 -- AUTO_INCREMENT for table `mo_admins`
 --
 ALTER TABLE `mo_admins`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `mo_labels`
+--
+ALTER TABLE `mo_labels`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `mo_logs`
 --
 ALTER TABLE `mo_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=577;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `mo_multisite`
 --
 ALTER TABLE `mo_multisite`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `mo_pages`
 --
 ALTER TABLE `mo_pages`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `tm_languages`
---
-ALTER TABLE `tm_languages`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `tm_links`
---
-ALTER TABLE `tm_links`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
