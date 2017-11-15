@@ -71,6 +71,4 @@ if (php_sapi_name() != 'cli') {
 
     // Loading the whole system
     $app->run();
-
-    exit();
 }
