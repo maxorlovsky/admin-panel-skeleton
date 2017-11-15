@@ -425,4 +425,12 @@ class UsersController
         
         return $returnPassword;
     }
+
+    public static function passwordVerify($userSpecifiedPassword, $DbPassword) {
+        if (password_verify($userSpecifiedPassword, $DbPassword)) {
+            return true;
+        }
+        
+        return false;
+    }
 }

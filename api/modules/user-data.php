@@ -156,7 +156,7 @@ class UserDataController
             return false;
         }
 
-        $convertedPassword = UserDataController::passwordConvert($attributes['pass']);
+        $convertedPassword = UsersController::passwordConvert($attributes['pass']);
         $q = $this->db->prepare(
             'UPDATE `users` SET '.
             '`password` = :password '.
@@ -168,20 +168,6 @@ class UserDataController
         $q->execute();
 
         return true; 
-    }
-
-    public static function passwordConvert($password) {
-        $returnPassword = password_hash($password, PASSWORD_BCRYPT);
-        
-        return $returnPassword;
-    }
-
-    public static function passwordVerify($userSpecifiedPassword, $DbPassword) {
-        if (password_verify($userSpecifiedPassword, $DbPassword)) {
-            return true;
-        }
-        
-        return false;
     }
 
     private function checkFormPassword($attributes) {
@@ -199,7 +185,7 @@ class UserDataController
         $q->execute();
         $checkPassword = $q->fetch();
 
-        if (!UserDataController::passwordVerify($attributes['oldPass'], $checkPassword['password'])) {
+        if (!UsersController::passwordVerify($attributes['oldPass'], $checkPassword['password'])) {
             $this->message .= 'Current password is incorrect<br />';
             $this->fields[] = 'oldPass';
         } 
