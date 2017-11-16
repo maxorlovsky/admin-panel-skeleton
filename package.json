@@ -1,14 +1,15 @@
 {
   "name": "mocms",
   "description": "MO CMS",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Maxtream/cms"
+    "url": "https://github.com/maxorlovsky/cms"
   },
   "scripts": {
     "build": "node_modules/.bin/gulp build",
+    "clean": "node_modules/.bin/gulp clean",
     "release": "git pull && yarn install && node_modules/.bin/gulp build --release",
     "release-npm": "git pull && npm install && node_modules/.bin/gulp build --release"
   },
