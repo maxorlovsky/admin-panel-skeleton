@@ -9,5 +9,9 @@
 
     .table td {
         vertical-align: middle;
+
+        &.logs-info {
+            word-break: break-all;
+        }
     }
 }

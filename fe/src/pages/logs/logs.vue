@@ -31,7 +31,7 @@
                     <td><span v-if="log.login">{{log.login}}</span><span v-else>N/A</span></td>
                     <td>{{log.date}}</td>
                     <td>{{log.ip}}</td>
-                    <td v-html="log.info"></td>
+                    <td class="logs-info" v-html="log.info"></td>
                 </tr>
             </tbody>
         </table>
