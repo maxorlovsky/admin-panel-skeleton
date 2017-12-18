@@ -51,6 +51,9 @@ const labelsLabel = {
     components: {
         loading
     },
+    props: {
+        multiSiteId: Number
+	},
     data: function() {
         return {
             labels: {},
@@ -61,11 +64,16 @@ const labelsLabel = {
     created: function() {
         this.fetchData();
     },
+    watch: {
+        'multiSiteId': function() {
+            this.fetchData();
+        }
+    },
     methods: {
         fetchData: function() {
             const self = this;
 
-            axios.get('/api/labels')
+            axios.get(`/api/labels/${this.multiSiteId}`)
             .then(function (response) {
                 self.labels = response.data.labels;
                 self.loading = false;

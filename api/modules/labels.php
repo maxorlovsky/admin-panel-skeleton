@@ -2,15 +2,19 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->get('/api/labels', function(Request $request, Response $response) {
+$app->get('/api/labels/{site_id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
         $data = array('message' => 'Authorization required');
     } else {
+        $attributes = array(
+            'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+        );
+
         // Define controller, fill up main variables
         $labelsController = new LabelsController($this->db, $this->params, $request->getAttribute('user'));
 
-        $labels = $labelsController->getLabels();
+        $labels = $labelsController->getLabels($attributes);
 
         $data = array(
             'labels' => $labels
@@ -20,20 +24,21 @@ $app->get('/api/labels', function(Request $request, Response $response) {
     return $response->withJson($data);
 })->add($auth);
 
-$app->get('/api/labels/{id}', function(Request $request, Response $response) {
+$app->get('/api/labels/{site_id}/{id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
         $data = array('message' => 'Authorization required');
     } else {
         $attributes = array(
-            'id' => $request->getAttribute('id'),
+            'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+            'id'        => filter_var($request->getAttribute('id'), FILTER_SANITIZE_NUMBER_INT),
         );
 
         // Define controller, fill up main variables
         $labelsController = new LabelsController($this->db, $this->params, $request->getAttribute('user'));
         
         $data = array(
-            'label' => $labelsController->getLabel($attributes['id'])
+            'label' => $labelsController->getLabel($attributes)
         );
     }
 
@@ -53,6 +58,7 @@ $app->post('/api/labels/add', function(Request $request, Response $response) {
         $attributes = array(
             'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
             'output'    => filter_var($body['output'], FILTER_SANITIZE_STRING),
+            'site_id'   => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
         );
         
         // Define controller, fill up main variables
@@ -199,6 +205,8 @@ class LabelsController
     private $db;
     private $params;
     private $user;
+    public $fields;
+    public $message;
 
     public function __construct($db, $params, $user) {
         $this->db = $db;
@@ -216,12 +224,17 @@ class LabelsController
         return array_unique($this->fields);
     }
 
-    public function getLabels() {
-        $q = $this->db->query(
+    public function getLabels($attributes) {
+        $q = $this->db->prepare(
             'SELECT `id`, `name`, `output` '.
             'FROM `mo_labels` '.
-            'WHERE `deleted` = 0 '
+            'WHERE `deleted` = 0 '.
+            'AND `site_id` = :site_id '.
+            'ORDER BY `name` ASC '
         );
+        
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
+
         $q->execute();
 
         $labels = $q->fetchAll();
@@ -229,14 +242,19 @@ class LabelsController
         return $labels;
     }
 
-    public function getLabel($id) {
+    public function getLabel($attributes) {
         $q = $this->db->prepare(
             'SELECT `id`, `name`, `output` '.
             'FROM `mo_labels` '.
-            'WHERE `id` = :id AND `deleted` = 0 '.
+            'WHERE `id` = :id '.
+            'AND `site_id` = :site_id '.
+            'AND `deleted` = 0 '.
             'LIMIT 1'
         );
-        $q->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $q->bindParam(':id', $attributes['id'], PDO::PARAM_INT);
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
+
         $q->execute();
 
         $label = $q->fetch();
@@ -276,10 +294,12 @@ class LabelsController
 
         $q = $this->db->prepare(
             'INSERT INTO `mo_labels` SET '.
+            '`site_id` = :site_id, '.
             '`name` = :name, '.
             '`output` = :output '
         );
 
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
         $q->bindParam(':name', $attributes['name'], PDO::PARAM_STR);
         $q->bindParam(':output', $attributes['output'], PDO::PARAM_STR);
         
