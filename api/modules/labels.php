@@ -225,7 +225,7 @@ class LabelsController
     public $fields;
     public $message;
 
-    public function __construct($db, $params, $user) {
+    public function __construct($db, $params, $user = null) {
         $this->db = $db;
         $this->params = $params;
         $this->user = $user;
