@@ -2,6 +2,23 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+$app->get('/api/labels/public/{site_id}', function(Request $request, Response $response) {
+    $attributes = array(
+        'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+    );
+
+    // Define controller, fill up main variables
+    $labelsController = new LabelsController($this->db, $this->params);
+
+    $labels = $labelsController->getPublicLabels($attributes);
+
+    $data = array(
+        'labels' => $labels
+    );
+
+    return $response->withJson($data);
+});
+
 $app->get('/api/labels/{site_id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
@@ -224,6 +241,22 @@ class LabelsController
         return array_unique($this->fields);
     }
 
+    public function getPublicLabels($attributes) {
+        $q = $this->db->prepare(
+            'SELECT `name`, `output` '.
+            'FROM `mo_labels` '.
+            'WHERE `deleted` = 0 '.
+            'AND `site_id` = :site_id '.
+            'ORDER BY `name` ASC '
+        );
+        
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
+
+        $q->execute();
+
+        return $q->fetchAll();
+    }
+
     public function getLabels($attributes) {
         $q = $this->db->prepare(
             'SELECT `id`, `name`, `output` '.
@@ -237,9 +270,7 @@ class LabelsController
 
         $q->execute();
 
-        $labels = $q->fetchAll();
-
-        return $labels;
+        return $q->fetchAll();
     }
 
     public function getLabel($attributes) {
