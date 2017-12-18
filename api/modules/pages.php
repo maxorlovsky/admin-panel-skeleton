@@ -2,15 +2,19 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->get('/api/pages', function(Request $request, Response $response) {
+$app->get('/api/pages/{site_id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
         $data = array('message' => 'Authorization required');
     } else {
+        $attributes = array(
+            'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+        );
+
         // Define controller, fill up main variables
         $pagesController = new PagesController($this->db, $this->params, $request->getAttribute('user'));
 
-        $pages = $pagesController->getPages();
+        $pages = $pagesController->getPages($attributes);
 
         $data = array(
             'pages' => $pages
@@ -20,20 +24,21 @@ $app->get('/api/pages', function(Request $request, Response $response) {
     return $response->withJson($data);
 })->add($auth);
 
-$app->get('/api/pages/{id}', function(Request $request, Response $response) {
+$app->get('/api/pages/{site_id}/{id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
         $data = array('message' => 'Authorization required');
     } else {
         $attributes = array(
-            'id' => $request->getAttribute('id'),
+            'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+            'id'        => filter_var($request->getAttribute('id'), FILTER_SANITIZE_NUMBER_INT),
         );
 
         // Define controller, fill up main variables
         $pagesController = new PagesController($this->db, $this->params, $request->getAttribute('user'));
         
         $data = array(
-            'page' => $pagesController->getPage($attributes['id'])
+            'page' => $pagesController->getPage($attributes)
         );
     }
 
@@ -51,6 +56,7 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
         $user = $request->getAttribute('user');
 
         $attributes = array(
+            'site_id'   => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
             'title'     => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
             'description'=> filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
             'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
@@ -207,6 +213,8 @@ class PagesController
     private $db;
     private $params;
     private $user;
+    public $fields;
+    public $message;
 
     public function __construct($db, $params, $user) {
         $this->db = $db;
@@ -224,27 +232,34 @@ class PagesController
         return array_unique($this->fields);
     }
 
-    public function getPages() {
-        $q = $this->db->query(
+    public function getPages($attributes) {
+        $q = $this->db->prepare(
             'SELECT `id`, `title`, `link`, `logged_in`, `enabled` '.
             'FROM `mo_pages` '.
-            'WHERE `deleted` = 0 '
+            'WHERE `deleted` = 0 '.
+            'AND `site_id` = :site_id '
         );
+
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
+
         $q->execute();
 
-        $pages = $q->fetchAll();
-
-        return $pages;
+        return $q->fetchAll();
     }
 
-    public function getPage($id) {
+    public function getPage($attributes) {
         $q = $this->db->prepare(
             'SELECT `id`, `title`, `description`, `link`, `logged_in`, `text`, `enabled` '.
             'FROM `mo_pages` '.
-            'WHERE `id` = :id AND `deleted` = 0 '.
+            'WHERE `id` = :id '.
+            'AND `deleted` = 0 '.
+            'AND `site_id` = :site_id '.
             'LIMIT 1'
         );
-        $q->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
+        $q->bindParam(':id', $attributes['id'], PDO::PARAM_INT);
+
         $q->execute();
 
         $page = $q->fetch();
@@ -264,6 +279,7 @@ class PagesController
 
         $q = $this->db->prepare(
             'INSERT INTO `mo_pages` SET '.
+            '`site_id` = :site_id, '.
             '`title` = :title, '.
             '`description` = :description, '.
             '`link` = :link, '.
@@ -275,6 +291,7 @@ class PagesController
         $logged_in = $attributes['logged_in'] ? true : false;
         $enabled = $attributes['enabled'] ? true : false;
 
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
         $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
         $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
         $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
@@ -282,7 +299,11 @@ class PagesController
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
         $q->bindParam(':enabled', $enabled, PDO::PARAM_BOOL);
         
-        $q->execute();
+        try {
+            $q->execute();
+        } catch(Exception $e) {
+            ddump($e->getMessage());
+        }
 
         return true;
     }
@@ -341,6 +362,9 @@ class PagesController
             $this->fields[] = 'link';
         } else if (strlen($attributes['link']) > 300) {
             $this->message .= 'Link is too long<br />';
+            $this->fields[] = 'link';
+        } else if (preg_match('/\s/', $attributes['link'])) {
+            $this->message .= 'Link must not have spaces<br />';
             $this->fields[] = 'link';
         }
 

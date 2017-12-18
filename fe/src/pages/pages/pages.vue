@@ -15,7 +15,8 @@
             <tr>
                 <th>Meta title</th>
                 <th>Page link</th>
-                <th>Actions</th>
+                <th class="text-center">Enabled</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -25,7 +26,12 @@
             <tr v-for="page in pages" v-bind:key="page.id">
                 <td>{{page.title}}</td>
                 <td>{{page.link}}</td>
-                <td>
+                <td class="text-center">
+                    <i class="fa"
+                        :class="{ 'fa-check': page.enabled == 1, 'fa-times': page.enabled != 1 }"
+                    ></i>
+                </td>
+                <td class="text-center">
                     <router-link :to="'/pages/edit/' + page.id"><button class="btn btn-success"><span class="fa fa-pencil"></span></button></router-link>
                     <button class="btn btn-danger"
                         v-on:click="deletePage(page.id)"
@@ -51,6 +57,9 @@ const pagesPage = {
     components: {
         loading
     },
+    props: {
+        multiSiteId: Number
+	},
     data: function() {
         return {
             pages: {},
@@ -61,11 +70,16 @@ const pagesPage = {
     created: function() {
         this.fetchData();
     },
+    watch: {
+        'multiSiteId': function() {
+            this.fetchData();
+        }
+    },
     methods: {
         fetchData: function() {
             const self = this;
 
-            axios.get('/api/pages')
+            axios.get(`/api/pages/${this.multiSiteId}`)
             .then(function (response) {
                 self.pages = response.data.pages;
                 self.loading = false;
