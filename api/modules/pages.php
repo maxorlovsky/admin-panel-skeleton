@@ -2,6 +2,23 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+$app->get('/api/pages/public/{site_id}', function(Request $request, Response $response) {
+    $attributes = array(
+        'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+    );
+
+    // Define controller, fill up main variables
+    $pagesController = new PagesController($this->db, $this->params);
+
+    $pages = $pagesController->getPublicPages($attributes);
+
+    $data = array(
+        'pages' => $pages
+    );
+
+    return $response->withJson($data);
+});
+
 $app->get('/api/pages/{site_id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
@@ -216,7 +233,7 @@ class PagesController
     public $fields;
     public $message;
 
-    public function __construct($db, $params, $user) {
+    public function __construct($db, $params, $user = null) {
         $this->db = $db;
         $this->params = $params;
         $this->user = $user;
@@ -230,6 +247,22 @@ class PagesController
     public function getFields() {
         // Return unique fields
         return array_unique($this->fields);
+    }
+
+    public function getPublicPages($attributes) {
+        $q = $this->db->prepare(
+            'SELECT `title`, `link`, `logged_in` '.
+            'FROM `mo_pages` '.
+            'WHERE `deleted` = 0 '.
+            'AND `enabled` = 1 '.
+            'AND `site_id` = :site_id '
+        );
+
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
+
+        $q->execute();
+
+        return $q->fetchAll();
     }
 
     public function getPages($attributes) {
