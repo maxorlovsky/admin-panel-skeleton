@@ -112,7 +112,7 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
                 'module'    => 'pages',
                 'type'      => 'add',
                 'user_id'   => $user->id,
-                'info'      => 'Page added <b>' . $attributes['name'] . '</b>'
+                'info'      => 'Page added <b>' . $attributes['title'] . '</b>'
             ]);
         }
     }
@@ -170,7 +170,7 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
                 'module'    => 'pages',
                 'type'      => 'edit',
                 'user_id'   => $user->id,
-                'info'      => 'Page updated <b>' . $attributes['name'] . '</b>'
+                'info'      => 'Page updated [<b>' . $attributes['id'] . '</b>]'
             ]);
         }
     }
@@ -190,7 +190,7 @@ $app->delete('/api/pages/delete/{id}', function(Request $request, Response $resp
         );
 
         // Define controller, fill up main variables
-        $pagesController = new PagesController($this->db, $this->params, $request->getAttribute('user'));
+        $pagesController = new PagesController($this->db, $this->params, $user);
 
         $checkPage = $pagesController->deletePage($attributes['id']);
         
@@ -251,7 +251,7 @@ class PagesController
 
     public function getPublicPages($attributes) {
         $q = $this->db->prepare(
-            'SELECT `title`, `link`, `logged_in` '.
+            'SELECT `title`, `description`, `link`, `logged_in`, `text` '.
             'FROM `mo_pages` '.
             'WHERE `deleted` = 0 '.
             'AND `enabled` = 1 '.
