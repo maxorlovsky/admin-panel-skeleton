@@ -64,12 +64,26 @@ $app->put('/api/user-data/change-password', function (Request $request, Response
                 'message' => $userDataController->getMessage(),
                 'fields' => $userDataController->getFields(),
             );
+
+            Log::save($this->db, [
+                'module'    => 'user',
+                'type'      => 'password-change',
+                'user_id'   => $user->id,
+                'info'      => 'Password change failed [<b>' . $userDataController->getMessage() . '</b>]'
+            ]);
         } else {
             // Passing success message
             $data = array(
                 'state' => 'success',
                 'message' => 'Password updated',
             );
+
+            Log::save($this->db, [
+                'module'    => 'user',
+                'type'      => 'password-change',
+                'user_id'   => $user->id,
+                'info'      => 'Password change success'
+            ]);
         }
     }
 
