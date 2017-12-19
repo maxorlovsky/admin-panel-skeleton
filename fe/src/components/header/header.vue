@@ -30,7 +30,7 @@ export default {
             loggedIn: false,
             enableBrands: websiteConfig.multiBrands,
             multisite: [],
-            multiSiteId: 0
+            multiSiteId: null
         };
     },
     created: function() {
@@ -51,6 +51,8 @@ export default {
 
                 if (self.multisite.length > 0) {
                     self.multiSiteId = self.multisite[0].id;
+                } else {
+                    self.multiSiteId = 0;
                 }
             });
         },

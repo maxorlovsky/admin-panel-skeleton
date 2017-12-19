@@ -47,9 +47,9 @@ $app->put('/api/user-data/change-password', function (Request $request, Response
         $body = $request->getParsedBody();
 
         $attributes = array(
-            'oldPass'   => filter_var($body['oldPass'], FILTER_SANITIZE_STRING),
-            'pass'      => filter_var($body['pass'], FILTER_SANITIZE_STRING),
-            'repeatPass'=> filter_var($body['repeatPass'], FILTER_SANITIZE_STRING)
+            'currentPass'   => filter_var($body['currentPass'], FILTER_SANITIZE_STRING),
+            'newPass'       => filter_var($body['newPass'], FILTER_SANITIZE_STRING),
+            'repeatPass'    => filter_var($body['repeatPass'], FILTER_SANITIZE_STRING),
         );
 
         // Define controller, fill up main variables
@@ -80,8 +80,8 @@ class UserDataController
 {
     private $db;
     private $user;
-    private $message;
-    private $fields;
+    public $fields;
+    public $message;
 
     public function __construct($db, $user) {
         $this->db = $db;
@@ -156,51 +156,55 @@ class UserDataController
             return false;
         }
 
-        $convertedPassword = UsersController::passwordConvert($attributes['pass']);
+        $convertedPassword = UsersController::passwordConvert($attributes['newPass']);
         $q = $this->db->prepare(
-            'UPDATE `users` SET '.
+            'UPDATE `mo_admins` SET '.
             '`password` = :password '.
             'WHERE `id` = :id '.
             'LIMIT 1'
         );
+
         $q->bindParam(':password', $convertedPassword, PDO::PARAM_STR);
         $q->bindParam(':id', $this->user->id, PDO::PARAM_INT);
+
         $q->execute();
 
         return true; 
     }
 
     private function checkFormPassword($attributes) {
-        if (!$attributes['oldPass']) {
+        if (!$attributes['currentPass']) {
             $this->message .= 'Current Password is empty<br />';
-            $this->fields[] = 'oldPass';
+            $this->fields[] = 'currentPass';
         }
 
         $q = $this->db->prepare(
-            'SELECT `password` FROM `users` '.
+            'SELECT `password` FROM `mo_admins` '.
             'WHERE `id` = :id '.
             'LIMIT 1'
         );
+
         $q->bindParam(':id', $this->user->id, PDO::PARAM_INT);
+
         $q->execute();
         $checkPassword = $q->fetch();
 
-        if (!UsersController::passwordVerify($attributes['oldPass'], $checkPassword['password'])) {
+        if (!UsersController::passwordVerify($attributes['currentPass'], $checkPassword['password'])) {
             $this->message .= 'Current password is incorrect<br />';
-            $this->fields[] = 'oldPass';
+            $this->fields[] = 'currentPass';
         } 
 
-        if (!$attributes['pass']) {
-            $this->message .= 'Password is empty<br />';
-            $this->fields[] = 'pass';
+        if (!$attributes['newPass']) {
+            $this->message .= 'New Password is empty<br />';
+            $this->fields[] = 'newPass';
         }
 
-        if (strlen($attributes['pass']) < 6) {
-            $this->message .= 'Password must be at least 6 characters long<br />';
-            $this->fields[] = 'pass';
+        if (strlen($attributes['newPass']) < 6) {
+            $this->message .= 'New Password must be at least 6 characters long<br />';
+            $this->fields[] = 'newPass';
         }
 
-        if ($attributes['pass'] !== $attributes['repeatPass']) {
+        if ($attributes['newPass'] !== $attributes['repeatPass']) {
             $this->message .= 'Passwords does not match<br />';
             $this->fields[] = 'repeatPass';
         }

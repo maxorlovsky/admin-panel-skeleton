@@ -98,6 +98,9 @@ const pagesEditPage = {
         loading,
         tinymce
     },
+    props: {
+        multiSiteId: Number
+	},
     data: function() {
         return {
             add: false,
@@ -127,14 +130,21 @@ const pagesEditPage = {
             this.loading = false;
         }
     },
+    watch: {
+        'multiSiteId': function() {
+            if (this.$route.params.id) {
+                this.fetchEditData(this.$route.params.id);
+            }
+        }
+    },
     methods: {
         fetchEditData: function(id) {
             const self = this;
 
-            axios.get(`/api/pages/${id}`)
+            axios.get(`/api/pages/${this.multiSiteId}/${id}`)
             .then(function (response) {
-                self.form.meta_title = response.data.page.meta_title;
-                self.form.meta_description = response.data.page.meta_description;
+                self.form.meta_title = response.data.page.title;
+                self.form.meta_description = response.data.page.description;
                 self.form.link = response.data.page.link;
                 self.form.text = response.data.page.text;
                 self.form.logged_in = response.data.page.logged_in == 1 ? true : false;
@@ -175,7 +185,8 @@ const pagesEditPage = {
                 link: this.form.link,
                 text: this.form.text,
                 logged_in: this.form.logged_in,
-                enabled: this.form.enabled
+                enabled: this.form.enabled,
+                site_id: this.multiSiteId
             };
 
             if (this.edit) {

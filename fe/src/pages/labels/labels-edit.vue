@@ -56,6 +56,9 @@ const labelsEditPage = {
         loading,
         tinymce
     },
+    props: {
+        multiSiteId: Number
+	},
     data: function() {
         return {
             add: false,
@@ -81,11 +84,18 @@ const labelsEditPage = {
             this.loading = false;
         }
     },
+    watch: {
+        'multiSiteId': function() {
+            if (this.$route.params.id) {
+                this.fetchEditData(this.$route.params.id);
+            }
+        }
+    },
     methods: {
         fetchEditData: function(id) {
             const self = this;
 
-            axios.get(`/api/labels/${id}`)
+            axios.get(`/api/labels/${this.multiSiteId}/${id}`)
             .then(function (response) {
                 self.form.name = response.data.label.name;
                 self.form.output = response.data.label.output;
@@ -120,7 +130,8 @@ const labelsEditPage = {
             let apiUrl = '/api/labels/add';
             let apiAttributes = {
                 name: this.form.name,
-                output: this.form.output
+                output: this.form.output,
+                site_id: this.multiSiteId
             };
 
             if (this.edit) {
