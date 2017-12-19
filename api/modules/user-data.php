@@ -46,6 +46,8 @@ $app->put('/api/user-data/change-password', function (Request $request, Response
         // Fetching post parameters
         $body = $request->getParsedBody();
 
+        $user = $request->getAttribute('user');
+
         $attributes = array(
             'currentPass'   => filter_var($body['currentPass'], FILTER_SANITIZE_STRING),
             'newPass'       => filter_var($body['newPass'], FILTER_SANITIZE_STRING),
@@ -53,7 +55,7 @@ $app->put('/api/user-data/change-password', function (Request $request, Response
         );
 
         // Define controller, fill up main variables
-        $userDataController = new UserDataController($this->db, $request->getAttribute('user'));
+        $userDataController = new UserDataController($this->db, $user);
 
         // Trying to register user
         $checkForm = $userDataController->updatePassword($attributes);

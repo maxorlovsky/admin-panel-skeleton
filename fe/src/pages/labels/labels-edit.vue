@@ -16,7 +16,7 @@
     <loading v-if="loading"></loading>
     <form method="post" v-on:submit.prevent="submitForm()" v-else>
         <div class="form-group row">
-            <label for="name-field" class="col-3 col-form-label">Name <span class="small">No spaces, use dash "-" or underscore "_"</span></label>
+            <label for="name-field" class="col-3 col-form-label">Name <span class="small">No spaces or dashes, use underscore "_"</span></label>
             <div class="col-9">
                 <input v-model="form.name"
                     :class="{ error: errorClasses.name }"

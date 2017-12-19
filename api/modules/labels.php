@@ -74,7 +74,7 @@ $app->post('/api/labels/add', function(Request $request, Response $response) {
 
         $attributes = array(
             'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
-            'output'    => filter_var($body['output'], FILTER_SANITIZE_STRING),
+            'output'    => filter_var($body['output'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
             'site_id'   => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
         );
         
@@ -129,7 +129,7 @@ $app->post('/api/labels/edit', function(Request $request, Response $response) {
         $attributes = array(
             'id'        => filter_var($body['id'], FILTER_SANITIZE_NUMBER_INT),
             'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
-            'output'    => filter_var($body['output'], FILTER_SANITIZE_STRING),
+            'output'    => filter_var($body['output'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
         );
 
         // Define controller, fill up main variables
@@ -182,7 +182,7 @@ $app->delete('/api/labels/delete/{id}', function(Request $request, Response $res
         );
 
         // Define controller, fill up main variables
-        $labelsController = new LabelsController($this->db, $this->params, $request->getAttribute('user'));
+        $labelsController = new LabelsController($this->db, $this->params, $user);
 
         $checkLabel = $labelsController->deleteLabel($attributes['id']);
         
@@ -254,7 +254,14 @@ class LabelsController
 
         $q->execute();
 
-        return $q->fetchAll();
+        $labels = $q->fetchAll();
+
+        $publicLabels = [];
+        foreach($labels as $v) {
+            $publicLabels[$v['name']] = html_entity_decode($v['output'], ENT_QUOTES);
+        }
+
+        return $publicLabels;
     }
 
     public function getLabels($attributes) {
@@ -270,7 +277,13 @@ class LabelsController
 
         $q->execute();
 
-        return $q->fetchAll();
+        $labels = $q->fetchAll();
+
+        foreach($labels as &$v) {
+            $v['output'] = $this->stripLabel($v['output']);
+        }
+
+        return $labels;
     }
 
     public function getLabel($attributes) {
@@ -370,8 +383,8 @@ class LabelsController
         } else if (strlen($attributes['name']) > 100) {
             $this->message .= 'Name is too long<br />';
             $this->fields[] = 'name';
-        } else if (preg_match('/\s/',$attributes['name'])) {
-            $this->message .= 'Name must not have spaces<br />';
+        } else if (preg_match('/-|\s/',$attributes['name'])) {
+            $this->message .= 'Name must not have spaces or dashes, please use underscore<br />';
             $this->fields[] = 'name';
         } else if ($type === 'add' && $this->checkIfLabelExist($attributes['name'])) {
             $this->message .= 'Label with this key name is already in use<br />';
@@ -392,5 +405,18 @@ class LabelsController
         $this->db->query('UPDATE `mo_labels` SET `deleted` = 1 WHERE `id` = ' . (int)$id . ' LIMIT 1');
         
         return true;
+    }
+
+    private function stripLabel($label) {
+        // Turn blaber into html code
+        $label = html_entity_decode($label, ENT_QUOTES);
+        
+        $label = strip_tags($label);
+
+        if (strlen($label) >= 100) {
+            $label = substr($label, 0, 100) . '...';
+        }
+
+        return $label;
     }
 }
