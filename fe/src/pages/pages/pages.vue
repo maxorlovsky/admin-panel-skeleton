@@ -21,7 +21,7 @@
         </thead>
         <tbody>
             <tr v-if="loading">
-                <td colspan="3"><loading></loading></td>
+                <td colspan="4"><loading></loading></td>
             </tr>
             <tr v-for="page in pages" v-bind:key="page.id">
                 <td>{{page.title}}</td>
