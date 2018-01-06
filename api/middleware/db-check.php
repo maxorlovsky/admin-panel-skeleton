@@ -5,7 +5,7 @@ $app->add(function ($request, $response, $next) {
         $response = $response->withStatus(503);
         $data = array('message' => 'No database connection denied');
 
-        return $response->withJson($data);
+        return $response->withJson($data, null, JSON_NUMERIC_CHECK);
     }
 
     $response = $next($request, $response);

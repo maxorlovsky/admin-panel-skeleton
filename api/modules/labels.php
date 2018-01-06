@@ -16,7 +16,7 @@ $app->get('/api/labels/public/{site_id}', function(Request $request, Response $r
         'labels' => $labels
     );
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 });
 
 $app->get('/api/labels/{site_id}', function(Request $request, Response $response) {
@@ -38,7 +38,7 @@ $app->get('/api/labels/{site_id}', function(Request $request, Response $response
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->get('/api/labels/{site_id}/{id}', function(Request $request, Response $response) {
@@ -59,7 +59,7 @@ $app->get('/api/labels/{site_id}/{id}', function(Request $request, Response $res
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->post('/api/labels/add', function(Request $request, Response $response) {
@@ -113,7 +113,7 @@ $app->post('/api/labels/add', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->post('/api/labels/edit', function(Request $request, Response $response) {
@@ -167,7 +167,7 @@ $app->post('/api/labels/edit', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->delete('/api/labels/delete/{id}', function(Request $request, Response $response) {
@@ -214,7 +214,7 @@ $app->delete('/api/labels/delete/{id}', function(Request $request, Response $res
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 class LabelsController

@@ -18,7 +18,7 @@ $app->get('/api/menu', function (Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->get('/api/multisite', function (Request $request, Response $response) {
@@ -35,7 +35,7 @@ $app->get('/api/multisite', function (Request $request, Response $response) {
         $data = $userDataController->fetchMultisites();
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->put('/api/user-data/change-password', function (Request $request, Response $response) {
@@ -89,7 +89,7 @@ $app->put('/api/user-data/change-password', function (Request $request, Response
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 class UserDataController

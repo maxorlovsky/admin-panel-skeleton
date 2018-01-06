@@ -13,6 +13,6 @@ $app->any('/[{path:.*}]', function (Request $request, Response $response) {
     } else {
         $data = array('message' => '*Beep-Boop* nothing to see here');
         
-        return $response->withJson($data);
+        return $response->withJson($data, null, JSON_NUMERIC_CHECK);
     }
 });

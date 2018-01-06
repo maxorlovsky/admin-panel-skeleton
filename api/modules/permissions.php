@@ -17,7 +17,7 @@ $app->get('/api/permissions', function(Request $request, Response $response) {
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->put('/api/permissions', function(Request $request, Response $response) {
@@ -65,7 +65,7 @@ $app->put('/api/permissions', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 class PermissionsController

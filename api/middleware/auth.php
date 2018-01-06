@@ -50,7 +50,7 @@ $auth = function ($request, $response, $next) {
                 $response = $response->withStatus(403);
                 $data = array('message' => 'Access denied');
                 
-                return $response->withJson($data);
+                return $response->withJson($data, null, JSON_NUMERIC_CHECK);
             }
         }
     }

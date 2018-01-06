@@ -41,7 +41,7 @@ $app->post('/api/login', function (Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 class LoginController

@@ -15,7 +15,7 @@ $app->get('/api/users', function(Request $request, Response $response) {
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->get('/api/users/{id}', function(Request $request, Response $response) {
@@ -35,7 +35,7 @@ $app->get('/api/users/{id}', function(Request $request, Response $response) {
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->delete('/api/users/delete/{id}', function(Request $request, Response $response) {
@@ -82,7 +82,7 @@ $app->delete('/api/users/delete/{id}', function(Request $request, Response $resp
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->post('/api/users/add', function(Request $request, Response $response) {
@@ -138,7 +138,7 @@ $app->post('/api/users/add', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->post('/api/users/edit', function(Request $request, Response $response) {
@@ -194,7 +194,7 @@ $app->post('/api/users/edit', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 class UsersController

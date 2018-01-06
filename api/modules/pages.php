@@ -16,7 +16,7 @@ $app->get('/api/pages/public/{site_id}', function(Request $request, Response $re
         'pages' => $pages
     );
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 });
 
 $app->get('/api/pages/{site_id}', function(Request $request, Response $response) {
@@ -38,7 +38,7 @@ $app->get('/api/pages/{site_id}', function(Request $request, Response $response)
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->get('/api/pages/{site_id}/{id}', function(Request $request, Response $response) {
@@ -59,7 +59,7 @@ $app->get('/api/pages/{site_id}/{id}', function(Request $request, Response $resp
         );
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->post('/api/pages/add', function(Request $request, Response $response) {
@@ -117,7 +117,7 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->post('/api/pages/edit', function(Request $request, Response $response) {
@@ -175,7 +175,7 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 $app->delete('/api/pages/delete/{id}', function(Request $request, Response $response) {
@@ -222,7 +222,7 @@ $app->delete('/api/pages/delete/{id}', function(Request $request, Response $resp
         }
     }
 
-    return $response->withJson($data);
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
 class PagesController
