@@ -141,7 +141,7 @@ const pagesEditPage = {
         fetchEditData: function(id) {
             const self = this;
 
-            axios.get(`/api/pages/${this.multiSiteId}/${id}`)
+            axios.get(`/api/pages/${id}`)
             .then(function (response) {
                 self.form.meta_title = response.data.page.title;
                 self.form.meta_description = response.data.page.description;

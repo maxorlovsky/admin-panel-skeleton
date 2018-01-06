@@ -2,9 +2,9 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->get('/api/labels/public/{site_id}', function(Request $request, Response $response) {
+$app->get('/api/labels/public', function(Request $request, Response $response) {
     $attributes = array(
-        'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+        'site_id'   => filter_var($request->getAttribute('siteId'), FILTER_SANITIZE_NUMBER_INT),
     );
 
     // Define controller, fill up main variables
@@ -19,13 +19,13 @@ $app->get('/api/labels/public/{site_id}', function(Request $request, Response $r
     return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 });
 
-$app->get('/api/labels/{site_id}', function(Request $request, Response $response) {
+$app->get('/api/labels', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
         $data = array('message' => 'Authorization required');
     } else {
         $attributes = array(
-            'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+            'site_id'   => filter_var($request->getAttribute('siteId'), FILTER_SANITIZE_NUMBER_INT),
         );
 
         // Define controller, fill up main variables
@@ -41,13 +41,13 @@ $app->get('/api/labels/{site_id}', function(Request $request, Response $response
     return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
-$app->get('/api/labels/{site_id}/{id}', function(Request $request, Response $response) {
+$app->get('/api/labels/{id}', function(Request $request, Response $response) {
     if (!$request->getAttribute('isLogged')) {
         $response = $response->withStatus(401);
         $data = array('message' => 'Authorization required');
     } else {
         $attributes = array(
-            'site_id'   => filter_var($request->getAttribute('site_id'), FILTER_SANITIZE_NUMBER_INT),
+            'site_id'   => filter_var($request->getAttribute('siteId'), FILTER_SANITIZE_NUMBER_INT),
             'id'        => filter_var($request->getAttribute('id'), FILTER_SANITIZE_NUMBER_INT),
         );
 

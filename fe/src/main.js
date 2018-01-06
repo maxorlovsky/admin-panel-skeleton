@@ -115,6 +115,7 @@ const vm = new Vue({
         },
         updateMultiSite: function(value) {
             this.multiSiteId = parseInt(value);
+            axios.defaults.headers.common.siteId = this.multiSiteId;
         },
         login: function() {
             this.loggedIn = functions.checkUserAuth();
@@ -124,6 +125,7 @@ const vm = new Vue({
             functions.storage('remove', 'token');
             functions.storage('remove', 'structure-user-data');
             delete(axios.defaults.headers.common.sessionToken);
+            delete(axios.defaults.headers.common.siteId);
             mo.loggedIn = false;
             this.loggedIn = false;
             this.$router.push('/');

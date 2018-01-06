@@ -73,7 +73,7 @@ const labelsLabel = {
         fetchData: function() {
             const self = this;
 
-            axios.get(`/api/labels/${this.multiSiteId}`)
+            axios.get('/api/labels')
             .then(function (response) {
                 self.labels = response.data.labels;
                 self.loading = false;

@@ -18,7 +18,7 @@ Header always set Access-Control-Allow-Credentials "true" env=ORIGIN
 Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
 #Header always set Access-Control-Max-Age "1728000"
 Header always set Access-Control-Max-Age "1000"
-Header always set Access-Control-Allow-Headers "Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With,sessionToken"
+Header always set Access-Control-Allow-Headers "Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Requested-With,sessionToken,siteId"
 # Always set Vary: Origin when it's possible you may send CORS headers
 Header merge Vary Origin
 # Remove merge shit..

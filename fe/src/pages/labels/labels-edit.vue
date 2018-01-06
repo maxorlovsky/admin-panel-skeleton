@@ -95,7 +95,7 @@ const labelsEditPage = {
         fetchEditData: function(id) {
             const self = this;
 
-            axios.get(`/api/labels/${this.multiSiteId}/${id}`)
+            axios.get(`/api/labels/${id}`)
             .then(function (response) {
                 self.form.name = response.data.label.name;
                 self.form.output = response.data.label.output;

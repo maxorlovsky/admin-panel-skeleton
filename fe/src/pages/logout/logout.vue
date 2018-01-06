@@ -20,6 +20,7 @@ const logoutPage = {
         axios.post('/api/logout')
         .then(function (response) {
             delete(axios.defaults.headers.common.sessionToken);
+            delete(axios.defaults.headers.common.siteId);
             mo.loggedIn = false;
             self.$parent.loggedIn = false;
             self.$router.push('/');

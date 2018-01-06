@@ -79,7 +79,7 @@ const pagesPage = {
         fetchData: function() {
             const self = this;
 
-            axios.get(`/api/pages/${this.multiSiteId}`)
+            axios.get('/api/pages')
             .then(function (response) {
                 self.pages = response.data.pages;
                 self.loading = false;
