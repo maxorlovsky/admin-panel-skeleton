@@ -1,27 +1,29 @@
 <?php
-$multisite = function ($request, $response, $next) {
-    // Check if brand ID is specified
-    if ($request->hasAttribute('multisite')) {
-        $multisite = (int)$request->getAttribute('multisite');
+$app->add(function ($request, $response, $next) {
+    // Check if siteId header is present
+    if ($request->hasHeader('siteId')) {
+        // Header exist, check in Db
+        $siteId = $request->getHeader('siteId')[0];
 
-        // Check what brand data we have in database
         $q = $this->db->prepare(
-            'SELECT * '.
-            'FROM `mo_multisite` '.
-            'WHERE `id` = :multisiteId '.
+            'SELECT * FROM `mo_multisite` '.
+            'WHERE `id` = :id '.
             'LIMIT 1'
         );
-        $q->bindParam(':multisiteId', $multisite, PDO::PARAM_INT);
+        $q->bindParam(':id', $siteId, PDO::PARAM_INT);
         $q->execute();
-        $multisite = $q->fetch();
 
-        // Checking if multisite was fetched, add to request
-        if ($multisite) {
-            $request = $request->withAttribute('multisite', $multisite);
+        $multiSite = $q->fetch();
+
+        // Session token not found in db, probably someone messing or it expired
+        if (!$multiSite) {
+            $request = $request->withAttribute('siteId', 0);
+        } else {
+            $request = $request->withAttribute('siteId', $multiSite['id']);
         }
     }
-
-    $response = $next($request, $response);
     
+    $response = $next($request, $response);
+
     return $response;
-};
+});
