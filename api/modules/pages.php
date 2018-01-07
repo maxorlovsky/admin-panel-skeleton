@@ -2,7 +2,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->get('/api/pages/public', function(Request $request, Response $response) {
+$app->get('/api/public/pages', function(Request $request, Response $response) {
     $attributes = array(
         'site_id'   => filter_var($request->getAttribute('siteId'), FILTER_SANITIZE_NUMBER_INT),
     );
