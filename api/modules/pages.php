@@ -262,7 +262,13 @@ class PagesController
 
         $q->execute();
 
-        return $q->fetchAll();
+        $pages = $q->fetchAll();
+
+        foreach($pages as &$v) {
+            $v['text'] = html_entity_decode($v['text'], ENT_QUOTES);
+        }
+
+        return $pages;
     }
 
     public function getPages($attributes) {
