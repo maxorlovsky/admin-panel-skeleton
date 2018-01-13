@@ -8,7 +8,7 @@ $app->get('/api/public/pages', function(Request $request, Response $response) {
     );
 
     // Define controller, fill up main variables
-    $pagesController = new PagesController($this->db, $this->params);
+    $pagesController = new PagesController($this->db);
 
     $pages = $pagesController->getPublicPages($attributes);
 
@@ -29,7 +29,7 @@ $app->get('/api/pages', function(Request $request, Response $response) {
         );
 
         // Define controller, fill up main variables
-        $pagesController = new PagesController($this->db, $this->params, $request->getAttribute('user'));
+        $pagesController = new PagesController($this->db, $request->getAttribute('user'));
 
         $pages = $pagesController->getPages($attributes);
 
@@ -52,7 +52,7 @@ $app->get('/api/pages/{id}', function(Request $request, Response $response) {
         );
 
         // Define controller, fill up main variables
-        $pagesController = new PagesController($this->db, $this->params, $request->getAttribute('user'));
+        $pagesController = new PagesController($this->db, $request->getAttribute('user'));
         
         $data = array(
             'page' => $pagesController->getPage($attributes)
@@ -83,7 +83,7 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
         );
         
         // Define controller, fill up main variables
-        $pagesController = new PagesController($this->db, $this->params, $user);
+        $pagesController = new PagesController($this->db, $user);
 
         // Trying to register user
         $checkPage = $pagesController->addPage($attributes);
@@ -141,7 +141,7 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
         );
 
         // Define controller, fill up main variables
-        $pagesController = new PagesController($this->db, $this->params, $user);
+        $pagesController = new PagesController($this->db, $user);
 
         // Trying to register user
         $checkPage = $pagesController->editPage($attributes);
@@ -190,7 +190,7 @@ $app->delete('/api/pages/delete/{id}', function(Request $request, Response $resp
         );
 
         // Define controller, fill up main variables
-        $pagesController = new PagesController($this->db, $this->params, $user);
+        $pagesController = new PagesController($this->db, $user);
 
         $checkPage = $pagesController->deletePage($attributes['id']);
         
@@ -228,14 +228,12 @@ $app->delete('/api/pages/delete/{id}', function(Request $request, Response $resp
 class PagesController
 {
     private $db;
-    private $params;
     private $user;
     public $fields;
     public $message;
 
-    public function __construct($db, $params, $user = null) {
+    public function __construct($db, $user = null) {
         $this->db = $db;
-        $this->params = $params;
         $this->user = $user;
     }
 
