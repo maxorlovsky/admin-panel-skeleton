@@ -2,22 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
+    mode: 'production',
     entry: {
-        bundle: ['./fe/src/main.js'],
-        vendors: [
-            'babel-polyfill',
-            'promise-polyfill',
-            'whatwg-fetch',
-            "vue",
-            "vue-router",
-            "vue-directive-tooltip",
-            "vuedraggable",
-            "@deveodk/vue-tinymce",
-			"axios",
-            "marked",
-            "hammerjs",
-            "tinymce"
-		]
+        bundle: ['./fe/src/main.js']
     },
     output: {
         filename: '[name].js',
@@ -27,7 +14,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -59,10 +46,20 @@ module.exports = {
             'process.env': {
                 NODE_ENV: '"production"'
             }
-        }),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendors'
-        }),
-        new webpack.optimize.UglifyJsPlugin()
-	]
+        })
+    ],
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendors",
+                    chunks: "all",
+                }
+            }
+        },
+    },
+    performance: {
+        hints: false
+    }
 };
