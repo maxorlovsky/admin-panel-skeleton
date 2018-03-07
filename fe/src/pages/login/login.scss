@@ -40,6 +40,9 @@
         background-color: $mainColor;
         border-radius: 0 0 4px 4px;
         text-align: center;
+        visibility: visible;
+        height: auto;
+        font-size: 0.625rem;
         
         a {
             color: #cac6bf;
@@ -48,7 +51,6 @@
             
             span {
                 font-family: Verdana;
-                font-size: 10px;
             }
         }
     }

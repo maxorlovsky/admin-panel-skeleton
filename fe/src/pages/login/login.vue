@@ -16,16 +16,12 @@
                     <div class="g-recaptcha" :data-sitekey="recaptchaSiteKey"></div>
                 </div>
                 
-                <button class="btn btn-lg btn-secondary">Enter</button>
-                
-                <div v-if="demo" class="guest_form">
-                    <button class="btn btn-lg btn-warning" :disabled="formLoading">Login as Demo</button>
-                </div>
+                <button class="btn btn-lg btn-secondary" :disabled="formLoading">Enter</button>
             </form>
         </div>
         
         <footer v-if="!loading">
-            <a href="https://cms.maxorlovsky.com" target="_blank">CMS Version: {{version}} by Max Orlovsky <span>&copy;</span> 2011-{{year}}</a>
+            <a href="https://maxorlovsky.com" target="_blank">CMS Version: {{version}} <span>&copy;</span> 2011-{{year}}</a>
         </footer>
     </section>
 </template>
@@ -33,9 +29,6 @@
 <script>
 // Globals functions
 import { functions } from '../../functions.js';
-
-// VUE
-import VueRouter from 'vue-router';
 
 // Components
 import loading from '../../components/loading/loading.vue';
@@ -57,7 +50,6 @@ const loginPage = {
             loading: true,
             formLoading: false,
             displayCaptcha: false,
-            demo: false,
             version: mo.version,
             year: 0,
             recaptchaSiteKey: ''

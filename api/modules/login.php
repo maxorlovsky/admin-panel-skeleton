@@ -15,8 +15,10 @@ $app->post('/api/login', function (Request $request, Response $response) {
             'password'  => filter_var($body['password'], FILTER_SANITIZE_STRING),
         );
 
+        $availableLoginAttempts = $this->get('settings')['availableLoginAttempts'];
+
         // Define controller, fill up main variables
-        $loginController = new LoginController($this->params, $this->db);
+        $loginController = new LoginController($this->params, $this->db, $availableLoginAttempts);
 
         // Authenticating user and in case of success return token
         $checkUser = $loginController->login($attributes);
@@ -49,10 +51,12 @@ class LoginController
     private $db;
     private $params;
     private $message;
+    private $availableLoginAttempts;
 
-    public function __construct($params, $db) {
+    public function __construct($params, $db, $availableLoginAttempts = 0) {
         $this->params = $params;
         $this->db = $db;
+        $this->availableLoginAttempts = $availableLoginAttempts;
         $this->message = '';
     }
 
@@ -127,7 +131,7 @@ class LoginController
             $q->bindParam(':ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
             $q->execute();
 
-            if ($attemptsNumber > 5) {
+            if ($attemptsNumber > $this->availableLoginAttempts) {
                 return false;
             }
         } else {
