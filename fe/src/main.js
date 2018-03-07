@@ -35,9 +35,7 @@ import * as customItems from './custom-components/custom.js';
 
 functions.storageCacheBuster();
 
-if (location.host.indexOf('dev') === 0) {
-    mo.env = 'dev';
-}
+mo.env = functions.getEnv();
 
 // Add <any> URLs to router, to push to /login
 mo.routes.push({
@@ -90,7 +88,8 @@ const vm = new Vue({
         leftSideMenu: false,
         loggedIn: functions.checkUserAuth(),
         userData: {},
-        multiSiteId: 0
+        multiSiteId: 0,
+        bodyClass: mo.env,
     },
     mounted() {
         let self = this;

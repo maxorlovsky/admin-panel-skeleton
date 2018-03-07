@@ -75,6 +75,19 @@ const functions = {
         }
 
         return mo.loggedIn;
+    },
+    getEnv: () => {
+        let env = functions.storage('get', 'env');
+
+        if (env === 'dev' || location.host.indexOf('dev') === 0) {
+            env = 'dev';
+        } else if (env === 'test' || location.host.indexOf('test') === 0 || env === 'qa' || location.host.indexOf('qa') === 0) {
+            env = 'test';
+        } else {
+            env = 'prod';
+        }
+
+        return env;
     }
 };
 
