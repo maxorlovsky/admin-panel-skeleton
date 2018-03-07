@@ -14,4 +14,20 @@
             word-break: break-all;
         }
     }
+
+    .filters {
+        display: flex;
+        
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            display: block;
+        }
+
+        .filter-wrapper {
+            margin-right: 2rem;
+        }
+    }
 }

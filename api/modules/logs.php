@@ -22,7 +22,7 @@ $app->post('/api/logs', function(Request $request, Response $response) {
 
         $data = array(
             'logs'      => $logsController->getLogs($attributes),
-            'maxAmount' => $logsController->getMaxAmount()
+            'maxAmount' => $logsController->getMaxAmount($attributes)
         );
     }
 
@@ -75,12 +75,34 @@ class LogsController
         if (!$logs) {
             return false;
         }
-        
+
         return $logs;
     }
 
-    public function getMaxAmount() {
-        $q = $this->db->query('SELECT COUNT(`id`) AS `amount` FROM `mo_logs`');
+    public function getMaxAmount($attributes) {
+        $q = $this->db->prepare(
+            'SELECT COUNT(`l`.`id`) AS `amount` '.
+			'FROM `mo_logs` AS `l` '.
+			'LEFT JOIN `mo_admins` AS `a` ON `l`.`user_id` = `a`.`id` '.
+            'WHERE 1=1 '.
+            $this->wherePrepare .
+            'ORDER BY `l`.`id` DESC '
+        );
+
+        if (isset($attributes['module']) && $attributes['module']) {
+            $q->bindValue(':module', $attributes['module'], PDO::PARAM_STR);
+        }
+
+        if (isset($attributes['type']) && $attributes['type']) {
+            $q->bindValue(':type', $attributes['type'], PDO::PARAM_STR);
+        }
+
+        try {
+            $q->execute();
+        } catch(Exception $e) {
+            ddump($e->getMessage());
+        }
+
         $row = $q->fetch();
         
         return (int)$row['amount'];

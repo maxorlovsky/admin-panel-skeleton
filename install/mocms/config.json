@@ -4,5 +4,9 @@
     "captcha": "",
     "multiBrands": false,
     "nodeModulesPath": "../../../../../../../node_modules",
-    "maxLevel": 5
+    "maxLevel": 5,
+    "logs": {
+        "modules": [],
+        "types": []
+    }
 }

@@ -4,6 +4,30 @@
         <h2>Logs</h2>
     </div>
 
+    <div class="filters">
+        <div class="filter-wrapper">
+            <label for="module">Module</label>
+
+            <select class="module" id="module" v-model="pickedModule">
+                <option v-for="mod in modules"
+                    :value="mod"
+                    v-bind:key="mod"
+                >{{mod}}</option>
+            </select>
+        </div>
+
+        <div class="filter-wrapper">
+            <label for="type">Type</label>
+
+            <select class="type" id="type" v-model="pickedType">
+                <option v-for="typ in types"
+                    :value="typ"
+                    v-bind:key="typ"
+                >{{typ}}</option>
+            </select>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -46,6 +70,9 @@
 </template>
 
 <script>
+// Website custom config
+import websiteConfig from '../../../../../../../mocms/config.json';
+
 // Components
 import loading from '../../components/loading/loading.vue';
 import pagination from '../../components/pagination/pagination.vue';
@@ -71,14 +98,23 @@ const logsPage = {
             empty: null,
             page: 1,
             amountPerPage: 20,
-            logsAmount: 0
+            logsAmount: 0,
+            pickedModule: '',
+            pickedType: '',
+            modules: ['', 'labels', 'login', 'logout', 'pages', 'permissions', 'users'],
+            types: ['', 'add', 'delete', 'edit', 'fail', 'password-change', 'success'],
         };
     },
     created: function() {
+        this.modules = this.modules.concat(websiteConfig.logs.modules);
+        this.types = this.types.concat(websiteConfig.logs.types);
+        
         return this.fetchData();
     },
     watch: {
-        $route: 'fetchData'
+        $route: 'fetchData',
+        pickedModule: 'fetchData',
+        pickedType: 'fetchData'
     },
     methods: {
         fetchData: function() {
@@ -87,15 +123,19 @@ const logsPage = {
             this.page = parseInt(this.$route.params.page);
 
             axios.post('/api/logs', {
-                module: '',
-                type: '',
+                module: this.pickedModule,
+                type: this.pickedType,
                 offset: this.offset,
                 page: this.page
             })
             .then(function (response) {
                 if (response.data.logs) {
                     self.logs = response.data.logs;
+                } else {
+                    console.log('Module or Type not found, or page is set too high, dropping to first page');
+                    self.$router.push('/logs/page/1');
                 }
+
                 self.logsAmount = response.data.maxAmount;
                 self.loading = false;
             })
