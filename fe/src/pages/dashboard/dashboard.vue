@@ -78,7 +78,7 @@ const dashboardPage = {
             // Frontend check
             if (!this.form.currentPass || !this.form.newPass || !this.form.repeatPass) {
                 // Generic error message
-                this.$parent.displayMessage('Please fill in the form', 'danger');
+                this.$parent.displayMessage('Please fill in the form', 'error');
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
@@ -103,7 +103,7 @@ const dashboardPage = {
                 self.formLoading = false;
 
                 // Display error message from API
-                self.$parent.displayMessage(error.response.data.message, 'danger');
+                self.$parent.displayMessage(error.response.data.message, 'error');
 
                 let errorFields = error.response.data.fields;
                 // In some cases slim return array as json, we need to convert it

@@ -205,7 +205,7 @@ const permissionsPage = {
                 self.formLoading = false;
 
                 // Display error message from API
-                self.$parent.displayMessage(error.response.data.message, 'danger');
+                self.$parent.displayMessage(error.response.data.message, 'error');
 
                 let errorFields = error.response.data.fields;
                 // In some cases slim return array as json, we need to convert it
@@ -251,7 +251,7 @@ const permissionsPage = {
 
             // In case it's already a parent with subs, forbid to move make it sub as well
             if (this.permissions[index].subCategories.length !== 0) {
-                this.$parent.displayMessage('This category have subcategories, please move all subcategories first', 'danger');
+                this.$parent.displayMessage('This category have subcategories, please move all subcategories first', 'error');
                 return false;
             }
 

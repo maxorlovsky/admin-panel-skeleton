@@ -10,6 +10,6 @@ gulp.task('scripts', ['custom-modules'], () => {
     const webpackConfig = release ? require('../../webpack.config.prod.js') : require('../../webpack.config.dev.js');
 
     return gulp.src('./vendor/fe/src/main.js')
-    	.pipe(webpackStream(webpackConfig))
+    	.pipe(webpackStream(webpackConfig, require('webpack')))
         .pipe(gulp.dest('./dist/js/'));
 });

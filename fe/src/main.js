@@ -4,6 +4,7 @@ import { functions } from './functions.js';
 // VUE
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueNotification from 'vue-notification';
 
 // 3rd party libs
 import axios from 'axios';
@@ -13,7 +14,6 @@ import Hammer from 'hammerjs';
 import headerComponent from './components/header/header.vue';
 import loading from './components/loading/loading.vue';
 import leftSide from './components/left-side/left-side.vue';
-import floatMessage from './components/float-message/float-message.vue';
 import fileUpload from './components/file-upload/file-upload.vue';
 
 // Pages
@@ -52,6 +52,7 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
+Vue.use(VueNotification);
 
 router.beforeEach((to, from, next) => {
     // If login is require and user state is not logged in - redirect to main page
@@ -82,7 +83,6 @@ const vm = new Vue({
         headerComponent,
         loading,
         leftSide,
-        floatMessage,
         fileUpload
     },
     data: {
@@ -90,7 +90,6 @@ const vm = new Vue({
         leftSideMenu: false,
         loggedIn: functions.checkUserAuth(),
         userData: {},
-        floatingMessage: {},
         multiSiteId: 0
     },
     mounted() {
@@ -143,7 +142,7 @@ const vm = new Vue({
             }))
             .catch((error) => {
                 self.authRequiredState(error);
-                self.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'danger');
+                self.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'error');
                 console.log('Error fetching user resources: ' + error);
             });
         },
@@ -152,15 +151,17 @@ const vm = new Vue({
                 type = 'info';
             }
 
-            this.floatingMessage = {
-                message: message,
-                type: type
-            };
+            this.$notify({
+                type: type,
+                title: type.charAt(0).toUpperCase() + type.slice(1),
+                text: message,
+                duration: 5000
+            });
         },
         authRequiredState: function(error) {
             console.log(error.response);
             if (error.response.status === 401) {
-                this.displayMessage('You must be logged in to enter this page', 'danger');
+                this.displayMessage('You must be logged in to enter this page', 'error');
                 this.logout();
             }
 

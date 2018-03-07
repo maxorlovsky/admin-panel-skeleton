@@ -99,7 +99,7 @@ const labelsLabel = {
                 self.formLoading = false;
             })
             .catch(function (error) {
-                self.$parent.displayMessage(error.response.data.message, 'danger');
+                self.$parent.displayMessage(error.response.data.message, 'error');
                 self.formLoading = false;
             });
         }

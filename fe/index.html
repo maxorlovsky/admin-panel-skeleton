@@ -54,7 +54,7 @@
         ></left-side>
     </div>
 
-    <float-message v-bind:parameters="floatingMessage"></float-message>
+    <notifications position="bottom right"></notifications>
 </div>
 
 <div id="template-holder" class="template-holder"></div>
@@ -64,6 +64,10 @@
 <script src="/vendor/maxtream/themages/dist/js/bundle.js?v=%version%"></script>
 <link async rel="stylesheet" type="text/css" href="/vendor/maxtream/themages/dist/styles/combined.css?v=%version%" />
 <script async defer src="https://www.google.com/recaptcha/api.js?render=explicit"></script>
+
+<script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='http://HOST:3001/browser-sync/browser-sync-client.js?v=2.23.6'><\/script>".replace("HOST", location.hostname));
+//]]></script>
 
 </body>
 </html>

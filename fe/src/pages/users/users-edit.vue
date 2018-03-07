@@ -171,7 +171,7 @@ const usersEditPage = {
             }))
             .catch((error) => {
                 self.$parent.authRequiredState(error);
-                self.$parent.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'danger');
+                self.$parent.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'error');
                 console.log('Error fetching user resources: ' + error);
             });
         },
@@ -198,7 +198,7 @@ const usersEditPage = {
             // Frontend check
             if (this.add && (!this.form.login || !this.form.password || !this.form.level)) {
                 // Generic error message
-                this.$parent.displayMessage('Please fill in the form', 'danger');
+                this.$parent.displayMessage('Please fill in the form', 'error');
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
@@ -244,7 +244,7 @@ const usersEditPage = {
                 self.formLoading = false;
 
                 // Display error message from API
-                self.$parent.displayMessage(error.response.data.message, 'danger');
+                self.$parent.displayMessage(error.response.data.message, 'error');
 
                 let errorFields = error.response.data.fields;
                 // In some cases slim return array as json, we need to convert it

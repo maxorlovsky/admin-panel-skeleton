@@ -117,7 +117,7 @@ const labelsEditPage = {
             // Frontend check
             if (!this.form.name) {
                 // Generic error message
-                this.$parent.displayMessage('Please fill in the form', 'danger');
+                this.$parent.displayMessage('Please fill in the form', 'error');
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
@@ -155,7 +155,7 @@ const labelsEditPage = {
                 self.formLoading = false;
 
                 // Display error message from API
-                self.$parent.displayMessage(error.response.data.message, 'danger');
+                self.$parent.displayMessage(error.response.data.message, 'error');
 
                 let errorFields = error.response.data.fields;
                 // In some cases slim return array as json, we need to convert it
