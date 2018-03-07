@@ -155,7 +155,7 @@ const vm = new Vue({
                 type: type,
                 title: type.charAt(0).toUpperCase() + type.slice(1),
                 text: message,
-                duration: 5000
+                duration: 10000
             });
         },
         authRequiredState: function(error) {
