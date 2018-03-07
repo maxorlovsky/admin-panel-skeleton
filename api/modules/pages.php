@@ -331,7 +331,7 @@ class PagesController
         $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
         $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
         $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
-        $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
+        $q->bindParam(':link', $attributes['link'], PDO::PARAM_STR);
         $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
         $q->bindParam(':enabled', $enabled, PDO::PARAM_BOOL);
@@ -369,7 +369,7 @@ class PagesController
 
         $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
         $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
-        $q->bindParam(':link', $attributes['link'], PDO::PARAM_INT);
+        $q->bindParam(':link', $attributes['link'], PDO::PARAM_STR);
         $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
         $q->bindParam(':enabled', $enabled, PDO::PARAM_BOOL);
