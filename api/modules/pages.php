@@ -73,13 +73,14 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
         $user = $request->getAttribute('user');
 
         $attributes = array(
-            'site_id'   => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
-            'title'     => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
-            'description'=> filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
-            'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
-            'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
-            'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-            'enabled'   => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
+            'site_id'           => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
+            'title'             => filter_var($body['title'], FILTER_SANITIZE_STRING),
+            'meta_title'        => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
+            'meta_description'  => filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
+            'link'              => filter_var($body['link'], FILTER_SANITIZE_STRING),
+            'logged_in'         => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
+            'text'              => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+            'enabled'           => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
         );
         
         // Define controller, fill up main variables
@@ -131,13 +132,14 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
         $user = $request->getAttribute('user');
 
         $attributes = array(
-            'id'        => filter_var($body['id'], FILTER_SANITIZE_NUMBER_INT),
-            'title'     => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
-            'description'=> filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
-            'link'      => filter_var($body['link'], FILTER_SANITIZE_STRING),
-            'logged_in' => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
-            'text'      => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-            'enabled'   => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
+            'id'                => filter_var($body['id'], FILTER_SANITIZE_NUMBER_INT),
+            'title'             => filter_var($body['title'], FILTER_SANITIZE_STRING),
+            'meta_title'        => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
+            'meta_description'  => filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
+            'link'              => filter_var($body['link'], FILTER_SANITIZE_STRING),
+            'logged_in'         => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
+            'text'              => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+            'enabled'           => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
         );
 
         // Define controller, fill up main variables
@@ -249,7 +251,7 @@ class PagesController
 
     public function getPublicPages($attributes) {
         $q = $this->db->prepare(
-            'SELECT `title`, `description`, `link`, `logged_in`, `text` '.
+            'SELECT `title`, `meta_title`, `meta_description`, `link`, `logged_in`, `text` '.
             'FROM `mo_pages` '.
             'WHERE `deleted` = 0 '.
             'AND `enabled` = 1 '.
@@ -264,6 +266,10 @@ class PagesController
 
         foreach($pages as &$v) {
             $v['text'] = html_entity_decode($v['text'], ENT_QUOTES);
+
+            if (!$v['meta_title']) {
+                $v['meta_title'] = $v['title'];
+            }
         }
 
         return $pages;
@@ -286,7 +292,7 @@ class PagesController
 
     public function getPage($attributes) {
         $q = $this->db->prepare(
-            'SELECT `id`, `title`, `description`, `link`, `logged_in`, `text`, `enabled` '.
+            'SELECT `id`, `title`, `meta_title`, `meta_description`, `link`, `logged_in`, `text`, `enabled` '.
             'FROM `mo_pages` '.
             'WHERE `id` = :id '.
             'AND `deleted` = 0 '.
@@ -318,7 +324,8 @@ class PagesController
             'INSERT INTO `mo_pages` SET '.
             '`site_id` = :site_id, '.
             '`title` = :title, '.
-            '`description` = :description, '.
+            '`meta_title` = :meta_title, '.
+            '`meta_description` = :meta_description, '.
             '`link` = :link, '.
             '`logged_in` = :logged_in, '.
             '`text` = :text, '.
@@ -330,7 +337,8 @@ class PagesController
 
         $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
         $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
-        $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
+        $q->bindParam(':meta_title', $attributes['meta_title'], PDO::PARAM_STR);
+        $q->bindParam(':meta_description', $attributes['meta_description'], PDO::PARAM_STR);
         $q->bindParam(':link', $attributes['link'], PDO::PARAM_STR);
         $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
@@ -356,7 +364,8 @@ class PagesController
         $q = $this->db->prepare(
             'UPDATE `mo_pages` SET '.
             '`title` = :title, '.
-            '`description` = :description, '.
+            '`meta_title` = :meta_title, '.
+            '`meta_description` = :meta_description, '.
             '`link` = :link, '.
             '`logged_in` = :logged_in, '.
             '`text` = :text, '.
@@ -368,7 +377,8 @@ class PagesController
         $enabled = $attributes['enabled'] ? true : false;
 
         $q->bindParam(':title', $attributes['title'], PDO::PARAM_STR);
-        $q->bindParam(':description', $attributes['description'], PDO::PARAM_STR);
+        $q->bindParam(':meta_title', $attributes['meta_title'], PDO::PARAM_STR);
+        $q->bindParam(':meta_description', $attributes['meta_description'], PDO::PARAM_STR);
         $q->bindParam(':link', $attributes['link'], PDO::PARAM_STR);
         $q->bindParam(':logged_in', $logged_in, PDO::PARAM_BOOL);
         $q->bindParam(':text', $attributes['text'], PDO::PARAM_STR);
@@ -382,16 +392,24 @@ class PagesController
 
     private function checkForm($attributes, $type) {
         if (!$attributes['title']) {
-            $this->message .= 'Meta title is empty<br />';
+            $this->message .= 'Title is empty<br />';
             $this->fields[] = 'title';
         } else if (strlen($attributes['title']) > 100) {
-            $this->message .= 'Meta title is too long<br />';
+            $this->message .= 'Title is too long<br />';
             $this->fields[] = 'title';
         }
 
-        if ($attributes['description'] && strlen($attributes['description']) > 160) {
+        if (!$attributes['meta_title']) {
+            $this->message .= 'Meta title is empty<br />';
+            $this->fields[] = 'meta_title';
+        } else if (strlen($attributes['meta_title']) > 70) {
+            $this->message .= 'Meta title is too long<br />';
+            $this->fields[] = 'meta_title';
+        }
+
+        if ($attributes['meta_description'] && strlen($attributes['meta_description']) > 230) {
             $this->message .= 'Meta description is too long<br />';
-            $this->fields[] = 'description';
+            $this->fields[] = 'meta_description';
         }
 
         if (!$attributes['link']) {
