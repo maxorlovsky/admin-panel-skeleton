@@ -16,6 +16,17 @@
     <loading v-if="loading"></loading>
     <form method="post" v-on:submit.prevent="submitForm()" v-else>
         <div class="form-group row">
+            <label for="title-field" class="col-3 col-form-label">Title</label>
+            <div class="col-9">
+                <input v-model="form.title"
+                    :class="{ error: errorClasses.title }"
+                    class="form-control"
+                    type="text"
+                    id="title-field" 
+                />
+            </div>
+        </div>
+        <div class="form-group row">
             <label for="meta_title-field" class="col-3 col-form-label">Meta title</label>
             <div class="col-9">
                 <input v-model="form.meta_title"
@@ -108,6 +119,7 @@ const pagesEditPage = {
             loading: true,
             formLoading: false,
             form: {
+                title: '',
                 meta_title: '',
                 meta_description: '',
                 link: '',
@@ -143,8 +155,9 @@ const pagesEditPage = {
 
             axios.get(`/api/pages/${id}`)
             .then(function (response) {
-                self.form.meta_title = response.data.page.title;
-                self.form.meta_description = response.data.page.description;
+                self.form.title = response.data.page.title;
+                self.form.meta_title = response.data.page.meta_title;
+                self.form.meta_description = response.data.page.meta_description;
                 self.form.link = response.data.page.link;
                 self.form.text = response.data.page.text;
                 self.form.logged_in = response.data.page.logged_in == 1 ? true : false;
@@ -180,6 +193,7 @@ const pagesEditPage = {
 
             let apiUrl = '/api/pages/add';
             let apiAttributes = {
+                title: this.form.title,
                 meta_title: this.form.meta_title,
                 meta_description: this.form.meta_description,
                 link: this.form.link,
@@ -193,6 +207,7 @@ const pagesEditPage = {
                 apiUrl = '/api/pages/edit';
                 apiAttributes = {
                     id: this.$route.params.id,
+                    title: this.form.title,
                     meta_title: this.form.meta_title,
                     meta_description: this.form.meta_description,
                     link: this.form.link,

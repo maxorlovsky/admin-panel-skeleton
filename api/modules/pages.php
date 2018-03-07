@@ -399,10 +399,7 @@ class PagesController
             $this->fields[] = 'title';
         }
 
-        if (!$attributes['meta_title']) {
-            $this->message .= 'Meta title is empty<br />';
-            $this->fields[] = 'meta_title';
-        } else if (strlen($attributes['meta_title']) > 70) {
+        if ($attributes['meta_title'] && strlen($attributes['meta_title']) > 70) {
             $this->message .= 'Meta title is too long<br />';
             $this->fields[] = 'meta_title';
         }
