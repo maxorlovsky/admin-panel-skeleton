@@ -1,0 +1,2 @@
+ALTER TABLE `mo_pages` CHANGE `title` `title` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `mo_pages` CHANGE `description` `description` VARCHAR(230) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
