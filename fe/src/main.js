@@ -17,6 +17,7 @@ import leftSide from './components/left-side/left-side.vue';
 import fileUpload from './components/file-upload/file-upload.vue';
 
 // Pages
+/* eslint-disable */
 import loginPage from './pages/login/login.vue';
 import dashboardPage from './pages/dashboard/dashboard.vue';
 import usersPage from './pages/users/users.vue';
@@ -28,10 +29,13 @@ import pagesEditPage from './pages/pages/pages-edit.vue';
 import labelsPage from './pages/labels/labels.vue';
 import labelsEditPage from './pages/labels/labels-edit.vue';
 import logoutPage from './pages/logout/logout.vue';
+/* eslint-enable */
 
 // Website custom config, those files must exist no matter what
 import websiteConfig from '../../../../../mocms/config.json';
+/* eslint-disable */
 import * as customItems from './custom-components/custom.js';
+/* eslint-enable */
 
 functions.storageCacheBuster();
 
@@ -61,9 +65,10 @@ router.beforeEach((to, from, next) => {
     }
 
     window.scrollTo(0, 0);
-    
+
     // Set up meta title
     let metaTitle = 'MO CMS';
+
     if (websiteConfig.title) {
         metaTitle = websiteConfig.title;
     }
@@ -154,7 +159,7 @@ function loadApp(storage) {
                     document.querySelector('body').className = document.querySelector('body').className.replace('open left', '').trim();
                 } else {
                     this.leftSideMenu = true;
-                    //window.location.hash = '#side-menu-open';
+                    // window.location.hash = '#side-menu-open';
                     document.querySelector('body').className = document.querySelector('body').className + ' open left'.trim();
                 }
             },
@@ -164,22 +169,17 @@ function loadApp(storage) {
             },
             logout() {
                 functions.storage('remove', 'token');
-                functions.storage('remove', 'structure-user-data');
-                delete(axios.defaults.headers.common.sessionToken);
-                delete(axios.defaults.headers.common.siteId);
+                delete (axios.defaults.headers.common.sessionToken);
+                delete (axios.defaults.headers.common.siteId);
                 mo.loggedIn = false;
                 this.loggedIn = false;
                 this.$router.push('/');
             },
             fetchLoggedInData() {
-                axios.all([
-                    axios.get('/api/menu')
-                ])
-                .then(axios.spread((
-                    menuData
-                ) => {
-                    this.menu = menuData.data;
-                }))
+                axios.get('/api/menu')
+                .then((response) => {
+                    this.menu = response.data;
+                })
                 .catch((error) => {
                     this.authRequiredState(error);
                     this.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'error');
@@ -210,4 +210,4 @@ function loadApp(storage) {
             }
         }
     });
-};
+}

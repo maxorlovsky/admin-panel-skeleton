@@ -73,12 +73,12 @@ $app->post('/api/pages/add', function(Request $request, Response $response) {
         $user = $request->getAttribute('user');
 
         $attributes = array(
-            'site_id'           => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
+            'site_id'           => filter_var($body['siteId'], FILTER_SANITIZE_NUMBER_INT),
             'title'             => filter_var($body['title'], FILTER_SANITIZE_STRING),
-            'meta_title'        => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
-            'meta_description'  => filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
+            'meta_title'        => filter_var($body['metaTitle'], FILTER_SANITIZE_STRING),
+            'meta_description'  => filter_var($body['metaDescription'], FILTER_SANITIZE_STRING),
             'link'              => filter_var($body['link'], FILTER_SANITIZE_STRING),
-            'logged_in'         => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
+            'logged_in'         => filter_var($body['loggedIn'], FILTER_SANITIZE_NUMBER_INT),
             'text'              => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
             'enabled'           => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
         );
@@ -134,10 +134,10 @@ $app->post('/api/pages/edit', function(Request $request, Response $response) {
         $attributes = array(
             'id'                => filter_var($body['id'], FILTER_SANITIZE_NUMBER_INT),
             'title'             => filter_var($body['title'], FILTER_SANITIZE_STRING),
-            'meta_title'        => filter_var($body['meta_title'], FILTER_SANITIZE_STRING),
-            'meta_description'  => filter_var($body['meta_description'], FILTER_SANITIZE_STRING),
+            'meta_title'        => filter_var($body['metaTitle'], FILTER_SANITIZE_STRING),
+            'meta_description'  => filter_var($body['metaDescription'], FILTER_SANITIZE_STRING),
             'link'              => filter_var($body['link'], FILTER_SANITIZE_STRING),
-            'logged_in'         => filter_var($body['logged_in'], FILTER_SANITIZE_NUMBER_INT),
+            'logged_in'         => filter_var($body['loggedIn'], FILTER_SANITIZE_NUMBER_INT),
             'text'              => filter_var($body['text'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
             'enabled'           => filter_var($body['enabled'], FILTER_SANITIZE_NUMBER_INT),
         );

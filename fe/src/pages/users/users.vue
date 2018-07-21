@@ -5,7 +5,7 @@
 
         <router-link to="/users/add">
             <button class="btn btn-success">
-                <span class="fa fa-user-plus"></span> Add new user
+                <span class="fa fa-user-plus"/> Add new user
             </button>
         </router-link>
     </div>
@@ -23,20 +23,31 @@
             </thead>
             <tbody>
                 <tr v-if="loading">
-                    <td colspan="5"><loading></loading></td>
+                    <td colspan="5">
+                        <loading/>
+                    </td>
                 </tr>
-                <tr v-for="admin in admins" v-bind:key="admin.id">
-                    <td>{{admin.login}}</td>
-                    <td>{{admin.email}}</td>
-                    <td><span v-if="admin.level != 0">{{admin.level}}</span><span v-else>Custom</span></td>
-                    <td>{{admin.last_login}}</td>
+                <tr v-for="admin in admins"
+                    :key="admin.id"
+                >
+                    <td>{{ admin.login }}</td>
+                    <td>{{ admin.email }}</td>
                     <td>
-                        <router-link :to="'/users/edit/' + admin.id"><button class="btn btn-success"><span class="fa fa-pencil"></span></button></router-link>
-                        <button class="btn btn-danger"
-                            v-on:click="deleteAdmin(admin.id)"
-                            :disabled="formLoading"
+                        <span v-if="admin.level != 0">{{ admin.level }}</span>
+                        <span v-else>Custom</span>
+                    </td>
+                    <td>{{ admin.last_login }}</td>
+                    <td>
+                        <router-link :to="'/users/edit/' + admin.id">
+                            <button class="btn btn-success">
+                                <span class="fa fa-pencil"/>
+                            </button>
+                        </router-link>
+                        <button :disabled="formLoading"
+                            class="btn btn-danger"
+                            @click="deleteAdmin(admin.id)"
                         >
-                            <span class="fa fa-trash"></span>
+                            <span class="fa fa-trash"/>
                         </button>
                     </td>
                 </tr>
@@ -57,33 +68,29 @@ const usersPage = {
     components: {
         loading
     },
-    data: function() {
+    data() {
         return {
             admins: {},
             formLoading: false,
             loading: true
         };
     },
-    created: function() {
+    created() {
         return this.fetchData();
     },
     methods: {
-        fetchData: function() {
-            const self = this;
-
+        fetchData() {
             axios.get('/api/users')
-            .then(function (response) {
-                self.admins = response.data.admins;
-                self.loading = false;
+            .then((response) => {
+                this.admins = response.data.admins;
+                this.loading = false;
             })
-            .catch(function (error) {
-                self.$parent.authRequiredState(error);
-                self.loading = false;
+            .catch((error) => {
+                this.$parent.authRequiredState(error);
+                this.loading = false;
             });
         },
-        deleteAdmin: function(id) {
-            const self = this;
-
+        deleteAdmin(id) {
             if (!confirm('Are you sure to delete?')) {
                 return false;
             }
@@ -91,14 +98,14 @@ const usersPage = {
             this.formLoading = true;
 
             axios.delete(`/api/users/delete/${id}`)
-            .then(function (response) {
-                self.$parent.displayMessage(response.data.message, 'success');
-                self.fetchData();
-                self.formLoading = false;
+            .then((response) => {
+                this.$parent.displayMessage(response.data.message, 'success');
+                this.fetchData();
+                this.formLoading = false;
             })
-            .catch(function (error) {
-                self.$parent.displayMessage(error.response.data.message, 'error');
-                self.formLoading = false;
+            .catch((error) => {
+                this.$parent.displayMessage(error.response.data.message, 'error');
+                this.formLoading = false;
             });
         }
     }

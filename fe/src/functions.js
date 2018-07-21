@@ -1,6 +1,3 @@
-// 3rd party libs
-import axios from 'axios';
-
 const functions = {
     storage: (func, key, ...args) => {
         let timeoutSeconds = 1800000;
@@ -17,7 +14,7 @@ const functions = {
                 return false;
             }
 
-            let saveData = {
+            const saveData = {
                 data: args[0],
                 time: (new Date().getTime() + timeoutSeconds),
                 version: mo.version
@@ -30,7 +27,7 @@ const functions = {
                 return false;
             }
 
-            let returnValue = JSON.parse(localStorage.getItem(key));
+            const returnValue = JSON.parse(localStorage.getItem(key));
 
             if (
                 // If older than 30 min
@@ -57,7 +54,7 @@ const functions = {
 
         // If version was bumped, we might still use outdated localStorage data, doing full cleanup
         if (localStorage.getItem('version') !== mo.version) {
-            for (let value of storagesKeys) {
+            for (const value of storagesKeys) {
                 localStorage.removeItem(value);
             }
             // Saving version to not cleaup everything again until the next bump

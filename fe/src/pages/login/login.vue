@@ -1,27 +1,51 @@
 <template>
     <section class="login-form">
-        <loading v-if="loading"></loading>
+        <loading v-if="loading"/>
 
-        <header v-if="!loading"></header>
-        
-        <div class="body" v-if="!loading">
-            <div class="alert alert-danger" v-if="formError" v-html="formError"></div>
-            
-            <form method="post" v-on:submit.prevent="submitForm()">
-                <input type="text" v-model="form.login" placeholder="Login" :class="{ 'error': formError }" />
-                <input type="password" v-model="form.password" placeholder="Password" :class="{ 'error': formError }" />
-                
-                <div v-if="displayCaptcha" class="recaptcha">
+        <header v-if="!loading"/>
+
+        <div v-if="!loading"
+            class="body"
+        >
+            <div v-if="formError"
+                class="alert alert-danger"
+                v-html="formError"
+            />
+
+            <form method="post"
+                @submit.prevent="submitForm()"
+            >
+                <input :class="{ 'error': formError }"
+                    v-model="form.login"
+                    placeholder="Login"
+                    type="text"
+                >
+
+                <input :class="{ 'error': formError }"
+                    v-model="form.password"
+                    placeholder="Password"
+                    type="password"
+                >
+
+                <div v-if="displayCaptcha"
+                    class="recaptcha"
+                >
                     Too many fail attempts, please prove that you're not a robot!
-                    <div class="g-recaptcha" :data-sitekey="recaptchaSiteKey"></div>
+                    <div :data-sitekey="recaptchaSiteKey"
+                        class="g-recaptcha"
+                    />
                 </div>
-                
-                <button class="btn btn-lg btn-secondary" :disabled="formLoading">Enter</button>
+
+                <button :disabled="formLoading"
+                    class="btn btn-lg btn-secondary"
+                >Enter</button>
             </form>
         </div>
-        
+
         <footer v-if="!loading">
-            <a href="https://maxorlovsky.com" target="_blank">CMS Version: {{version}} <span>&copy;</span> 2011-{{year}}</a>
+            <a href="https://maxorlovsky.com"
+                target="_blank"
+            >CMS Version: {{ version }} <span>&copy;</span> 2011-{{ year }}</a>
         </footer>
     </section>
 </template>
@@ -40,7 +64,7 @@ const loginPage = {
     components: {
         loading
     },
-    data: function() {
+    data() {
         return {
             form: {
                 login: '',
@@ -55,7 +79,7 @@ const loginPage = {
             recaptchaSiteKey: ''
         };
     },
-    created: function() {
+    created() {
         if (mo.loggedIn) {
             this.$router.push('dashboard');
         } else {
@@ -64,7 +88,7 @@ const loginPage = {
         }
     },
     methods: {
-        submitForm: function() {
+        submitForm() {
             this.formLoading = true;
 
             if (!this.form.login || !this.form.password) {
@@ -80,7 +104,8 @@ const loginPage = {
             .then((response) => {
                 const token = response.data.sessionToken;
 
-                functions.storage('set', 'token', token, 604800000); // 7 days
+                // 7 days
+                functions.storage('set', 'token', token, 604800000);
 
                 this.$root.storeUser({
                     user: {},

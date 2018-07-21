@@ -1,49 +1,62 @@
 <template>
-<section class="left-side" :class="{ 'collapsed': menuCollapsed }">
-    <nav v-on:click="triggerClick()">
+<section :class="{ 'collapsed': menuCollapsed }"
+    class="left-side"
+>
+    <nav @click="triggerClick()">
         <ul>
-            <li class="nav-link"
-                v-for="link in menu"
+            <li v-for="link in menu"
                 :key="link.url"
+                class="nav-link"
             >
-                <router-link :to="link.url"
+                <router-link v-if="checkUrl(link.url)"
+                    :to="link.url"
                     :class="{ 'collapsed': menuCollapsed }"
-                    v-if="checkUrl(link.url)"
                 >
-                    <i :class="link.icon_classes"></i>
-                    <span>{{link.title}}</span>
+                    <i :class="link.iconClasses" />
+                    <span>{{ link.title }}</span>
                 </router-link>
-                <a href="javascript:;" :class="{ 'collapsed': menuCollapsed }" v-else>
-                    <i :class="link.icon_classes"></i>
-                    <span>{{link.title}}</span>
+                <a v-else
+                    :class="{ 'collapsed': menuCollapsed }"
+                    href="javascript:;"
+                >
+                    <i :class="link.iconClasses" />
+                    <span>{{ link.title }}</span>
                 </a>
 
-                <ul class="nav-sub" v-if="link.sublinks">
-                    <li class="nav-link"
-                        v-for="sublink in link.sublinks"
-                        v-bind:key="sublink.url"
+                <ul v-if="link.sublinks"
+                    class="nav-sub"
+                >
+                    <li v-for="sublink in link.sublinks"
+                        :key="sublink.url"
+                        class="nav-link"
                     >
                         <router-link :to="sublink.url">
-                            <i class="fa fa-angle-right"></i>
-                            <i :class="sublink.icon_classes"></i>
-                            <span>{{sublink.title}}</span>
+                            <i class="fa fa-angle-right" />
+                            <i :class="sublink.iconClasses" />
+                            <span>{{ sublink.title }}</span>
                         </router-link>
                     </li>
                 </ul>
             </li>
 
             <li class="nav-link collapser">
-                <a href="javascript:;" v-on:click="menuCollapserClick()">
-                    <i class="fa"
-                        :class="{ 'fa-angle-double-right': menuCollapsed, 'fa-angle-double-left': !menuCollapsed }"
-                    ></i>
+                <a href="javascript:;"
+                    @click="menuCollapserClick()"
+                >
+                    <i :class="{ 'fa-angle-double-right': menuCollapsed, 'fa-angle-double-left': !menuCollapsed }"
+                        class="fa"
+                    />
                     <span v-if="!menuCollapsed">Collapse menu</span>
                 </a>
             </li>
         </ul>
     </nav>
 
-    <div class="side-menu-cover" v-on:click="triggerClick()"><i class="fa fa-times burger-closer"></i></div>
+    <div class="side-menu-cover"
+        @click="triggerClick()"
+    >
+        <i class="fa fa-times burger-closer" />
+    </div>
 </section>
 </template>
 
@@ -54,31 +67,39 @@ import { functions } from '../../functions.js';
 export default {
     name: 'left-side',
     props: {
-        menu: {}
+        menu: {
+            type: Object,
+            default: () => []
+        }
     },
-    data: function() {
+    data() {
         return {
             menuCollapsed: false
         };
     },
-    created: function() {
+    created() {
         const getMenuCollapseState = functions.storage('get', 'menu-collapse');
+
         this.menuCollapsed = getMenuCollapseState.state;
     },
     methods: {
-        menuCollapserClick: function() {
+        menuCollapserClick() {
             if (this.menuCollapsed) {
                 this.menuCollapsed = false;
-                functions.storage('set', 'menu-collapse', { state: false });
+                functions.storage('set', 'menu-collapse', {
+                    state: false
+                });
             } else {
                 this.menuCollapsed = true;
-                functions.storage('set', 'menu-collapse', { state: true });
+                functions.storage('set', 'menu-collapse', {
+                    state: true
+                });
             }
         },
-        triggerClick: function() {
+        triggerClick() {
             this.$emit('nav-menu');
         },
-        checkUrl: function(url) {
+        checkUrl(url) {
             if (url.indexOf('nourl-') > 0) {
                 return false;
             }

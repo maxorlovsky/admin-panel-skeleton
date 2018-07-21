@@ -1,4 +1,6 @@
-<template></template>
+<template>
+    <div/>
+</template>
 
 <script>
 // Globals functions
@@ -8,24 +10,17 @@ import { functions } from '../../functions.js';
 import axios from 'axios';
 
 const logoutPage = {
-    data: function() {
+    data() {
         return {};
     },
-    created: function() {
-        const self = this;
-
+    created() {
         functions.storage('remove', 'token');
-        functions.storage('remove', 'structure-user-data');
 
         axios.post('/api/logout')
-        .then(function (response) {
-            delete(axios.defaults.headers.common.sessionToken);
-            delete(axios.defaults.headers.common.siteId);
-            mo.loggedIn = false;
-            self.$parent.loggedIn = false;
-            self.$router.push('/');
+        .then(() => {
+            this.$root.logout();
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.log(error);
         });
     }

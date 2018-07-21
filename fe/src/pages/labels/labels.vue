@@ -5,7 +5,7 @@
 
         <router-link to="/labels/add">
             <button class="btn btn-success">
-                <span class="fa fa-file-text"></span> Add new label
+                <span class="fa fa-file-text"/> Add new label
             </button>
         </router-link>
     </div>
@@ -20,18 +20,26 @@
         </thead>
         <tbody>
             <tr v-if="loading">
-                <td colspan="3"><loading></loading></td>
+                <td colspan="3">
+                    <loading/>
+                </td>
             </tr>
-            <tr v-for="label in labels" v-bind:key="label.id">
-                <td>{{label.name}}</td>
-                <td>{{label.output}}</td>
+            <tr v-for="label in labels"
+                :key="label.id"
+            >
+                <td>{{ label.name }}</td>
+                <td>{{ label.output }}</td>
                 <td>
-                    <router-link :to="'/labels/edit/' + label.id"><button class="btn btn-success"><span class="fa fa-pencil"></span></button></router-link>
-                    <button class="btn btn-danger"
-                        v-on:click="deleteLabel(label.id)"
-                        :disabled="formLoading"
+                    <router-link :to="'/labels/edit/' + label.id">
+                        <button class="btn btn-success">
+                            <span class="fa fa-pencil"/>
+                        </button>
+                    </router-link>
+                    <button :disabled="formLoading"
+                        class="btn btn-danger"
+                        @click="deleteLabel(label.id)"
                     >
-                        <span class="fa fa-trash"></span>
+                        <span class="fa fa-trash"/>
                     </button>
                 </td>
             </tr>
@@ -53,39 +61,35 @@ const labelsLabel = {
     },
     props: {
         multiSiteId: Number
-	},
-    data: function() {
+    },
+    data() {
         return {
             labels: {},
             formLoading: false,
             loading: true
         };
     },
-    created: function() {
+    created() {
         this.fetchData();
     },
     watch: {
-        'multiSiteId': function() {
+        'multiSiteId'() {
             this.fetchData();
         }
     },
     methods: {
-        fetchData: function() {
-            const self = this;
-
+        fetchData() {
             axios.get('/api/labels')
-            .then(function (response) {
-                self.labels = response.data.labels;
-                self.loading = false;
+            .then((response) => {
+                this.labels = response.data.labels;
+                this.loading = false;
             })
-            .catch(function (error) {
-                self.$parent.authRequiredState(error);
-                self.loading = false;
+            .catch((error) => {
+                this.$parent.authRequiredState(error);
+                this.loading = false;
             });
         },
-        deleteLabel: function(id) {
-            const self = this;
-
+        deleteLabel(id) {
             if (!confirm('Are you sure to delete?')) {
                 return false;
             }
@@ -93,14 +97,14 @@ const labelsLabel = {
             this.formLoading = true;
 
             axios.delete(`/api/labels/delete/${id}`)
-            .then(function (response) {
-                self.$parent.displayMessage(response.data.message, 'success');
-                self.fetchData();
-                self.formLoading = false;
+            .then((response) => {
+                this.$parent.displayMessage(response.data.message, 'success');
+                this.fetchData();
+                this.formLoading = false;
             })
-            .catch(function (error) {
-                self.$parent.displayMessage(error.response.data.message, 'error');
-                self.formLoading = false;
+            .catch((error) => {
+                this.$parent.displayMessage(error.response.data.message, 'error');
+                this.formLoading = false;
             });
         }
     }

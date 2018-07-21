@@ -8,37 +8,56 @@
         </h2>
         <router-link to="/labels">
             <button class="btn btn-info">
-                <span class="fa fa-step-backward"></span> Back to list
+                <span class="fa fa-step-backward"/> Back to list
             </button>
         </router-link>
     </div>
 
-    <loading v-if="loading"></loading>
-    <form method="post" v-on:submit.prevent="submitForm()" v-else>
+    <loading v-if="loading"/>
+    <form v-else
+        method="post"
+        @submit.prevent="submitForm()"
+    >
         <div class="form-group row">
-            <label for="name-field" class="col-3 col-form-label">Name <span class="small">No spaces or dashes, use underscore "_"</span></label>
+            <label for="name-field"
+                class="col-3 col-form-label"
+            >
+                Name
+                <span class="small">No spaces or dashes, use underscore "_"</span>
+            </label>
             <div class="col-9">
-                <input v-model="form.name"
+                <input id="name-field"
+                    v-model="form.name"
                     :class="{ error: errorClasses.name }"
                     class="form-control"
                     type="text"
-                    id="name-field" 
-                />
+                >
             </div>
         </div>
         <div class="form-group row">
-            <label for="output-field" class="col-3 col-form-label">Text <span class="small">Unlike in other places, this text won't be wrapper in "paragraph" tag</span></label>
+            <label for="output-field"
+                class="col-3 col-form-label"
+            >
+                Text
+                <span class="small">Unlike in other places, this text won't be wrapper in "paragraph" tag</span>
+            </label>
             <div class="col-9">
-                <tinymce v-model="form.output"
+                <tinymce id="output-field"
+                    v-model="form.output"
                     :class="{ error: errorClasses.output }"
-                    id="output-field"
                     :no-paragraph="true"
-                ></tinymce>
+                />
             </div>
         </div>
 
-        <button class="btn btn-primary" v-if="add" :disabled="formLoading">Add label</button>
-        <button class="btn btn-primary" v-else :disabled="formLoading">Edit label</button>
+        <button v-if="add"
+            :disabled="formLoading"
+            class="btn btn-primary"
+        >Add label</button>
+        <button v-else
+            :disabled="formLoading"
+            class="btn btn-primary"
+        >Edit label</button>
     </form>
 </section>
 </template>
@@ -58,8 +77,8 @@ const labelsEditPage = {
     },
     props: {
         multiSiteId: Number
-	},
-    data: function() {
+    },
+    data() {
         return {
             add: false,
             edit: false,
@@ -72,9 +91,7 @@ const labelsEditPage = {
             errorClasses: {}
         };
     },
-    created: function() {
-        const self = this;
-
+    created() {
         // Define if we add or edit
         if (this.$route.params.id) {
             this.edit = true;
@@ -85,31 +102,27 @@ const labelsEditPage = {
         }
     },
     watch: {
-        'multiSiteId': function() {
+        'multiSiteId'() {
             if (this.$route.params.id) {
                 this.fetchEditData(this.$route.params.id);
             }
         }
     },
     methods: {
-        fetchEditData: function(id) {
-            const self = this;
-
+        fetchEditData(id) {
             axios.get(`/api/labels/${id}`)
-            .then(function (response) {
-                self.form.name = response.data.label.name;
-                self.form.output = response.data.label.output;
-                
-                self.loading = false;
+            .then((response) => {
+                this.form.name = response.data.label.name;
+                this.form.output = response.data.label.output;
+
+                this.loading = false;
             })
-            .catch(function (error) {
-                self.loading = false;
+            .catch((error) => {
+                this.loading = false;
                 console.log(error);
             });
         },
-        submitForm: function() {
-            const self = this;
-
+        submitForm() {
             this.formLoading = true;
 
             this.errorClasses = {};
@@ -121,7 +134,7 @@ const labelsEditPage = {
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
-                    name: !this.form.name ? true : false
+                    name: !this.form.name
                 };
 
                 return false;
@@ -131,7 +144,7 @@ const labelsEditPage = {
             let apiAttributes = {
                 name: this.form.name,
                 output: this.form.output,
-                site_id: this.multiSiteId
+                siteId: this.multiSiteId
             };
 
             if (this.edit) {
@@ -144,28 +157,31 @@ const labelsEditPage = {
             }
 
             axios.post(apiUrl, apiAttributes)
-            .then(function (response) {
-                self.$parent.displayMessage(response.data.message, 'success');
-                if (self.add) {
-                    self.$router.push('/labels');
+            .then((response) => {
+                this.$parent.displayMessage(response.data.message, 'success');
+
+                if (this.add) {
+                    this.$router.push('/labels');
                 }
-                self.formLoading = false;
+
+                this.formLoading = false;
             })
-            .catch(function (error) {
-                self.formLoading = false;
+            .catch((error) => {
+                this.formLoading = false;
 
                 // Display error message from API
-                self.$parent.displayMessage(error.response.data.message, 'error');
+                this.$parent.displayMessage(error.response.data.message, 'error');
 
                 let errorFields = error.response.data.fields;
+
                 // In some cases slim return array as json, we need to convert it
                 if (errorFields.constructor !== Array) {
-                    errorFields = Object.keys(errorFields).map(key => errorFields[key]);
+                    errorFields = Object.keys(errorFields).map((key) => errorFields[key]);
                 }
 
                 // Mark fields with error class
                 for (let i = 0; i < errorFields.length; ++i) {
-                    self.errorClasses[errorFields[i]] = true;
+                    this.errorClasses[errorFields[i]] = true;
                 }
             });
         }

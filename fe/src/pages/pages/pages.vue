@@ -5,7 +5,7 @@
 
         <router-link to="/pages/add">
             <button class="btn btn-success">
-                <span class="fa fa-file-text"></span> Add new page
+                <span class="fa fa-file-text"/> Add new page
             </button>
         </router-link>
     </div>
@@ -21,23 +21,32 @@
         </thead>
         <tbody>
             <tr v-if="loading">
-                <td colspan="4"><loading></loading></td>
+                <td colspan="4">
+                    <loading/>
+                </td>
             </tr>
-            <tr v-for="page in pages" v-bind:key="page.id">
-                <td>{{page.title}}</td>
-                <td>{{page.link}}</td>
+            <tr v-for="page in pages"
+                :key="page.id"
+            >
+                <td>{{ page.title }}</td>
+                <td>{{ page.link }}</td>
                 <td class="text-center">
-                    <i class="fa"
-                        :class="{ 'fa-check': page.enabled == 1, 'fa-times': page.enabled != 1 }"
-                    ></i>
+                    <i :class="{ 'fa-check': page.enabled == 1, 'fa-times': page.enabled != 1 }"
+                        class="fa"
+                    />
                 </td>
                 <td class="text-center">
-                    <router-link :to="'/pages/edit/' + page.id"><button class="btn btn-success"><span class="fa fa-pencil"></span></button></router-link>
-                    <button class="btn btn-danger"
-                        v-on:click="deletePage(page.id)"
-                        :disabled="formLoading"
+                    <router-link :to="'/pages/edit/' + page.id">
+                        <button class="btn btn-success">
+                            <span class="fa fa-pencil"/>
+                        </button>
+                    </router-link>
+
+                    <button :disabled="formLoading"
+                        class="btn btn-danger"
+                        @click="deletePage(page.id)"
                     >
-                        <span class="fa fa-trash"></span>
+                        <span class="fa fa-trash"/>
                     </button>
                 </td>
             </tr>
@@ -59,50 +68,46 @@ const pagesPage = {
     },
     props: {
         multiSiteId: Number
-	},
-    data: function() {
+    },
+    data() {
         return {
             pages: {},
             formLoading: false,
             loading: true
         };
     },
-    created: function() {
+    created() {
         this.fetchData();
     },
     watch: {
-        'multiSiteId': function() {
+        'multiSiteId'() {
             this.fetchData();
         }
     },
     methods: {
-        fetchData: function() {
-            const self = this;
-
+        fetchData() {
             axios.get('/api/pages')
-            .then(function (response) {
-                self.pages = response.data.pages;
-                self.loading = false;
+            .then((response) => {
+                this.pages = response.data.pages;
+                this.loading = false;
             })
-            .catch(function (error) {
-                self.$parent.authRequiredState(error);
-                self.loading = false;
+            .catch((error) => {
+                this.$parent.authRequiredState(error);
+                this.loading = false;
             });
         },
-        deletePage: function(id) {
-            const self = this;
-
+        deletePage(id) {
             this.formLoading = true;
 
             axios.delete(`/api/pages/delete/${id}`)
-            .then(function (response) {
-                self.$parent.displayMessage(response.data.message, 'success');
-                self.fetchData();
-                self.formLoading = false;
+            .then((response) => {
+                this.$parent.displayMessage(response.data.message, 'success');
+                this.fetchData();
+                this.formLoading = false;
             })
-            .catch(function (error) {
-                self.$parent.displayMessage(error.response.data.message, 'error');
-                self.formLoading = false;
+            .catch((error) => {
+                this.$parent.displayMessage(error.response.data.message, 'error');
+                this.formLoading = false;
             });
         }
     }

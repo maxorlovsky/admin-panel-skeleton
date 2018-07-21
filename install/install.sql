@@ -58,7 +58,7 @@ CREATE TABLE `mocms` (
 --
 
 INSERT INTO `mocms` (`setting`, `value`) VALUES
-('menu', '[{"key":"dashboard","name":"Home","icon_classes":"fa fa-book","strict":true,"level":1,"subCategories":[]},{"key":"users","name":"Users","icon_classes":"fa fa-users","strict":false,"level":"3","subCategories":[]},{"key":"permissions","name":"Permissions","icon_classes":"fa fa-universal-access","strict":false,"level":"3","subCategories":[]},{"key":"logs","name":"Logs","icon_classes":"fa fa-list","strict":false,"level":"3","subCategories":[]},{"key":"labels","name":"Labels","icon_classes":"fa fa-list-alt","strict":false,"level":1,"subCategories":[]},{"key":"pages","name":"Pages","icon_classes":"fa fa-file-text","strict":false,"level":"2","subCategories":[]}]');
+('menu', '[{"key":"dashboard","name":"Home","iconClasses":"fa fa-book","strict":true,"level":1,"subCategories":[]},{"key":"users","name":"Users","iconClasses":"fa fa-users","strict":false,"level":"3","subCategories":[]},{"key":"permissions","name":"Permissions","iconClasses":"fa fa-universal-access","strict":false,"level":"3","subCategories":[]},{"key":"logs","name":"Logs","iconClasses":"fa fa-list","strict":false,"level":"3","subCategories":[]},{"key":"labels","name":"Labels","iconClasses":"fa fa-list-alt","strict":false,"level":1,"subCategories":[]},{"key":"pages","name":"Pages","iconClasses":"fa fa-file-text","strict":false,"level":"2","subCategories":[]}]');
 
 -- --------------------------------------------------------
 

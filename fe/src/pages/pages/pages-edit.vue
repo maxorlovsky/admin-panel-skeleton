@@ -8,90 +8,113 @@
         </h2>
         <router-link to="/pages">
             <button class="btn btn-info">
-                <span class="fa fa-step-backward"></span> Back to list
+                <span class="fa fa-step-backward"/> Back to list
             </button>
         </router-link>
     </div>
 
-    <loading v-if="loading"></loading>
-    <form method="post" v-on:submit.prevent="submitForm()" v-else>
+    <loading v-if="loading"/>
+    <form v-else
+        method="post"
+        @submit.prevent="submitForm()"
+    >
         <div class="form-group row">
-            <label for="title-field" class="col-3 col-form-label">Title</label>
+            <label for="title-field"
+                class="col-3 col-form-label"
+            >Title</label>
             <div class="col-9">
-                <input v-model="form.title"
+                <input id="title-field"
+                    v-model="form.title"
                     :class="{ error: errorClasses.title }"
                     class="form-control"
                     type="text"
-                    id="title-field" 
-                />
+                >
             </div>
         </div>
         <div class="form-group row">
-            <label for="meta_title-field" class="col-3 col-form-label">Meta title</label>
+            <label for="metaTitle-field"
+                class="col-3 col-form-label"
+            >Meta title</label>
             <div class="col-9">
-                <input v-model="form.meta_title"
-                    :class="{ error: errorClasses.meta_title }"
+                <input id="metaTitle-field"
+                    v-model="form.metaTitle"
+                    :class="{ error: errorClasses.metaTitle }"
                     class="form-control"
                     type="text"
-                    id="meta_title-field" 
-                />
+                >
             </div>
         </div>
         <div class="form-group row">
-            <label for="meta_description-field" class="col-3 col-form-label">Meta description</label>
+            <label for="metaDescription-field"
+                class="col-3 col-form-label"
+            >Meta description</label>
             <div class="col-9">
-                <input v-model="form.meta_description"
-                    :class="{ error: errorClasses.meta_description }"
+                <input id="metaDescription-field"
+                    v-model="form.metaDescription"
+                    :class="{ error: errorClasses.metaDescription }"
                     class="form-control"
                     type="text"
-                    id="meta_description-field" 
                     maxlength="160"
-                />
+                >
             </div>
         </div>
         <div class="form-group row">
-            <label for="link-field" class="col-3 col-form-label">Link</label>
+            <label for="link-field"
+                class="col-3 col-form-label"
+            >Link</label>
             <div class="col-9">
-                <input v-model="form.link"
+                <input id="link-field"
+                    v-model="form.link"
                     :class="{ error: errorClasses.link }"
                     class="form-control"
                     type="text"
-                    id="link-field" 
-                />
+                >
             </div>
         </div>
         <div class="form-group row">
-            <label for="text-field" class="col-3 col-form-label">Text</label>
+            <label for="text-field"
+                class="col-3 col-form-label"
+            >Text</label>
             <div class="col-9">
-                <tinymce v-model="form.text"
+                <tinymce id="text-field"
+                    v-model="form.text"
                     :class="{ error: errorClasses.text }"
-                    id="text-field"
-                ></tinymce>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="logged_in-field" class="col-3 col-form-label">Logged In only</label>
-            <div class="col-9">
-                <input v-model="form.logged_in"
-                    :class="{ error: errorClasses.logged_in }"
-                    type="checkbox"
-                    id="logged_in-field"
                 />
             </div>
         </div>
         <div class="form-group row">
-            <label for="enabled-field" class="col-3 col-form-label">Enabled</label>
+            <label for="loggedIn-field"
+                class="col-3 col-form-label"
+            >Logged In only</label>
             <div class="col-9">
-                <input v-model="form.enabled"
+                <input id="loggedIn-field"
+                    v-model="form.loggedIn"
+                    :class="{ error: errorClasses.loggedIn }"
+                    type="checkbox"
+                >
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="enabled-field"
+                class="col-3 col-form-label"
+            >Enabled</label>
+            <div class="col-9">
+                <input id="enabled-field"
+                    v-model="form.enabled"
                     :class="{ error: errorClasses.enabled }"
                     type="checkbox"
-                    id="enabled-field"
-                />
+                >
             </div>
         </div>
 
-        <button class="btn btn-primary" v-if="add" :disabled="formLoading">Add page</button>
-        <button class="btn btn-primary" v-else :disabled="formLoading">Edit page</button>
+        <button v-if="add"
+            :disabled="formLoading"
+            class="btn btn-primary"
+        >Add page</button>
+        <button v-else
+            :disabled="formLoading"
+            class="btn btn-primary"
+        >Edit page</button>
     </form>
 </section>
 </template>
@@ -111,7 +134,7 @@ const pagesEditPage = {
     },
     props: {
         multiSiteId: Number
-	},
+    },
     data: function() {
         return {
             add: false,
@@ -120,19 +143,17 @@ const pagesEditPage = {
             formLoading: false,
             form: {
                 title: '',
-                meta_title: '',
-                meta_description: '',
+                metaTitle: '',
+                metaDescription: '',
                 link: '',
                 text: '',
-                logged_in: false,
+                loggedIn: false,
                 enabled: false
             },
             errorClasses: {}
         };
     },
-    created: function() {
-        const self = this;
-
+    created() {
         // Define if we add or edit
         if (this.$route.params.id) {
             this.edit = true;
@@ -143,49 +164,45 @@ const pagesEditPage = {
         }
     },
     watch: {
-        'multiSiteId': function() {
+        'multiSiteId'() {
             if (this.$route.params.id) {
                 this.fetchEditData(this.$route.params.id);
             }
         }
     },
     methods: {
-        fetchEditData: function(id) {
-            const self = this;
-
+        fetchEditData(id) {
             axios.get(`/api/pages/${id}`)
-            .then(function (response) {
-                self.form.title = response.data.page.title;
-                self.form.meta_title = response.data.page.meta_title;
-                self.form.meta_description = response.data.page.meta_description;
-                self.form.link = response.data.page.link;
-                self.form.text = response.data.page.text;
-                self.form.logged_in = response.data.page.logged_in == 1 ? true : false;
-                self.form.enabled = response.data.page.enabled == 1 ? true : false;
+            .then((response) => {
+                this.form.title = response.data.page.title;
+                this.form.metaTitle = response.data.page.meta_title;
+                this.form.metaDescription = response.data.page.meta_description;
+                this.form.link = response.data.page.link;
+                this.form.text = response.data.page.text;
+                this.form.loggedIn = response.data.page.logged_in === 1;
+                this.form.enabled = response.data.page.enabled === 1;
 
-                self.loading = false;
+                this.loading = false;
             })
-            .catch(function (error) {
-                self.loading = false;
+            .catch((error) => {
+                this.loading = false;
                 console.log(error);
             });
         },
-        submitForm: function() {
-            const self = this;
-
+        submitForm() {
             this.formLoading = true;
 
             this.errorClasses = {};
 
             // Frontend check
-            if (!this.form.meta_title || !this.form.link) {
+            if (!this.form.metaTitle || !this.form.link) {
                 // Generic error message
                 this.$parent.displayMessage('Please fill in the form', 'error');
                 this.formLoading = false;
                 // Mark specific fields as empty ones
                 this.errorClasses = {
-                    meta_title: !this.form.meta_title ? true : false,
-                    link: !this.form.link ? true : false
+                    metaTitle: !this.form.metaTitle,
+                    link: !this.form.link
                 };
 
                 return false;
@@ -194,13 +211,13 @@ const pagesEditPage = {
             let apiUrl = '/api/pages/add';
             let apiAttributes = {
                 title: this.form.title,
-                meta_title: this.form.meta_title,
-                meta_description: this.form.meta_description,
+                metaTitle: this.form.metaTitle,
+                metaDescription: this.form.metaDescription,
                 link: this.form.link,
                 text: this.form.text,
-                logged_in: this.form.logged_in,
+                loggedIn: this.form.loggedIn,
                 enabled: this.form.enabled,
-                site_id: this.multiSiteId
+                siteId: this.multiSiteId
             };
 
             if (this.edit) {
@@ -208,38 +225,41 @@ const pagesEditPage = {
                 apiAttributes = {
                     id: this.$route.params.id,
                     title: this.form.title,
-                    meta_title: this.form.meta_title,
-                    meta_description: this.form.meta_description,
+                    metaTitle: this.form.metaTitle,
+                    metaDescription: this.form.metaDescription,
                     link: this.form.link,
                     text: this.form.text,
-                    logged_in: this.form.logged_in,
+                    loggedIn: this.form.loggedIn,
                     enabled: this.form.enabled
                 };
             }
 
             axios.post(apiUrl, apiAttributes)
-            .then(function (response) {
-                self.$parent.displayMessage(response.data.message, 'success');
-                if (self.add) {
-                    self.$router.push('/pages');
+            .then((response) => {
+                this.$parent.displayMessage(response.data.message, 'success');
+
+                if (this.add) {
+                    this.$router.push('/pages');
                 }
-                self.formLoading = false;
+
+                this.formLoading = false;
             })
-            .catch(function (error) {
-                self.formLoading = false;
+            .catch((error) => {
+                this.formLoading = false;
 
                 // Display error message from API
-                self.$parent.displayMessage(error.response.data.message, 'error');
+                this.$parent.displayMessage(error.response.data.message, 'error');
 
                 let errorFields = error.response.data.fields;
+
                 // In some cases slim return array as json, we need to convert it
                 if (errorFields.constructor !== Array) {
-                    errorFields = Object.keys(errorFields).map(key => errorFields[key]);
+                    errorFields = Object.keys(errorFields).map((key) => errorFields[key]);
                 }
 
                 // Mark fields with error class
                 for (let i = 0; i < errorFields.length; ++i) {
-                    self.errorClasses[errorFields[i]] = true;
+                    this.errorClasses[errorFields[i]] = true;
                 }
             });
         }

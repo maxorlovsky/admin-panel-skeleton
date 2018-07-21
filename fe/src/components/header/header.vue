@@ -1,16 +1,22 @@
 <template>
 <header class="header-component">
-    <div class="fa fa-bars burger"
-        v-on:click="burgerMenu()"
-        :class="{ 'active': burgerStatus }"></div>
+    <div :class="{ 'active': burgerStatus }"
+        class="fa fa-bars burger"
+        @click="burgerMenu()"
+    />
 
-    <router-link to="/dashboard" class="logo"></router-link>
+    <router-link to="/dashboard"
+        class="logo"
+    />
 
-    <select class="multi-brand" v-if="enableBrands" v-model="multiSiteId">
+    <select v-if="enableBrands"
+        v-model="multiSiteId"
+        class="multi-brand"
+    >
         <option v-for="brand in multisite"
             :value="brand.id"
-            v-bind:key="brand.id"
-        >{{brand.name}}</option>
+            :key="brand.id"
+        >{{ brand.name }}</option>
     </select>
 </header>
 </template>
@@ -24,7 +30,7 @@ import axios from 'axios';
 
 export default {
     name: 'header-component',
-    data: function() {
+    data() {
         return {
             burgerStatus: this.$parent.leftSideMenu,
             loggedIn: false,
@@ -33,30 +39,28 @@ export default {
             multiSiteId: null
         };
     },
-    created: function() {
-        return this.fetchData();
-    },
     watch: {
-        'multiSiteId': function() {
+        'multiSiteId'() {
             this.$emit('update-multisite', this.multiSiteId);
         }
     },
+    created() {
+        return this.fetchData();
+    },
     methods: {
-        fetchData: function() {
-            const self = this;
-
+        fetchData() {
             axios.get('/api/multisite')
-            .then(function (response) {
-                self.multisite = response.data;
+            .then((response) => {
+                this.multisite = response.data;
 
-                if (self.multisite.length > 0) {
-                    self.multiSiteId = self.multisite[0].id;
+                if (this.multisite.length > 0) {
+                    this.multiSiteId = this.multisite[0].id;
                 } else {
-                    self.multiSiteId = 0;
+                    this.multiSiteId = 0;
                 }
             });
         },
-        burgerMenu: function() {
+        burgerMenu() {
             this.$emit('nav-menu');
         }
     }

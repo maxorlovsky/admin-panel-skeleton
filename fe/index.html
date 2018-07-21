@@ -33,24 +33,21 @@
 <body>
 
 <div id="app" :class="bodyClass">
-    <header-component
-        v-if="loggedIn"
-        v-on:nav-menu="burgerMenu"
-        v-on:update-multisite="updateMultiSite"
+    <header-component v-if="loggedIn"
+        @nav-menu="burgerMenu"
+        @update-multisite="updateMultiSite"
     ></header-component>
     
     <div class="wrapper">
         <section class="page">
-            <router-view
-                v-bind:user-data="userData"
-                v-bind:multi-site-id="multiSiteId"
+            <router-view :user-data="userData"
+                :multi-site-id="multiSiteId"
             ></router-view>
         </section>
 
-        <left-side
-            v-if="loggedIn"
-            v-on:nav-menu="burgerMenu"
-            v-bind:menu="menu"
+        <left-side v-if="loggedIn"
+            :menu="menu"
+            @nav-menu="burgerMenu"
         ></left-side>
     </div>
 
@@ -66,7 +63,7 @@
 <script async defer src="https://www.google.com/recaptcha/api.js?render=explicit"></script>
 
 <script id="__bs_script__">//<![CDATA[
-    document.write("<script async src='http://HOST:3001/browser-sync/browser-sync-client.js?v=2.23.6'><\/script>".replace("HOST", location.hostname));
+    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.23.6'><\/script>".replace("HOST", location.hostname));
 //]]></script>
 
 </body>

@@ -75,7 +75,7 @@ $app->post('/api/labels/add', function(Request $request, Response $response) {
         $attributes = array(
             'name'      => filter_var($body['name'], FILTER_SANITIZE_STRING),
             'output'    => filter_var($body['output'], FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-            'site_id'   => filter_var($body['site_id'], FILTER_SANITIZE_NUMBER_INT),
+            'site_id'   => filter_var($body['siteId'], FILTER_SANITIZE_NUMBER_INT),
         );
         
         // Define controller, fill up main variables
@@ -308,16 +308,18 @@ class LabelsController
         return $label;
     }
 
-    public function checkIfLabelExist($name, $id = 0) {
+    public function checkIfLabelExist($attributes, $id = 0) {
         $q = $this->db->prepare(
             'SELECT `id` '.
             'FROM `mo_labels` '.
             'WHERE `name` = :name '.
+            'AND `site_id` = :site_id '.
             'AND `deleted` = 0 '.
             'AND `id` != :id '.
             'LIMIT 1'
         );
-        $q->bindParam(':name', $name, PDO::PARAM_STR);
+        $q->bindParam(':name', $attributes['name'], PDO::PARAM_STR);
+        $q->bindParam(':site_id', $attributes['site_id'], PDO::PARAM_INT);
         $q->bindParam(':id', $id, PDO::PARAM_INT);
         $q->execute();
 
@@ -386,10 +388,10 @@ class LabelsController
         } else if (preg_match('/-|\s/',$attributes['name'])) {
             $this->message .= 'Name must not have spaces or dashes, please use underscore<br />';
             $this->fields[] = 'name';
-        } else if ($type === 'add' && $this->checkIfLabelExist($attributes['name'])) {
+        } else if ($type === 'add' && $this->checkIfLabelExist($attributes)) {
             $this->message .= 'Label with this key name is already in use<br />';
             $this->fields[] = 'name';
-        } else if ($type === 'edit' && $this->checkIfLabelExist($attributes['name'], $attributes['id'])) {
+        } else if ($type === 'edit' && $this->checkIfLabelExist($attributes, $attributes['id'])) {
             $this->message .= 'Label with this key name is already in use<br />';
             $this->fields[] = 'name';
         }

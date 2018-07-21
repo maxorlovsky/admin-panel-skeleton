@@ -8,22 +8,28 @@
         <div class="filter-wrapper">
             <label for="module">Module</label>
 
-            <select class="module" id="module" v-model="pickedModule">
+            <select id="module"
+                v-model="pickedModule"
+                class="module"
+            >
                 <option v-for="mod in modules"
                     :value="mod"
-                    v-bind:key="mod"
-                >{{mod}}</option>
+                    :key="mod"
+                >{{ mod }}</option>
             </select>
         </div>
 
         <div class="filter-wrapper">
             <label for="type">Type</label>
 
-            <select class="type" id="type" v-model="pickedType">
+            <select id="type"
+                v-model="pickedType"
+                class="type"
+            >
                 <option v-for="typ in types"
                     :value="typ"
-                    v-bind:key="typ"
-                >{{typ}}</option>
+                    :key="typ"
+                >{{ typ }}</option>
             </select>
         </div>
     </div>
@@ -43,28 +49,39 @@
             </thead>
             <tbody>
                 <tr v-if="loading">
-                    <td colspan="7"><loading></loading></td>
+                    <td colspan="7"><loading/></td>
                 </tr>
+
                 <tr v-if="!logs">
-                    <td colspan="7" align="center">There are no data in logs</td>
+                    <td colspan="7"
+                        align="center"
+                    >There are no data in logs</td>
                 </tr>
-                <tr v-else v-for="log in logs" v-bind:key="log.id">
-                    <td>{{log.id}}</td>
-                    <td>{{log.module}}</td>
-                    <td>{{log.type}}</td>
-                    <td><span v-if="log.login">{{log.login}}</span><span v-else>N/A</span></td>
-                    <td>{{log.date}}</td>
-                    <td>{{log.ip}}</td>
-                    <td class="logs-info" v-html="log.info"></td>
+                <tr v-for="log in logs"
+                    v-else
+                    :key="log.id"
+                >
+                    <td>{{ log.id }}</td>
+                    <td>{{ log.module }}</td>
+                    <td>{{ log.type }}</td>
+                    <td>
+                        <span v-if="log.login">{{ log.login }}</span>
+                        <span v-else>N/A</span>
+                    </td>
+                    <td>{{ log.date }}</td>
+                    <td>{{ log.ip }}</td>
+                    <td class="logs-info"
+                        v-html="log.info"
+                    />
                 </tr>
             </tbody>
         </table>
 
-        <pagination v-bind:page="page"
-            v-bind:amount="logsAmount"
-            v-bind:amount-per-page="amountPerPage"
+        <pagination :page="page"
+            :amount="logsAmount"
+            :amount-per-page="amountPerPage"
             page-url="logs"
-        ></pagination>
+        />
     </div>
 </section>
 </template>
@@ -85,7 +102,7 @@ const logsPage = {
         loading,
         pagination
     },
-    data: function() {
+    data() {
         if (!this.$route.params.page) {
             this.$route.params.page = 1;
         }
@@ -102,13 +119,13 @@ const logsPage = {
             pickedModule: '',
             pickedType: '',
             modules: ['', 'labels', 'login', 'logout', 'pages', 'permissions', 'users'],
-            types: ['', 'add', 'delete', 'edit', 'fail', 'password-change', 'success'],
+            types: ['', 'add', 'delete', 'edit', 'fail', 'password-change', 'success']
         };
     },
-    created: function() {
+    created() {
         this.modules = this.modules.concat(websiteConfig.logs.modules);
         this.types = this.types.concat(websiteConfig.logs.types);
-        
+
         return this.fetchData();
     },
     watch: {
@@ -117,9 +134,7 @@ const logsPage = {
         pickedType: 'fetchData'
     },
     methods: {
-        fetchData: function() {
-            const self = this;
-
+        fetchData() {
             this.page = parseInt(this.$route.params.page);
 
             axios.post('/api/logs', {
@@ -128,20 +143,20 @@ const logsPage = {
                 offset: this.offset,
                 page: this.page
             })
-            .then(function (response) {
+            .then((response) => {
                 if (response.data.logs) {
-                    self.logs = response.data.logs;
+                    this.logs = response.data.logs;
                 } else {
                     console.log('Module or Type not found, or page is set too high, dropping to first page');
-                    self.$router.push('/logs/page/1');
+                    this.$router.push('/logs/page/1');
                 }
 
-                self.logsAmount = response.data.maxAmount;
-                self.loading = false;
+                this.logsAmount = response.data.maxAmount;
+                this.loading = false;
             })
-            .catch(function (error) {
-                self.$parent.authRequiredState(error);
-                self.loading = false;
+            .catch((error) => {
+                this.$parent.authRequiredState(error);
+                this.loading = false;
             });
         }
     }
