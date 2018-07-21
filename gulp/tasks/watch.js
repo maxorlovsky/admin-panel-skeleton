@@ -13,7 +13,6 @@ gulp.task('watch', ['serve'], () => {
 		],
 		[
 			'custom-modules',
-			'lint:script',
 			'scripts',
 			browserSync.reload
 		]

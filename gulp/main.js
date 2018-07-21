@@ -6,7 +6,6 @@ require('require-dir')('./tasks');
 gulp.task('build', (cb) => {
 	return runSequence(
 		'custom-modules',
-		'lint:script',
 		'copy',
 		['styles', 'scripts'],
 		'bump-ver',
