@@ -34,7 +34,11 @@ $app->post('/api/login', function (Request $request, Response $response) {
             ]);
         } else {
             // Passing session token to the user
-            $data['sessionToken'] = $checkUser;
+            $data = [
+                'user'          => [],
+                'sessionToken'  => $checkUser,
+            ];
+
             Log::save($this->db, [
                 'module'=> 'login',
                 'type'  => 'success',

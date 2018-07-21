@@ -66,16 +66,6 @@ const functions = {
 
         return true;
     },
-    checkUserAuth: () => {
-        const token = functions.storage('get', 'token');
-
-        if (token.sessionToken) {
-            mo.loggedIn = true;
-            axios.defaults.headers.common.sessionToken = token.sessionToken;
-        }
-
-        return mo.loggedIn;
-    },
     getEnv: () => {
         let env = functions.storage('get', 'env');
 

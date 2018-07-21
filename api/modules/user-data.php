@@ -21,6 +21,20 @@ $app->get('/api/menu', function (Request $request, Response $response) {
     return $response->withJson($data, null, JSON_NUMERIC_CHECK);
 })->add($auth);
 
+$app->get('/api/me', function (Request $request, Response $response) {
+    // Define controller, fill up main variables
+    $userDataController = new UserDataController($this->db, $request->getAttribute('user'));
+
+    $data = $userDataController->fetchAdminData();
+
+    if (!$data) {
+        $response = $response->withStatus(401);
+        $data = array('message' => 'Authorization error');
+    }
+
+    return $response->withJson($data, null, JSON_NUMERIC_CHECK);
+})->add($auth);
+
 $app->get('/api/multisite', function (Request $request, Response $response) {
     $data = [];
 
@@ -116,6 +130,14 @@ class UserDataController
         return array_unique($this->fields);
     }
 
+    public function fetchAdminData() {
+        if (!$this->user) {
+            return false;
+        }
+
+        return $this->user;
+    }
+
     public function fetchMenu() {
         $q = $this->db->query('SELECT `value` FROM `mocms` WHERE `setting` = "menu"');
         $q->execute();
@@ -130,7 +152,7 @@ class UserDataController
                 $returnMenu[$value->key] = [
                     'url'           => '/' . $value->key,
                     'title'         => $value->name,
-                    'icon_classes'  => $value->icon_classes,
+                    'iconClasses'   => $value->iconClasses,
                 ];
 
                 if (isset($value->subCategories) && $value->subCategories) {
@@ -141,7 +163,7 @@ class UserDataController
                             $returnMenu[$value->key]['sublinks'][$subValue->key] = [
                                 'url'           => '/' . $subValue->key,
                                 'title'         => $subValue->name,
-                                'icon_classes'  => $subValue->icon_classes,
+                                'iconClasses'  => $subValue->iconClasses,
                             ];
                         }
                     }
@@ -152,7 +174,7 @@ class UserDataController
         $returnMenu['logout'] = [
             'url'           => '/logout',
             'title'         => 'Logout',
-            'icon_classes'  => 'fa fa-sign-out',
+            'iconClasses'  => 'fa fa-sign-out',
         ];
 
         return $returnMenu;

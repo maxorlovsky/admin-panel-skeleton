@@ -55,10 +55,11 @@ Vue.use(VueNotification);
 router.beforeEach((to, from, next) => {
     // If login is require and user state is not logged in - redirect to main page
     if (to.meta.loggedIn && !mo.loggedIn) {
-        next({
-            path: '/'
-        });
+        console.log('Authentication failure');
+        next('/');
+        return false;
     }
+
     window.scrollTo(0, 0);
     
     // Set up meta title
@@ -74,99 +75,139 @@ router.beforeEach((to, from, next) => {
     return next();
 });
 
-const vm = new Vue({
-    el: '#app',
-    router: router,
-    components: {
-        headerComponent,
-        loading,
-        leftSide,
-        fileUpload
-    },
-    data: {
-        menu: {},
-        leftSideMenu: false,
-        loggedIn: functions.checkUserAuth(),
-        userData: {},
-        multiSiteId: 0,
-        bodyClass: mo.env,
-    },
-    mounted() {
-        let self = this;
-        
-        delete Hammer.defaults.cssProps.userSelect;
+// Check if there is a token
+if (functions.storage('get', 'token')) {
+    // Add JWT token as default header
+    axios.defaults.headers.common.sessionToken = functions.storage('get', 'token');
 
-        if (this.loggedIn) {
-            this.fetchLoggedInData();
+    // Check user
+    axios.get('/api/me')
+    .then((response) => {
+        const store = {
+            user: response.data,
+            token: functions.storage('get', 'token')
         }
-    },
-    methods: {
-        burgerMenu: function() {
-            if (this.leftSideMenu) {
-                this.leftSideMenu = false;
-                document.querySelector('body').className = document.querySelector('body').className.replace('open left', '').trim();
-            } else {
-                this.leftSideMenu = true;
-                //window.location.hash = '#side-menu-open';
-                document.querySelector('body').className = document.querySelector('body').className + ' open left'.trim();
-            }
-        },
-        updateMultiSite: function(value) {
-            this.multiSiteId = parseInt(value);
-            axios.defaults.headers.common.siteId = this.multiSiteId;
-        },
-        login: function() {
-            this.loggedIn = functions.checkUserAuth();
-            this.fetchLoggedInData();
-        },
-        logout: function() {
-            functions.storage('remove', 'token');
-            functions.storage('remove', 'structure-user-data');
-            delete(axios.defaults.headers.common.sessionToken);
-            delete(axios.defaults.headers.common.siteId);
-            mo.loggedIn = false;
-            this.loggedIn = false;
-            this.$router.push('/');
-        },
-        fetchLoggedInData: function() {
-            let self = this;
 
-            axios.all([
-                axios.get('/api/menu')
-            ])
-            .then(axios.spread((
-                menuData
-            ) => {
-                self.menu = menuData.data;
-            }))
-            .catch((error) => {
-                self.authRequiredState(error);
-                self.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'error');
-                console.log('Error fetching user resources: ' + error);
-            });
-        },
-        displayMessage: function(message, type) {
-            if (!type) {
-                type = 'info';
-            }
-
-            this.$notify({
-                type: type,
-                title: type.charAt(0).toUpperCase() + type.slice(1),
-                text: message,
-                duration: 10000
-            });
-        },
-        authRequiredState: function(error) {
-            console.log(error.response);
-            if (error.response.status === 401) {
-                this.displayMessage('You must be logged in to enter this page', 'error');
-                this.logout();
-            }
-
-            return false;
+        // Marking user as logged in for routing check
+        if (store.user) {
+            mo.loggedIn = true;
         }
-    }
-});
 
-document.getElementById('pre-loading').remove();
+        mo.app = loadApp(store);
+    })
+    .catch(() => {
+        // If something went wrong, loading app for logged out user
+        mo.app = loadApp({});
+    });
+} else {
+    // Load as logged out state
+    mo.app = loadApp({});
+}
+
+function loadApp(storage) {
+    return new Vue({
+        el: '#app',
+        router: router,
+        components: {
+            headerComponent,
+            loading,
+            leftSide,
+            fileUpload
+        },
+        data() {
+            return {
+                menu: {},
+                leftSideMenu: false,
+                loggedIn: false,
+                userData: {},
+                multiSiteId: 0,
+                bodyClass: mo.env
+            };
+        },
+        created() {
+            // If user is logged in, storring in Vuex
+            if (Object.keys(storage).length !== 0) {
+                this.storeUser(storage);
+            }
+        },
+        mounted() {
+            document.getElementById('pre-loading').remove();
+
+            delete Hammer.defaults.cssProps.userSelect;
+
+            if (this.loggedIn) {
+                this.fetchLoggedInData();
+            }
+        },
+        methods: {
+            storeUser(data) {
+                // Add JWT token as default header
+                axios.defaults.headers.common.sessionToken = data.token;
+
+                // Marking user for app as logged in, for easier check
+                this.loggedIn = true;
+                mo.loggedIn = true;
+            },
+            burgerMenu() {
+                if (this.leftSideMenu) {
+                    this.leftSideMenu = false;
+                    document.querySelector('body').className = document.querySelector('body').className.replace('open left', '').trim();
+                } else {
+                    this.leftSideMenu = true;
+                    //window.location.hash = '#side-menu-open';
+                    document.querySelector('body').className = document.querySelector('body').className + ' open left'.trim();
+                }
+            },
+            updateMultiSite(value) {
+                this.multiSiteId = parseInt(value);
+                axios.defaults.headers.common.siteId = this.multiSiteId;
+            },
+            logout() {
+                functions.storage('remove', 'token');
+                functions.storage('remove', 'structure-user-data');
+                delete(axios.defaults.headers.common.sessionToken);
+                delete(axios.defaults.headers.common.siteId);
+                mo.loggedIn = false;
+                this.loggedIn = false;
+                this.$router.push('/');
+            },
+            fetchLoggedInData() {
+                axios.all([
+                    axios.get('/api/menu')
+                ])
+                .then(axios.spread((
+                    menuData
+                ) => {
+                    this.menu = menuData.data;
+                }))
+                .catch((error) => {
+                    this.authRequiredState(error);
+                    this.displayMessage('Error, during the process of updating user data, please repeat the process or re-login', 'error');
+                    console.log('Error fetching user resources: ' + error);
+                });
+            },
+            displayMessage(message, type) {
+                if (!type) {
+                    type = 'info';
+                }
+
+                this.$notify({
+                    type: type,
+                    title: type.charAt(0).toUpperCase() + type.slice(1),
+                    text: message,
+                    duration: 10000
+                });
+            },
+            authRequiredState(error) {
+                console.log(error.response);
+
+                if (error.response.status === 401) {
+                    this.displayMessage('You must be logged in to enter this page', 'error');
+                    this.logout();
+                }
+
+                return false;
+            }
+        }
+    });
+};

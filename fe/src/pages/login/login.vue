@@ -65,8 +65,6 @@ const loginPage = {
     },
     methods: {
         submitForm: function() {
-            const self = this;
-
             this.formLoading = true;
 
             if (!this.form.login || !this.form.password) {
@@ -79,16 +77,25 @@ const loginPage = {
                 login: this.form.login,
                 password: this.form.password
             })
-            .then(function (response) {
-                functions.storage('set', 'token', response.data, 604800000); // 7 days
-                self.$parent.login();
-                self.$router.push('dashboard');
-                self.formLoading = false;
+            .then((response) => {
+                const token = response.data.sessionToken;
+
+                functions.storage('set', 'token', token, 604800000); // 7 days
+
+                this.$root.storeUser({
+                    user: {},
+                    token: token
+                });
+
+                this.$root.fetchLoggedInData();
+
+                this.$router.push('dashboard');
+
+                this.formLoading = false;
             })
-            .catch(function (error) {
-                console.log(error);
-                self.formError = error.response.data.message;
-                self.formLoading = false;
+            .catch((error) => {
+                this.formError = error.response.data.message;
+                this.formLoading = false;
             });
         }
     }
