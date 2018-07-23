@@ -18,6 +18,12 @@
             :key="brand.id"
         >{{ brand.name }}</option>
     </select>
+
+    <div class="profile">
+        <router-link to="/profile">
+            <i class="fa fa-user"/>
+        </router-link>
+    </div>
 </header>
 </template>
 

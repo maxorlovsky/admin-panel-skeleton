@@ -1,5 +1,5 @@
 <template>
-<section class="dashboard">
+<section class="profile-page">
     <form method="post"
         @submit.prevent="submitForm()"
     >
@@ -59,7 +59,7 @@
 // 3rd party libs
 import axios from 'axios';
 
-const dashboardPage = {
+const profilePage = {
     data() {
         return {
             formLoading: false,
@@ -129,13 +129,13 @@ const dashboardPage = {
 
 // Routing
 mo.routes.push({
-    path: '/dashboard',
-    component: dashboardPage,
+    path: '/profile',
+    component: profilePage,
     meta: {
-        title: 'Dashboard',
+        title: 'Profile',
         loggedIn: true
     }
 });
 
-export default dashboardPage;
+export default profilePage;
 </script>
