@@ -18,21 +18,22 @@ import fileUpload from './components/file-upload/file-upload.vue';
 
 // Pages
 /* eslint-disable */
-import loginPage from './pages/login/login.vue';
-import dashboardPage from './pages/dashboard/dashboard.vue';
-import usersPage from './pages/users/users.vue';
-import usersEditPage from './pages/users/users-edit.vue';
-import permissionsPage from './pages/permissions/permissions.vue';
-import logsPage from './pages/logs/logs.vue';
 import pagesPage from './pages/pages/pages.vue';
 import pagesEditPage from './pages/pages/pages-edit.vue';
+import permissionsPage from './pages/permissions/permissions.vue';
+import profilePage from './pages/profile/profile.vue';
 import labelsPage from './pages/labels/labels.vue';
 import labelsEditPage from './pages/labels/labels-edit.vue';
+import loginPage from './pages/login/login.vue';
 import logoutPage from './pages/logout/logout.vue';
+import logsPage from './pages/logs/logs.vue';
+import usersPage from './pages/users/users.vue';
+import usersEditPage from './pages/users/users-edit.vue';
 /* eslint-enable */
 
 // Website custom config, those files must exist no matter what
 import websiteConfig from '../../../../../mocms/config.json';
+
 /* eslint-disable */
 import * as customItems from './custom-components/custom.js';
 /* eslint-enable */
@@ -46,6 +47,16 @@ mo.routes.push({
     path: '*',
     redirect: '/'
 });
+
+// Check if dashboard path exist, if not, making dashboard redirect to profile
+const checkDashboard = mo.routes.findIndex((route) => route.path === '/dashboard');
+
+if (checkDashboard === -1) {
+    mo.routes.push({
+        path: '/dashboard',
+        redirect: '/profile'
+    });
+}
 
 // Initiate the router
 const router = new VueRouter({
