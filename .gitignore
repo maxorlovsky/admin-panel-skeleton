@@ -1,4 +1,8 @@
+# Specific project files and logs
+*.log
+.stylelintcache
+
+# Folders
 /node_modules
-/vendor
-/dist
-/fe/src/custom-components
+/public/dist/
+/public/index.html

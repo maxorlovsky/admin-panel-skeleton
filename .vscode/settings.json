@@ -5,9 +5,13 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/node_modules": true,
-        "**/vendor": true,
-        "**/dist": true,
-        "**/fe/src/custom-components": true
-    }
+        "**/node_modules": true
+    },
+    "git.ignoreLimitWarning": true,
+    "eslint.validate": [
+        "javascript",
+        {
+            "language": "vue"
+        }
+    ]
 }
