@@ -1,98 +1,59 @@
 // Globals functions
-import { functions } from './functions.js';
+// import { functions } from './functions.js';
 
 // VUE
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import VueNotification from 'vue-notification';
+import Vuetify from 'vuetify';
 
 // 3rd party libs
-import axios from 'axios';
-import Hammer from 'hammerjs';
+import firebase from 'firebase';
+// import axios from 'axios';
+// import Hammer from 'hammerjs';
+
+const config = {
+    apiKey: 'AIzaSyBGCxlmCrgyZC85DIGKdr8o5IYgrnoO38g',
+    authDomain: 'maltadriving-225f3.firebaseapp.com',
+    databaseURL: 'https://maltadriving-225f3.firebaseio.com',
+    projectId: 'maltadriving-225f3',
+    storageBucket: 'maltadriving-225f3.appspot.com',
+    messagingSenderId: '667356511602'
+};
+
+firebase.initializeApp(config);
+
+Vue.use(Vuetify);
 
 // Components
-import headerComponent from './components/header/header.vue';
+/* import headerComponent from './components/header/header.vue';
 import loading from './components/loading/loading.vue';
 import leftSide from './components/left-side/left-side.vue';
-import fileUpload from './components/file-upload/file-upload.vue';
+import fileUpload from './components/file-upload/file-upload.vue'; */
 
 // Pages
 /* eslint-disable */
-import pagesPage from './pages/pages/pages.vue';
+/* import pagesPage from './pages/pages/pages.vue';
 import pagesEditPage from './pages/pages/pages-edit.vue';
-import permissionsPage from './pages/permissions/permissions.vue';
+import permissionsPage from './pages/permissions/permissions.vue'; */
 import profilePage from './pages/profile/profile.vue';
-import labelsPage from './pages/labels/labels.vue';
-import labelsEditPage from './pages/labels/labels-edit.vue';
+/* import labelsPage from './pages/labels/labels.vue';
+import labelsEditPage from './pages/labels/labels-edit.vue'; */
 import loginPage from './pages/login/login.vue';
-import logoutPage from './pages/logout/logout.vue';
+/*import logoutPage from './pages/logout/logout.vue';
 import logsPage from './pages/logs/logs.vue';
 import usersPage from './pages/users/users.vue';
-import usersEditPage from './pages/users/users-edit.vue';
+import usersEditPage from './pages/users/users-edit.vue'; */
 /* eslint-enable */
 
-// Website custom config, those files must exist no matter what
-import websiteConfig from '../../../../../mocms/config.json';
+//functions.storageCacheBuster();
 
-/* eslint-disable */
-import * as customItems from './custom-components/custom.js';
-/* eslint-enable */
+// Router
+import router from './router.js';
 
-functions.storageCacheBuster();
-
-mo.env = functions.getEnv();
-
-// Add <any> URLs to router, to push to /login
-mo.routes.push({
-    path: '*',
-    redirect: '/'
-});
-
-// Check if dashboard path exist, if not, making dashboard redirect to profile
-const checkDashboard = mo.routes.findIndex((route) => route.path === '/dashboard');
-
-if (checkDashboard === -1) {
-    mo.routes.push({
-        path: '/dashboard',
-        redirect: '/profile'
-    });
-}
-
-// Initiate the router
-const router = new VueRouter({
-    mode: 'history',
-    routes: mo.routes
-});
-
-Vue.use(VueRouter);
-Vue.use(VueNotification);
-
-router.beforeEach((to, from, next) => {
-    // If login is require and user state is not logged in - redirect to main page
-    if (to.meta.loggedIn && !mo.loggedIn) {
-        console.log('Authentication failure');
-        next('/');
-        return false;
-    }
-
-    window.scrollTo(0, 0);
-
-    // Set up meta title
-    let metaTitle = 'MO CMS';
-
-    if (websiteConfig.title) {
-        metaTitle = websiteConfig.title;
-    }
-    document.title = metaTitle;
-    if (to.meta.title) {
-        document.title += ' - ' + to.meta.title;
-    }
-
-    return next();
-});
+// Main app file
+import App from './app.vue';
 
 // Check if there is a token
-if (functions.storage('get', 'token')) {
+/* if (functions.storage('get', 'token')) {
     // Add JWT token as default header
     axios.defaults.headers.common.sessionToken = functions.storage('get', 'token');
 
@@ -118,7 +79,18 @@ if (functions.storage('get', 'token')) {
 } else {
     // Load as logged out state
     mo.app = loadApp({});
-}
+} */
+
+// Load when firebase is on
+firebase.auth().onAuthStateChanged(() => {
+    mo.app = new Vue({
+        router: router,
+        render: (h) => h(App)
+    }).$mount('#app');
+});
+
+/* 
+mo.app = loadApp({}).$mount('#app');
 
 function loadApp(storage) {
     return new Vue({
@@ -136,8 +108,7 @@ function loadApp(storage) {
                 leftSideMenu: false,
                 loggedIn: false,
                 userData: {},
-                multiSiteId: 0,
-                bodyClass: mo.env
+                multiSiteId: 0
             };
         },
         created() {
@@ -221,4 +192,4 @@ function loadApp(storage) {
             }
         }
     });
-}
+} */

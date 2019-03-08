@@ -1,6 +1,6 @@
 {
     "name": "mo-backend-template",
-    "description": "mo-backend-template",
+    "description": "admin-panel-skeleton",
     "version": "1.0.0",
     "require": {
         "php": "^7.1.3",

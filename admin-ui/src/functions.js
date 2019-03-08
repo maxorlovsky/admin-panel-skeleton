@@ -6,11 +6,12 @@ const functions = {
             timeoutSeconds = args[1];
         }
 
-        // setItem
+        // Set Item
         if (func === 'set') {
             // If any parameter is empty, we don't do anything
             if (!func || !key || !args[0]) {
-                console.log('false');
+                console.error('false');
+
                 return false;
             }
 
@@ -33,10 +34,10 @@ const functions = {
                 // If older than 30 min
                 (returnValue.time <= new Date().getTime()) ||
                 // Or if version is now different, ignoring session token
-                (returnValue.version !== mo.version && key !== 'token')
-               ) {
+                (returnValue.version !== mo.version && key !== 'token')) {
                 // Cleanup
                 functions.storage('remove', key);
+
                 return false;
             }
 
@@ -62,19 +63,6 @@ const functions = {
         }
 
         return true;
-    },
-    getEnv: () => {
-        let env = functions.storage('get', 'env');
-
-        if (env === 'dev' || location.host.indexOf('dev') === 0) {
-            env = 'dev';
-        } else if (env === 'test' || location.host.indexOf('test') === 0 || env === 'qa' || location.host.indexOf('qa') === 0) {
-            env = 'test';
-        } else {
-            env = 'prod';
-        }
-
-        return env;
     }
 };
 

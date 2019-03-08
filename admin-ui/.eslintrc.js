@@ -331,9 +331,7 @@ module.exports = {
                 "allowFirstLine": true
             }
         }],
-        "vue/multiline-html-element-content-newline": "off",
         "vue/name-property-casing": ["error", "kebab-case"],
-        "vue/singleline-html-element-content-newline": "off",
         "wrap-iife": "error",
         "wrap-regex": "error",
         "yield-star-spacing": "error",

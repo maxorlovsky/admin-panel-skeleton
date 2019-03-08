@@ -15,11 +15,11 @@ body {
 
 /* for smooth :hover transitions */
 a {
-    transition: .5s;
+    transition: 0.5s;
 }
 
 [v-cloak] .v-cloak--hidden{
-  display: none;
+    display: none;
 }
 
 .template-holder {
@@ -61,7 +61,7 @@ select {
     padding: 0;
     width: 100%;
     height: 100%;
-    font-family: 'Open Sans';
+    font-family: $font;
 }
 
 .page {
@@ -71,9 +71,7 @@ select {
     margin: 0px auto;
     visibility: visible;
     height: auto;
-    transition: .5s;
-
-    @include clearfix();
+    transition: 0.5s;
 
     form .btn.btn-primary {
         margin-top: 0.5rem;
@@ -89,27 +87,4 @@ span.small {
     display: block;
     color: #777;
     font-size: 0.7rem;
-}
-
-/* Drop idiotic bootstrap focus shadow */
-textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="time"]:focus,
-input[type="week"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus,
-.uneditable-input:focus,
-.btn.focus,
-.btn:focus {
-    box-shadow: none !important;
-    outline: 0;
 }

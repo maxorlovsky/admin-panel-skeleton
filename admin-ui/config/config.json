@@ -1,0 +1,12 @@
+{
+    "title": "",
+    "version": "1.0.0",
+    "captcha": "",
+    "multiBrands": true,
+    "nodeModulesPath": "../../../../../../../node_modules",
+    "maxLevel": 5,
+    "logs": {
+        "modules": [],
+        "types": []
+    }
+}

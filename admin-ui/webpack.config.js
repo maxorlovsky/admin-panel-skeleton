@@ -14,8 +14,8 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const config = {
     mode: 'development',
     entry: {
-        bundle: ['@babel/polyfill', './fe/src/main.js'],
-        styles: ['./fe/styles/global.scss']
+        bundle: ['@babel/polyfill', './src/main.js'],
+        styles: ['./styles/global.scss']
     },
     output: {
         filename: '[name].js',
@@ -128,12 +128,8 @@ module.exports = function (env = {}) {
 
     const copyFiles = [
         {
-            from: './fe/assets/',
+            from: './assets/',
             to: 'assets/'
-        },
-        {
-            from: './node_modules/font-awesome/fonts/',
-            to: 'assets/fonts'
         },
         {
             from: './node_modules/tinymce/skins/ui/oxide-dark/',
