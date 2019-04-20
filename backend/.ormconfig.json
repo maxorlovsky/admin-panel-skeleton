@@ -1,0 +1,25 @@
+{
+    "env": "dev",
+    "type": "mariadb",
+    "host": "",
+    "port": 3306,
+    "username": "",
+    "password": "",
+    "database": "",
+    "synchronize": true,
+    "logging": false,
+    "entities": [
+        "db/entity/**/*.ts"
+    ],
+    "migrations": [
+        "db/migration/**/*.ts"
+    ],
+    "subscribers": [
+        "db/subscriber/**/*.ts"
+    ],
+    "cli": {
+        "entitiesDir": "db/entity",
+        "migrationsDir": "db/migration",
+        "subscribersDir": "db/subscriber"
+    }
+}

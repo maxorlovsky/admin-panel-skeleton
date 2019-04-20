@@ -1,0 +1,12 @@
+{
+    "availableLoginAttempts": 5,
+    "maxLevel": 3,
+    "minPasswordLength": 6,
+    "corsDomains": [
+        "https://localhost:8070",
+        "https://localhost:8071",
+        "https://admin.anya.orlovsky.me",
+        "https://anya.orlovsky.me"
+    ],
+    "corsHeaders": "sessionToken, siteId"
+}
