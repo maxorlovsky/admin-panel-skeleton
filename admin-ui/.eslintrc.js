@@ -126,7 +126,9 @@ module.exports = {
             "error",
             "unix"
         ],
-        "lines-around-comment": "error",
+        "lines-around-comment": ["error", {
+            "beforeBlockComment": false
+        }],
         "lines-around-directive": "error",
         "lines-between-class-members": "error",
         "max-depth": "error",
@@ -141,7 +143,7 @@ module.exports = {
         "newline-after-var": "error",
         "newline-before-return": "error",
         "newline-per-chained-call": "error",
-        "no-alert": "error",
+        "no-alert": "off",
         "no-array-constructor": "error",
         "no-await-in-loop": "error",
         "no-bitwise": "error",
@@ -236,7 +238,7 @@ module.exports = {
         "no-useless-return": "error",
         "no-var": "error",
         "no-void": "error",
-        "no-warning-comments": "error",
+        "no-warning-comments": [0, { "terms": ["todo"], "location": "start" }],
         "no-whitespace-before-property": "error",
         "no-with": "error",
         "nonblock-statement-body-position": "error",
@@ -331,7 +333,10 @@ module.exports = {
                 "allowFirstLine": true
             }
         }],
+        "vue/multiline-html-element-content-newline": "off",
         "vue/name-property-casing": ["error", "kebab-case"],
+        "vue/no-v-html": "off",
+        "vue/singleline-html-element-content-newline": "off",
         "wrap-iife": "error",
         "wrap-regex": "error",
         "yield-star-spacing": "error",

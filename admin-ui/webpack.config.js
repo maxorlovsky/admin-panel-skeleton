@@ -102,7 +102,7 @@ const config = {
     devServer: {
         compress: true,
         https: true,
-        port: 8060,
+        port: 8071,
         historyApiFallback: true,
         contentBase: './public/',
         publicPath: '/dist/',
@@ -110,7 +110,17 @@ const config = {
             ignored: /node_modules/
         },
         inline: true,
-        quiet: false
+        quiet: false,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3000',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
     },
     performance: {
         hints: false
@@ -132,8 +142,8 @@ module.exports = function (env = {}) {
             to: 'assets/'
         },
         {
-            from: './node_modules/tinymce/skins/ui/oxide-dark/',
-            to: 'styles/tinymce-skins'
+            from: './node_modules/tinymce/skins/',
+            to: 'assets/tinymce-skins'
         }
     ];
 
