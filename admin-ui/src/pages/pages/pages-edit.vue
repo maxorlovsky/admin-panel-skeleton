@@ -1,128 +1,116 @@
 <template>
-<section class="pages">
-    <div class="heading">
-        <h2>
-            <span v-if="add">Add</span>
-            <span v-else>Edit</span>
-            page
-        </h2>
-        <router-link to="/pages">
-            <button class="btn btn-info">
-                <span class="fa fa-step-backward"/> Back to list
-            </button>
-        </router-link>
-    </div>
+    <section class="pages">
+        <v-card-actions>
+            <h2>
+                <span v-if="add">Add</span>
+                <span v-else>Edit</span>
+                page
+            </h2>
+            <v-spacer />
+            <v-btn round
+                depressed
+                class="button blue"
+                to="/pages"
+            >Back to list</v-btn>
+        </v-card-actions>
 
-    <loading v-if="loading"/>
-    <form v-else
-        method="post"
-        @submit.prevent="submitForm()"
-    >
-        <div class="form-group row">
-            <label for="title-field"
-                class="col-3 col-form-label"
-            >Title</label>
-            <div class="col-9">
-                <input id="title-field"
-                    v-model="form.title"
-                    :class="{ error: errorClasses.title }"
-                    class="form-control"
-                    type="text"
-                >
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="metaTitle-field"
-                class="col-3 col-form-label"
-            >Meta title</label>
-            <div class="col-9">
-                <input id="metaTitle-field"
-                    v-model="form.metaTitle"
-                    :class="{ error: errorClasses.metaTitle }"
-                    class="form-control"
-                    type="text"
-                >
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="metaDescription-field"
-                class="col-3 col-form-label"
-            >Meta description</label>
-            <div class="col-9">
-                <input id="metaDescription-field"
-                    v-model="form.metaDescription"
-                    :class="{ error: errorClasses.metaDescription }"
-                    class="form-control"
-                    type="text"
-                    maxlength="160"
-                >
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="link-field"
-                class="col-3 col-form-label"
-            >Link</label>
-            <div class="col-9">
-                <input id="link-field"
-                    v-model="form.link"
-                    :class="{ error: errorClasses.link }"
-                    class="form-control"
-                    type="text"
-                >
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="text-field"
-                class="col-3 col-form-label"
-            >Text</label>
-            <div class="col-9">
-                <tinymce id="text-field"
-                    v-model="form.text"
-                    :class="{ error: errorClasses.text }"
-                />
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="loggedIn-field"
-                class="col-3 col-form-label"
-            >Logged In only</label>
-            <div class="col-9">
-                <input id="loggedIn-field"
-                    v-model="form.loggedIn"
-                    :class="{ error: errorClasses.loggedIn }"
-                    type="checkbox"
-                >
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="enabled-field"
-                class="col-3 col-form-label"
-            >Enabled</label>
-            <div class="col-9">
-                <input id="enabled-field"
-                    v-model="form.enabled"
-                    :class="{ error: errorClasses.enabled }"
-                    type="checkbox"
-                >
-            </div>
-        </div>
+        <loading v-if="loading" />
 
-        <button v-if="add"
-            :disabled="formLoading"
-            class="btn btn-primary"
-        >Add page</button>
-        <button v-else
-            :disabled="formLoading"
-            class="btn btn-primary"
-        >Edit page</button>
-    </form>
-</section>
+        <v-form v-else
+            class="block"
+            @submit.prevent="submitForm()"
+        >
+            <v-container grid-list-xl
+                fluid
+                text-xs-center
+            >
+                <v-layout row
+                    wrap
+                >
+                    <v-flex xs12>
+                        <v-text-field v-model="form.title"
+                            :error="errorClasses.title"
+                            :rules="titleRules"
+                            outline
+                            counter="100"
+                            name="title"
+                            label="Title"
+                            type="text"
+                        />
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <v-text-field v-model="form.metaTitle"
+                            :error="errorClasses.metaTitle"
+                            outline
+                            counter="70"
+                            name="metaTitle"
+                            label="Meta Title"
+                            type="text"
+                        />
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <v-text-field v-model="form.metaDescription"
+                            :error="errorClasses.metaDescription"
+                            outline
+                            counter="230"
+                            name="metaDescription"
+                            label="Meta Description"
+                            type="text"
+                        />
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <v-text-field v-model="form.link"
+                            :error="errorClasses.link"
+                            :rules="linkRules"
+                            outline
+                            counter="300"
+                            name="link"
+                            label="Link"
+                            type="text"
+                        />
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <tinymce id="text-field"
+                            v-model="form.text"
+                            :class="{ error: errorClasses.text }"
+                            :no-paragraph="true"
+                        />
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <v-checkbox v-model="form.enabled"
+                            hide-details
+                            label="Enabled"
+                        />
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <v-card-actions>
+                <v-btn :loading="formLoading"
+                    :disabled="submitDisabled"
+                    type="submit"
+                    color="blue"
+                    class="button"
+                    round
+                    depressed
+                >Save</v-btn>
+            </v-card-actions>
+        </v-form>
+    </section>
 </template>
 
 <script>
 // Components
 import loading from '../../components/loading/loading.vue';
 import tinymce from '../../components/tinymce/tinymce.vue';
+
+// Mixins
+import formMixin from '../../mixins/form-mixin.js';
 
 // 3rd party libs
 import axios from 'axios';
@@ -132,26 +120,56 @@ const pagesEditPage = {
         loading,
         tinymce
     },
-    props: {
-        multiSiteId: Number
-    },
+    mixins: [formMixin],
     data: function() {
         return {
             add: false,
             edit: false,
             loading: true,
             formLoading: false,
+            submitDisabled: true,
             form: {
                 title: '',
                 metaTitle: '',
                 metaDescription: '',
                 link: '',
                 text: '',
-                loggedIn: false,
                 enabled: false
             },
-            errorClasses: {}
+            errorClasses: {},
+            validationRules: {
+                title: {
+                    minLength: 1,
+                    maxLength: 100
+                }
+            },
+            titleRules: [
+                (value) => this.formMixinIsRequired(value) || 'Required',
+                (value) => this.formMixinIsRangeValid(value.length, this.validationRules.title.minLength, this.validationRules.title.maxLength) || `Should be between ${this.validationRules.title.minLength} and ${this.validationRules.title.maxLength} characters long`
+            ],
+            linkRules: [
+                (value) => this.formMixinIsRequired(value) || 'Required',
+                (value) => value.indexOf(' ') === -1 || 'Must not include spaces, use _ or -'
+            ]
         };
+    },
+    watch: {
+        multiSiteId: {
+            // Triggering watch immediately
+            immediate: true,
+            handler() {
+                // Trigger only on edit
+                if (this.$route.params.id) {
+                    this.fetchEditData(this.$route.params.id);
+                }
+            }
+        },
+        form: {
+            deep: true,
+            handler() {
+                this.disableSubmit();
+            }
+        }
     },
     created() {
         // Define if we add or edit
@@ -163,105 +181,90 @@ const pagesEditPage = {
             this.loading = false;
         }
     },
-    watch: {
-        'multiSiteId'() {
-            if (this.$route.params.id) {
-                this.fetchEditData(this.$route.params.id);
-            }
-        }
-    },
     methods: {
-        fetchEditData(id) {
-            axios.get(`/api/pages/${id}`)
-            .then((response) => {
-                this.form.title = response.data.page.title;
-                this.form.metaTitle = response.data.page.meta_title;
-                this.form.metaDescription = response.data.page.meta_description;
-                this.form.link = response.data.page.link;
-                this.form.text = response.data.page.text;
-                this.form.loggedIn = response.data.page.logged_in === 1;
-                this.form.enabled = response.data.page.enabled === 1;
+        async fetchEditData(id) {
+            try {
+                const response = await axios.get(`${mo.apiUrl}/page/${id}`);
 
+                this.form.title = response.data.data.title;
+                this.form.metaTitle = response.data.data.metaTitle;
+                this.form.metaDescription = response.data.data.metaDescription;
+                this.form.link = response.data.data.link;
+                this.form.text = response.data.data.text;
+                this.form.enabled = response.data.data.enabled;
+            } catch (error) {
+                console.error(error);
+            } finally {
                 this.loading = false;
-            })
-            .catch((error) => {
-                this.loading = false;
-                console.log(error);
-            });
+            }
         },
         submitForm() {
             this.formLoading = true;
-
             this.errorClasses = {};
 
-            // Frontend check
-            if (!this.form.metaTitle || !this.form.link) {
-                // Generic error message
-                this.$parent.displayMessage('Please fill in the form', 'error');
-                this.formLoading = false;
-                // Mark specific fields as empty ones
-                this.errorClasses = {
-                    metaTitle: !this.form.metaTitle,
-                    link: !this.form.link
-                };
+            // Check in case if it's an edit form
+            if (this.edit) {
+                this.submitEditForm();
 
-                return false;
+                return true;
             }
 
-            let apiUrl = '/api/pages/add';
-            let apiAttributes = {
-                title: this.form.title,
-                metaTitle: this.form.metaTitle,
-                metaDescription: this.form.metaDescription,
-                link: this.form.link,
-                text: this.form.text,
-                loggedIn: this.form.loggedIn,
-                enabled: this.form.enabled,
-                siteId: this.multiSiteId
-            };
+            this.submitAddForm();
 
-            if (this.edit) {
-                apiUrl = '/api/pages/edit';
-                apiAttributes = {
+            return true;
+        },
+        async submitAddForm() {
+            try {
+                // Send request to API to create a label
+                const response = await axios.post(`${mo.apiUrl}/page`, {
+                    title: this.form.title,
+                    metaTitle: this.form.metaTitle,
+                    metaDescription: this.form.metaDescription,
+                    link: this.form.link,
+                    text: this.form.text,
+                    enabled: this.form.enabled,
+                    siteId: this.multiSiteId
+                });
+
+                this.displayMessage(response.data.message, { type: 'success' });
+
+                // Redirect back to the list on success
+                this.$router.push('/pages');
+            } catch (error) {
+                // Display error message from API
+                this.displayMessage(error.response.data.message, { type: 'error' });
+
+                this.errorClasses = this.formMixinHandleErrors(error);
+            } finally {
+                // Unblock the form
+                this.formLoading = false;
+            }
+        },
+        async submitEditForm() {
+            try {
+                const response = await axios.put(`${mo.apiUrl}/page`, {
                     id: this.$route.params.id,
                     title: this.form.title,
                     metaTitle: this.form.metaTitle,
                     metaDescription: this.form.metaDescription,
                     link: this.form.link,
                     text: this.form.text,
-                    loggedIn: this.form.loggedIn,
                     enabled: this.form.enabled
-                };
-            }
+                });
 
-            axios.post(apiUrl, apiAttributes)
-            .then((response) => {
-                this.$parent.displayMessage(response.data.message, 'success');
-
-                if (this.add) {
-                    this.$router.push('/pages');
-                }
-
-                this.formLoading = false;
-            })
-            .catch((error) => {
-                this.formLoading = false;
-
+                this.displayMessage(response.data.message, { type: 'success' });
+            } catch (error) {
                 // Display error message from API
-                this.$parent.displayMessage(error.response.data.message, 'error');
+                this.displayMessage(error.response.data.message, { type: 'error' });
 
-                let errorFields = error.response.data.fields;
-
-                // In some cases slim return array as json, we need to convert it
-                if (errorFields.constructor !== Array) {
-                    errorFields = Object.keys(errorFields).map((key) => errorFields[key]);
-                }
-
-                // Mark fields with error class
-                for (let i = 0; i < errorFields.length; ++i) {
-                    this.errorClasses[errorFields[i]] = true;
-                }
-            });
+                this.errorClasses = this.formMixinHandleErrors(error);
+            } finally {
+                // Unblock the form
+                this.formLoading = false;
+            }
+        },
+        disableSubmit() {
+            this.submitDisabled = !this.form.title || !this.form.link;
         }
     }
 };

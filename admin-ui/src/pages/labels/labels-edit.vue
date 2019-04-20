@@ -1,83 +1,92 @@
 <template>
-<section class="labels">
-    <div class="heading">
-        <h2>
-            <span v-if="add">Add</span>
-            <span v-else>Edit</span>
-            label
-        </h2>
-        <router-link to="/labels">
-            <button class="btn btn-info">
-                <span class="fa fa-step-backward"/> Back to list
-            </button>
-        </router-link>
-    </div>
+    <section class="labels">
+        <v-card-actions>
+            <h2>
+                <span v-if="add">Add</span>
+                <span v-else>Edit</span>
+                label
+            </h2>
+            <v-spacer />
+            <v-btn round
+                depressed
+                class="button blue"
+                to="/labels"
+            >Back to list</v-btn>
+        </v-card-actions>
 
-    <loading v-if="loading"/>
-    <form v-else
-        method="post"
-        @submit.prevent="submitForm()"
-    >
-        <div class="form-group row">
-            <label for="name-field"
-                class="col-3 col-form-label"
+        <loading v-if="loading" />
+
+        <v-form v-else
+            class="block"
+            @submit.prevent="submitForm()"
+        >
+            <v-container grid-list-xl
+                fluid
+                text-xs-center
             >
-                Name
-                <span class="small">No spaces or dashes, use underscore "_"</span>
-            </label>
-            <div class="col-9">
-                <input id="name-field"
-                    v-model="form.name"
-                    :class="{ error: errorClasses.name }"
-                    class="form-control"
-                    type="text"
+                <v-layout row
+                    wrap
                 >
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="output-field"
-                class="col-3 col-form-label"
-            >
-                Text
-                <span class="small">Unlike in other places, this text won't be wrapper in "paragraph" tag</span>
-            </label>
-            <div class="col-9">
-                <tinymce id="output-field"
-                    v-model="form.output"
-                    :class="{ error: errorClasses.output }"
-                    :no-paragraph="true"
-                />
-            </div>
-        </div>
+                    <v-flex xs12>
+                        <v-text-field v-model="form.name"
+                            :error="errorClasses.name"
+                            :rules="nameRules"
+                            outline
+                            counter="100"
+                            hint="No spaces or dashes, use underscore '_'"
+                            name="name"
+                            label="Name"
+                            type="text"
+                        />
+                    </v-flex>
 
-        <button v-if="add"
-            :disabled="formLoading"
-            class="btn btn-primary"
-        >Add label</button>
-        <button v-else
-            :disabled="formLoading"
-            class="btn btn-primary"
-        >Edit label</button>
-    </form>
-</section>
+                    <v-flex xs12>
+                        <tinymce id="output-field"
+                            v-model="form.output"
+                            :class="{ error: errorClasses.output }"
+                            :no-paragraph="true"
+                        />
+
+                        <div class="output-hint-message v-messages theme--light">
+                            <div class="v-messages__wrapper">
+                                <div class="v-message__message">Unlike in other places, this text won't be wrapper in "paragraph" tag</div>
+                            </div>
+                        </div>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+
+            <v-card-actions>
+                <v-btn :loading="formLoading"
+                    :disabled="submitDisabled"
+                    type="submit"
+                    color="blue"
+                    class="button"
+                    round
+                    depressed
+                >Save</v-btn>
+            </v-card-actions>
+        </v-form>
+    </section>
 </template>
 
 <script>
+// 3rd party libs
+import axios from 'axios';
+
 // Components
 import loading from '../../components/loading/loading.vue';
 import tinymce from '../../components/tinymce/tinymce.vue';
 
-// 3rd party libs
-import axios from 'axios';
+// Mixins
+import formMixin from '../../mixins/form-mixin.js';
 
 const labelsEditPage = {
     components: {
         loading,
         tinymce
     },
-    props: {
-        multiSiteId: Number
-    },
+    mixins: [formMixin],
     data() {
         return {
             add: false,
@@ -88,7 +97,18 @@ const labelsEditPage = {
                 name: '',
                 output: ''
             },
-            errorClasses: {}
+            errorClasses: {},
+            submitDisabled: true,
+            validationRules: {
+                name: {
+                    minLength: 1,
+                    maxLength: 100
+                }
+            },
+            nameRules: [
+                (value) => this.formMixinIsRequired(value) || 'Required',
+                (value) => this.formMixinIsRangeValid(value.length, this.validationRules.name.minLength, this.validationRules.name.maxLength) || `Should be between ${this.validationRules.name.minLength} and ${this.validationRules.name.maxLength} characters long`
+            ]
         };
     },
     created() {
@@ -101,89 +121,101 @@ const labelsEditPage = {
             this.loading = false;
         }
     },
+    computed: {
+        multiSiteId() {
+            return this.$store.getters.get('multiSiteId');
+        }
+    },
     watch: {
-        'multiSiteId'() {
-            if (this.$route.params.id) {
-                this.fetchEditData(this.$route.params.id);
+        multiSiteId: {
+            // Triggering watch immediately
+            immediate: true,
+            handler() {
+                // Trigger only on edit
+                if (this.$route.params.id) {
+                    this.fetchEditData(this.$route.params.id);
+                }
+            }
+        },
+        form: {
+            deep: true,
+            handler() {
+                this.disableSubmit();
             }
         }
     },
     methods: {
-        fetchEditData(id) {
-            axios.get(`/api/labels/${id}`)
-            .then((response) => {
-                this.form.name = response.data.label.name;
-                this.form.output = response.data.label.output;
+        disableSubmit() {
+            this.submitDisabled = !this.form.name || !this.form.output;
+        },
+        async fetchEditData(id) {
+            try {
+                const response = await axios.get(`${mo.apiUrl}/label/${id}`);
 
+                this.form.name = response.data.data.name;
+                this.form.output = response.data.data.output;
+            } catch (error) {
+                console.error(error);
+            } finally {
                 this.loading = false;
-            })
-            .catch((error) => {
-                this.loading = false;
-                console.log(error);
-            });
+            }
         },
         submitForm() {
             this.formLoading = true;
-
             this.errorClasses = {};
 
-            // Frontend check
-            if (!this.form.name) {
-                // Generic error message
-                this.$parent.displayMessage('Please fill in the form', 'error');
-                this.formLoading = false;
-                // Mark specific fields as empty ones
-                this.errorClasses = {
-                    name: !this.form.name
-                };
+            // Check in case if it's an edit form
+            if (this.edit) {
+                this.submitEditForm();
 
-                return false;
+                return true;
             }
 
-            let apiUrl = '/api/labels/add';
-            let apiAttributes = {
-                name: this.form.name,
-                output: this.form.output,
-                siteId: this.multiSiteId
-            };
+            this.submitAddForm();
 
-            if (this.edit) {
-                apiUrl = '/api/labels/edit';
-                apiAttributes = {
+            return true;
+        },
+        async submitAddForm() {
+            try {
+                // Send request to API to create a label
+                const response = await axios.post(`${mo.apiUrl}/label`, {
+                    name: this.form.name,
+                    output: this.form.output,
+                    siteId: this.multiSiteId
+                });
+
+                this.displayMessage(response.data.message, { type: 'success' });
+
+                // Redirect back to the list on success
+                this.$router.push('/labels');
+            } catch (error) {
+                // Display error message from API
+                this.displayMessage(error.response.data.message, { type: 'error' });
+
+                this.errorClasses = this.formMixinHandleErrors(error);
+            } finally {
+                // Unblock the form
+                this.formLoading = false;
+            }
+        },
+        async submitEditForm() {
+            try {
+                const response = await axios.put(`${mo.apiUrl}/label`, {
                     id: this.$route.params.id,
                     name: this.form.name,
                     output: this.form.output
-                };
-            }
+                });
 
-            axios.post(apiUrl, apiAttributes)
-            .then((response) => {
-                this.$parent.displayMessage(response.data.message, 'success');
-
-                if (this.add) {
-                    this.$router.push('/labels');
-                }
-
-                this.formLoading = false;
-            })
-            .catch((error) => {
-                this.formLoading = false;
-
+                this.displayMessage(response.data.message, { type: 'success' });
+            } catch (error) {
                 // Display error message from API
-                this.$parent.displayMessage(error.response.data.message, 'error');
+                this.displayMessage(error.response.data.message, { type: 'error' });
 
-                let errorFields = error.response.data.fields;
-
-                // In some cases slim return array as json, we need to convert it
-                if (errorFields.constructor !== Array) {
-                    errorFields = Object.keys(errorFields).map((key) => errorFields[key]);
-                }
-
-                // Mark fields with error class
-                for (let i = 0; i < errorFields.length; ++i) {
-                    this.errorClasses[errorFields[i]] = true;
-                }
-            });
+                this.errorClasses = this.formMixinHandleErrors(error);
+            } finally {
+                // Unblock the form
+                this.formLoading = false;
+            }
         }
     }
 };

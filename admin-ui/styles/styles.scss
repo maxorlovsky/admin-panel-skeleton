@@ -1,3 +1,7 @@
+html {
+    font-size: 10px;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -8,83 +12,70 @@ body {
     width: 100%;
 }
 
-/* Required for all buttons */
-.btn {
-    cursor: pointer;
-}
-
-/* for smooth :hover transitions */
-a {
-    transition: 0.5s;
-}
-
-[v-cloak] .v-cloak--hidden{
-    display: none;
-}
-
-.template-holder {
-    display: none;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"] {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: $font;
-    margin-bottom: 1rem;
-    border: 1px solid #cecece;
-    padding: 0.2em 0.5em;
-
-    &:hover {
-        background-color: #eee;
-    }
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"],
-select {
-    &.error,
-    .error & {
-        border: 1px solid #900;
-    }
-}
-
-.wrapper {
+.logo-wrapper {
     display: flex;
-    min-height: calc(100vh - #{$header-height});
-    flex-direction: row-reverse;
-    flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: $font;
-}
+    align-content: center;
+    justify-content: center;
 
-.page {
-    width: 80%;
-    flex: 1;
-    position: relative;
-    margin: 0px auto;
-    visibility: visible;
-    height: auto;
-    transition: 0.5s;
+    .logo-circle {
+        border: 1px solid $main-color;
+        border-radius: 50%;
+        padding: 1rem;
+        background-color: #fff;
+    }
 
-    form .btn.btn-primary {
-        margin-top: 0.5rem;
-        width: 100%;
+    .logo {
+        width: 10rem;
+        height: 10rem;
+        background-image: url("#{$images}/logo.png");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 }
 
-.sort-handle {
-    cursor: n-resize;
+.v-btn.button {
+    padding: 1.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #fff;
+    min-width: 14.1rem;
+    align-self: right;
 }
 
-span.small {
-    display: block;
-    color: #777;
-    font-size: 0.7rem;
+h2 {
+    color: #eee;
+}
+
+.v-form.block {
+    padding: 1rem;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 8px 8px 8px 0px rgba(90, 90, 90, 0.75);
+}
+
+// Vuetify overrides
+.v-content {
+    .v-content__wrap {
+        background-image: linear-gradient(to right, rgba(#1f2d3d, 0.75) 0%, rgba(#1f2d3d, 0.75) 100%), url("#{$images}/tree.png");
+        background-position: 0 100%;
+        background-repeat: no-repeat;
+    }
+
+    .v-list__tile--active {
+        background-color: rgba(0, 0, 0, 0.5);
+
+        .v-list__tile__title {
+            color: #fff !important;
+        }
+    }
+
+    .theme--light.v-navigation-drawer {
+        background-color: $main-color;
+    }
+
+    .v-card__actions {
+        justify-content: flex-end;
+    }
 }

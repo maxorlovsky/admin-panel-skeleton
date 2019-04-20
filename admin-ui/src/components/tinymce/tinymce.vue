@@ -1,6 +1,8 @@
 <template>
     <div class="tinymce-component">
-        <textarea :id="id"/>
+        <textarea :id="id"
+            :value="value"
+        />
     </div>
 </template>
 
@@ -10,8 +12,10 @@ import Vue from 'vue';
 
 // 3rd party libs
 import tinymce from 'tinymce';
+
 // TinyMCE themes
 import 'tinymce/themes/modern/theme';
+
 // TinyMCE plugins
 import 'tinymce/plugins/code/plugin';
 import 'tinymce/plugins/fullscreen/plugin';
@@ -38,47 +42,52 @@ export default {
             default: false
         }
     },
-    mounted () {
-        /* eslint-disable */
-        let options = {
-            branding: false,
-            skin_url: '/vendor/maxtream/themages/dist/styles/tinymce-skins',
-            menubar: false,
-            toolbar: [
-                'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect forecolor backcolor | removeformat',
-                'undo redo | code | restoredraft | fullscreen | bullist numlist | link unlink image'
-            ],
-            fontsize_formats: '8px 9px 10px 11px 12px 13px 14px 15px 16px 17px 18px 19px 20px 24px 36px',
-            plugins: ['code', 'fullscreen', 'lists', 'link', 'autosave', 'image', 'imagetools', 'textcolor', 'colorpicker'],
-            forced_root_block: this.noParagraph ? '' : 'p'
-            // https://www.tinymce.com/docs/plugins/imagetools/
-        };
-        /* eslint-enable */
+    mounted() {
+        // If value is not set, recheck in 1 second
+        if (!this.value) {
+            setTimeout(() => {
+                if (this.value) {
+                    tinymce.get(this.id).setContent(this.value);
+                }
+            }, 1000);
+        }
 
-        options.selector = '#' + this.id;
-
-        options.setup = (editor) => this.config(editor);
-
-        Vue.nextTick(() => tinymce.init(options));
+        this.initiate();
     },
     beforeDestroy () {
         tinymce.execCommand('mceRemoveEditor', false, this.id);
     },
     methods: {
-        config(editor) {
-            editor.on('NodeChange Change KeyUp', () => {
-                this.$emit('input', tinymce.get(this.id).getContent());
-                this.$emit('change', tinymce.get(this.id), tinymce.get(this.id).getContent());
-            });
+        initiate() {
+            /* eslint-disable */
+            let options = {
+                branding: false,
+                skin_url: '/dist/assets/tinymce-skins/lightgray',
+                menubar: false,
+                toolbar: [
+                    'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect forecolor backcolor | removeformat',
+                    'undo redo | code | restoredraft | fullscreen | bullist numlist | link unlink image'
+                ],
+                fontsize_formats: '8px 9px 10px 11px 12px 13px 14px 15px 16px 17px 18px 19px 20px 24px 36px',
+                plugins: ['code', 'fullscreen', 'lists', 'link', 'autosave', 'image', 'imagetools', 'textcolor', 'colorpicker'],
+                forced_root_block: this.noParagraph ? '' : 'p',
+                selector: `#${this.id}`,
+                init_instance_callback: (editor) => {
+                    editor.on('KeyUp', (e) => {
+                        this.$emit('input', editor.getContent());
+                    });
 
-            editor.on('init', () => {
-                if (this.value) {
-                    tinymce.get(this.id).setContent(this.value);
+                    editor.on('Change', (e) => {
+                        this.$emit('input', editor.getContent());
+                    });
+                    
+                    editor.setContent(this.value);
                 }
+            };
+            /* eslint-enable */
 
-                this.$emit('input', this.value);
-            });
+            Vue.nextTick(() => tinymce.init(options));
         }
     }
-}
+};
 </script>

@@ -1,58 +1,47 @@
 <template>
-<section class="pages">
-    <div class="heading">
-        <h2>Pages</h2>
+    <section class="pages">
+        <v-card-actions>
+            <h2>Pages</h2>
+            <v-spacer />
+            <v-btn round
+                depressed
+                class="button green"
+                to="/pages/add"
+            >Add new page</v-btn>
+        </v-card-actions>
 
-        <router-link to="/pages/add">
-            <button class="btn btn-success">
-                <span class="fa fa-file-text"/> Add new page
-            </button>
-        </router-link>
-    </div>
+        <v-data-table :headers="headers"
+            :items="pages"
+            :loading="loading"
+            no-data-text="No pages added"
+            hide-actions
+        >
+            <v-progress-linear slot="progress"
+                color="purple"
+                indeterminate
+            />
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Meta title</th>
-                <th>Page link</th>
-                <th class="text-center">Enabled</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-if="loading">
-                <td colspan="4">
-                    <loading/>
-                </td>
-            </tr>
-            <tr v-for="page in pages"
-                :key="page.id"
+            <template slot="items"
+                slot-scope="props"
             >
-                <td>{{ page.title }}</td>
-                <td>{{ page.link }}</td>
-                <td class="text-center">
-                    <i :class="{ 'fa-check': page.enabled == 1, 'fa-times': page.enabled != 1 }"
-                        class="fa"
-                    />
-                </td>
-                <td class="text-center">
-                    <router-link :to="'/pages/edit/' + page.id">
-                        <button class="btn btn-success">
-                            <span class="fa fa-pencil"/>
+                <tr>
+                    <td>{{ props.item.title }}</td>
+                    <td>{{ props.item.link }}</td>
+                    <td>{{ props.item.enabled ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <router-link :to="'/pages/edit/' + props.item.id">
+                            <v-icon>edit</v-icon>
+                        </router-link>
+                        <button :disabled="loading"
+                            @click="deletePage(props.item.id)"
+                        >
+                            <v-icon>delete</v-icon>
                         </button>
-                    </router-link>
-
-                    <button :disabled="formLoading"
-                        class="btn btn-danger"
-                        @click="deletePage(page.id)"
-                    >
-                        <span class="fa fa-trash"/>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</section>
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>
+    </section>
 </template>
 
 <script>
@@ -66,49 +55,82 @@ const pagesPage = {
     components: {
         loading
     },
-    props: {
-        multiSiteId: Number
-    },
     data() {
         return {
-            pages: {},
+            headers: [
+                {
+                    text: 'Title',
+                    sortable: true,
+                    value: 'title'
+                },
+                {
+                    text: 'Link',
+                    sortable: true,
+                    value: 'link'
+                },
+                {
+                    text: 'Enabled',
+                    sortable: false,
+                    value: 'enabled'
+                },
+                {
+                    text: 'Actions',
+                    sortable: false,
+                    value: null
+                }
+            ],
+            pages: [],
             formLoading: false,
             loading: true
         };
     },
-    created() {
-        this.fetchData();
+    computed: {
+        multiSiteId() {
+            return this.$store.getters.get('multiSiteId');
+        }
     },
     watch: {
-        'multiSiteId'() {
-            this.fetchData();
+        // Triggering watch immediately
+        multiSiteId: {
+            immediate: true,
+            handler() {
+                this.fetchData();
+            }
         }
     },
     methods: {
-        fetchData() {
-            axios.get('/api/pages')
-            .then((response) => {
-                this.pages = response.data.pages;
-                this.loading = false;
-            })
-            .catch((error) => {
-                this.$parent.authRequiredState(error);
-                this.loading = false;
-            });
-        },
-        deletePage(id) {
-            this.formLoading = true;
+        async fetchData() {
+            try {
+                const response = await axios.get(`${mo.apiUrl}/pages`);
 
-            axios.delete(`/api/pages/delete/${id}`)
-            .then((response) => {
-                this.$parent.displayMessage(response.data.message, 'success');
+                this.pages = response.data.data;
+            } catch (error) {
+                this.displayMessage(error, { type: 'error' });
+            } finally {
+                this.loading = false;
+            }
+        },
+        async deletePage(id) {
+            if (!confirm('Are you sure you want to delete page?')) {
+                return false;
+            }
+
+            this.loading = true;
+
+            try {
+                const response = await axios.delete(`${mo.apiUrl}/page/${id}`);
+
+                // Display success message
+                this.displayMessage(response.data.message, { type: 'success' });
+
+                // Re-fetching data
                 this.fetchData();
-                this.formLoading = false;
-            })
-            .catch((error) => {
-                this.$parent.displayMessage(error.response.data.message, 'error');
-                this.formLoading = false;
-            });
+            } catch (error) {
+                // Display error message
+                this.displayMessage(error.response.data.message, { type: 'error' });
+            } finally {
+                this.loading = false;
+            }
         }
     }
 };

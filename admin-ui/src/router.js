@@ -1,6 +1,3 @@
-// 3rd party libs
-import firebase from 'firebase';
-
 // Vue
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -31,7 +28,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     // If login is require and user state is not logged in - redirect to main page
-    if (to.meta.loggedIn && !firebase.auth().currentUser) {
+    if (to.meta.loggedIn && !mo.loggedIn) {
         console.error('Authentication failure');
         next('/');
 
@@ -41,7 +38,7 @@ router.beforeEach((to, from, next) => {
     window.scrollTo(0, 0);
 
     // Set up meta title
-    const metaTitle = 'MO CMS';
+    const metaTitle = 'CMS';
 
     document.title = metaTitle;
     if (to.meta.title) {

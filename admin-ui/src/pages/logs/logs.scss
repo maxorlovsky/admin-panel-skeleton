@@ -1,33 +1,8 @@
 .logs {
     padding: 1rem;
 
-    .heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .table td {
-        vertical-align: middle;
-
-        &.logs-info {
-            word-break: break-all;
-        }
-    }
-
     .filters {
         display: flex;
-        
-        label {
-            font-weight: bold;
-        }
-
-        select {
-            display: block;
-        }
-
-        .filter-wrapper {
-            margin-right: 2rem;
-        }
+        padding: 1rem 0;
     }
 }

@@ -1,170 +1,198 @@
 <template>
-<section class="permissions">
-    <div class="heading">
-        <h2>Permissions</h2>
-    </div>
+    <section class="permissions">
+        <v-card-actions>
+            <h2>Permissions</h2>
+            <v-spacer />
+        </v-card-actions>
 
-    <form class="table-responsive"
-        @submit.prevent="submitForm()"
-    >
-        <div class="row head">
-            <div class="col-2 column">Key</div>
-            <div class="col-4 column">Page name</div>
-            <div class="col-3 column">Icon classes</div>
-            <div class="col-1 column centered">Level</div>
-            <div class="col-2 column centered">Actions</div>
-        </div>
-
-        <div v-if="loading"
-            class="row"
+        <form class="permissions-table"
+            @submit.prevent="submitForm()"
         >
-            <div class="col-12 column"><loading/></div>
-        </div>
+            <div class="row head">
+                <div class="column key">Key</div>
+                <div class="column page-name">Page name</div>
+                <div class="column icon-classes">Icon classes</div>
+                <div class="column level">Level</div>
+                <div class="column actions">Actions</div>
+            </div>
 
-        <div class="row">
-            <div class="col-12 column ghost"/>
-        </div>
-
-        <draggable v-model="permissions"
-            :options="{ handle: '.parent-sort-handle', group:'nav', ghostClass: 'ghost', animation: 50 }"
-            class="permissions-list"
-        >
-            <div v-for="(permission, index) in permissions"
-                :key="index"
+            <div v-if="loading"
                 class="row"
             >
-                <div v-if="permission.new"
-                    class="col-2 column"
+                <loading />
+            </div>
+
+            <div class="row">
+                <div class="column ghost" />
+            </div>
+
+            <draggable v-model="permissions"
+                v-bind="{ handle: '.parent-sort-handle', group:'nav', ghostClass: 'ghost', animation: 50 }"
+                class="permissions-list"
+            >
+                <div v-for="(permission, index) in permissions"
+                    :key="index"
+                    class="row"
                 >
-                    <input v-model="permission.key"
-                        :class="{ error: errorClasses[permission.key] }"
-                        type="text"
-                    >
-                </div>
-                <div v-else
-                    class="col-2 column"
-                >{{ permission.key }}</div>
-                <div class="col-4 column">
-                    <input v-model="permission.name"
-                        :class="{ error: errorClasses[permission.key] }"
-                        type="text"
-                    >
-                </div>
-                <div class="col-3 column">
-                    <input v-model="permission.iconClasses"
-                        :class="{ error: errorClasses[permission.key] }"
-                        type="text"
-                    >
-                </div>
-                <div class="col-1 column centered">
-                    <select v-model="permission.level"
-                        :disabled="permission.strict"
-                    >
-                        <option v-for="level in maxLevel"
-                            :key="level"
-                        >{{ level }}</option>
-                    </select>
-                </div>
-                <div class="col-2 column centered">
-                    <div :disabled="permission.strict"
-                        class="btn btn-info"
-                        @click="makeRowSub(index)"
-                    ><i class="fa fa-arrow-right"/></div>
-
-                    <div :disabled="permission.strict"
-                        class="btn btn-info sort-handle parent-sort-handle"
-                        @click.stop.prevent
-                    ><i class="fa fa-sort"/></div>
-
-                    <div :disabled="permission.strict"
-                        class="btn btn-danger"
-                        @click="removeRow(index)"
-                    >-</div>
-                </div>
-
-                <draggable v-model="permission.subCategories"
-                    :options="{ handle: '.sub-sort-handle', group:'sub-nav', animation: 50 }"
-                    :class="{ 'drag-on': drag }"
-                    class="subpermissions-list"
-                    @start="drag=true"
-                >
-                    <div v-for="(subpermission, subindex) in permission.subCategories"
-                        :key="subindex"
-                        class="row sub-row"
-                    >
-                        <div class="col-1 column">
-                            <i class="fa fa-arrow-right"/>
-                        </div>
-
-                        <div v-if="subpermission.new"
-                            class="col-1 column"
-                        >
-                            <input v-model="subpermission.key"
-                                :class="{ error: errorClasses[subpermission.key] }"
-                                type="text"
-                            >
-                        </div>
-                        <div v-else
-                            class="col-2 column"
-                        >{{ subpermission.key }}</div>
-
-                        <div class="col-3 column">
-                            <input v-model="subpermission.name"
-                                :class="{ error: errorClasses[subpermission.key] }"
-                                type="text"
-                            >
-                        </div>
-                        <div class="col-3 column">
-                            <input v-model="subpermission.iconClasses"
-                                :class="{ error: errorClasses[subpermission.key] }"
-                                type="text"
-                            >
-                        </div>
-                        <div class="col-1 column centered">
-                            <select v-model="subpermission.level"
-                                :disabled="subpermission.strict"
-                            >
-                                <option v-for="level in maxLevel"
-                                    :key="level"
-                                >{{ level }}</option>
-                            </select>
-                        </div>
-                        <div class="col-2 column centered">
-                            <div :disabled="subpermission.strict"
-                                class="btn btn-info"
-                                @click="makeRowParent(index, subindex)"
-                            ><i class="fa fa-arrow-left"/></div>
-
-                            <div :disabled="subpermission.strict"
-                                class="btn btn-info sort-handle sub-sort-handle"
-                                @click.stop.prevent
-                            ><i class="fa fa-sort"/></div>
-
-                            <div :disabled="subpermission.strict"
-                                class="btn btn-danger"
-                                @click="removeSubRow(index, subindex)"
-                            >-</div>
-                        </div>
+                    <div class="column key">
+                        <v-text-field v-model="permission.key"
+                            :error="errorClasses[permission.key]"
+                            :disabled="!permission.new"
+                            outline
+                            name="name"
+                            label="Key"
+                            type="text"
+                        />
                     </div>
-                </draggable>
-            </div>
-        </draggable>
 
-        <div v-if="!loading"
-            class="row"
-        >
-            <div class="col-12 column centered">
-                <div class="btn btn-success"
+                    <div class="column page-name">
+                        <v-text-field v-model="permission.name"
+                            :error="errorClasses[permission.key]"
+                            outline
+                            name="name"
+                            label="Name"
+                            type="text"
+                        />
+                    </div>
+
+                    <div class="column icon-classes">
+                        <v-text-field v-model="permission.iconClasses"
+                            :error="errorClasses[permission.key]"
+                            outline
+                            name="name"
+                            label="Icons"
+                            type="text"
+                        />
+                    </div>
+
+                    <div class="column level">
+                        <v-select v-model="permission.level"
+                            :items="levels"
+                            :disabled="permission.strict"
+                            outline
+                            label="Level"
+                        />
+                    </div>
+
+                    <div class="column actions">
+                        <div v-if="!permission.strict"
+                            @click="makeRowSub(index)"
+                        >
+                            <v-icon>arrow_forward</v-icon>
+                        </div>
+
+                        <div v-if="!permission.strict"
+                            class="sort-handle parent-sort-handle"
+                            @click.stop.prevent
+                        >
+                            <v-icon>swap_calls</v-icon>
+                        </div>
+
+                        <div v-if="!permission.strict"
+                            @click="removeRow(index)"
+                        ><v-icon>delete</v-icon></div>
+                    </div>
+
+                    <draggable v-model="permission.subCategories"
+                        v-bind="{ handle: '.sub-sort-handle', group:'sub-nav', animation: 50 }"
+                        :class="{ 'drag-on': drag }"
+                        class="subpermissions-list"
+                        @start="drag=true"
+                    >
+                        <div v-for="(subpermission, subindex) in permission.subCategories"
+                            :key="subindex"
+                            class="row sub-row"
+                        >
+                            <div class="column subkey">
+                                <v-icon>arrow_forward</v-icon>
+                            </div>
+
+                            <div class="column key">
+                                <v-text-field v-model="subpermission.key"
+                                    :error="errorClasses[subpermission.key]"
+                                    :disabled="!subpermission.new"
+                                    outline
+                                    name="name"
+                                    label="Key"
+                                    type="text"
+                                />
+                            </div>
+
+                            <div class="column page-name">
+                                <v-text-field v-model="subpermission.name"
+                                    :error="errorClasses[permission.key]"
+                                    outline
+                                    name="name"
+                                    label="Name"
+                                    type="text"
+                                />
+                            </div>
+
+                            <div class="column icon-classes">
+                                <v-text-field v-model="subpermission.iconClasses"
+                                    :error="errorClasses[permission.key]"
+                                    outline
+                                    name="name"
+                                    label="Icons"
+                                    type="text"
+                                />
+                            </div>
+
+                            <div class="column level">
+                                <v-select v-model="subpermission.level"
+                                    :items="levels"
+                                    :disabled="subpermission.strict"
+                                    outline
+                                    label="Level"
+                                />
+                            </div>
+
+                            <div class="column actions">
+                                <div v-if="!subpermission.strict"
+                                    @click="makeRowParent(index, subindex)"
+                                >
+                                    <v-icon>arrow_back</v-icon>
+                                </div>
+
+                                <div v-if="!subpermission.strict"
+                                    class="sort-handle sub-sort-handle"
+                                    @click.stop.prevent
+                                >
+                                    <v-icon>swap_calls</v-icon>
+                                </div>
+
+                                <div v-if="!subpermission.strict"
+                                    @click="removeSubRow(index, subindex)"
+                                ><v-icon>delete</v-icon></div>
+                            </div>
+                        </div>
+                    </draggable>
+                </div>
+            </draggable>
+
+            <div v-if="!loading"
+                class="row center"
+            >
+                <v-btn :loading="formLoading"
+                    color="green"
+                    class="button"
+                    round
+                    depressed
                     @click="addRow()"
-                >+</div>
+                >+</v-btn>
             </div>
-        </div>
 
-        <button :disabled="formLoading"
-            class="btn btn-primary"
-        >Update permissions</button>
-    </form>
-</section>
+            <v-card-actions>
+                <v-btn :loading="formLoading"
+                    type="submit"
+                    color="blue"
+                    class="button"
+                    round
+                    depressed
+                >Save</v-btn>
+            </v-card-actions>
+        </form>
+    </section>
 </template>
 
 <script>
@@ -172,17 +200,21 @@
 import loading from '../../components/loading/loading.vue';
 import draggable from 'vuedraggable';
 
+// Mixins
+import formMixin from '../../mixins/form-mixin.js';
+
 // 3rd party libs
 import axios from 'axios';
 
 // Website custom config
-import websiteConfig from '../../../../../../../mocms/config.json';
+import websiteConfig from '../../../config/config.json';
 
 const permissionsPage = {
     components: {
         loading,
         draggable
     },
+    mixins: [formMixin],
     data() {
         return {
             permissions: [],
@@ -190,29 +222,31 @@ const permissionsPage = {
             loading: true,
             errorClasses: {},
             drag: false,
+            levels: [],
             maxLevel: websiteConfig.maxLevel
         };
     },
     created() {
+        this.levels = Array.from({ length: this.maxLevel }, (v, k) => k++);
+
         this.fetchData();
     },
     methods: {
-        fetchData() {
-            axios.get('/api/permissions')
-            .then((response) => {
-                this.permissions = response.data.permissions;
+        async fetchData() {
+            try {
+                const response = await axios.get('/api/permissions');
+
+                this.permissions = response.data.data;
 
                 // Required for drag-n-drop functionality
                 this.addEmptySubCategories();
-
+            } catch (error) {
+                this.displayMessage(error.response.data.message, { type: 'error' });
+            } finally {
                 this.loading = false;
-            })
-            .catch((error) => {
-                this.$parent.authRequiredState(error);
-                this.loading = false;
-            });
+            }
         },
-        submitForm() {
+        async submitForm() {
             this.formLoading = true;
             this.errorClasses = {};
 
@@ -229,30 +263,22 @@ const permissionsPage = {
                 }
             }
 
-            axios.put('/api/permissions', this.permissions)
-            .then((response) => {
-                this.$parent.displayMessage(response.data.message, 'success');
-                this.formLoading = false;
-                this.$parent.fetchLoggedInData();
-            })
-            .catch((error) => {
-                this.formLoading = false;
+            try {
+                // Submit to API
+                const response = await axios.put('/api/permissions', this.permissions);
 
+                this.displayMessage(response.data.message, { type: 'success' });
+
+                // Triggering menu re-fetcher
+                this.$store.dispatch('fetchMenu');
+            } catch (error) {
                 // Display error message from API
-                this.$parent.displayMessage(error.response.data.message, 'error');
+                this.displayMessage(error.response.data.message, { type: 'error' });
 
-                let errorFields = error.response.data.fields;
-
-                // In some cases slim return array as json, we need to convert it
-                if (errorFields.constructor !== Array) {
-                    errorFields = Object.keys(errorFields).map((key) => errorFields[key]);
-                }
-
-                // Mark fields with error class
-                for (let i = 0; i < errorFields.length; ++i) {
-                    this.errorClasses[errorFields[i]] = true;
-                }
-            });
+                this.errorClasses = this.formMixinHandleErrors(error);
+            } finally {
+                this.formLoading = false;
+            }
         },
         addRow() {
             this.permissions.push({
@@ -280,7 +306,8 @@ const permissionsPage = {
         makeRowSub(index) {
             // In case it's already a parent with subs, forbid to move make it sub as well
             if (this.permissions[index].subCategories.length !== 0) {
-                this.$parent.displayMessage('This category have subcategories, please move all subcategories first', 'error');
+                this.displayMessage('This category have subcategories, please move all subcategories first', { type: 'warning' });
+
                 return false;
             }
 

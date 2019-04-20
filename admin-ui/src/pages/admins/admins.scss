@@ -1,0 +1,15 @@
+.admins {
+    padding: 1rem;
+
+    form {
+        margin-top: 2rem;
+    }
+
+    .permissions {
+        display: flex;
+        
+        > div {
+            padding-right: 1rem;
+        }
+    }
+}

@@ -1,19 +1,19 @@
 <template>
-    <section class="labels">
+    <section class="admins">
         <v-card-actions>
-            <h2>Labels</h2>
+            <h2>Admins</h2>
             <v-spacer />
             <v-btn round
                 depressed
                 class="button green"
-                to="/labels/add"
-            >Add new label</v-btn>
+                to="/admins/add"
+            >Add new admin</v-btn>
         </v-card-actions>
 
         <v-data-table :headers="headers"
-            :items="labels"
+            :items="admins"
             :loading="loading"
-            no-data-text="No labels added"
+            no-data-text="No admins found"
             hide-actions
         >
             <v-progress-linear slot="progress"
@@ -25,14 +25,17 @@
                 slot-scope="props"
             >
                 <tr>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.output }}</td>
+                    <td>{{ props.item.id }}</td>
+                    <td>{{ props.item.login }}</td>
+                    <td>{{ props.item.level !== 0 ? props.item.level : 'Custom' }}</td>
+                    <td>{{ props.item.lastLogin || '--' }}</td>
+                    <td>{{ props.item.lastIp || '--' }}</td>
                     <td>
-                        <router-link :to="'/labels/edit/' + props.item.id">
+                        <router-link :to="'/admins/edit/' + props.item.id">
                             <v-icon>edit</v-icon>
                         </router-link>
                         <button :disabled="loading"
-                            @click="deleteLabel(props.item.id)"
+                            @click="deleteAdmin(props.item.id)"
                         >
                             <v-icon>delete</v-icon>
                         </button>
@@ -50,7 +53,7 @@ import loading from '../../components/loading/loading.vue';
 // 3rd party libs
 import axios from 'axios';
 
-const labelsPage = {
+const adminsPage = {
     components: {
         loading
     },
@@ -58,14 +61,29 @@ const labelsPage = {
         return {
             headers: [
                 {
-                    text: 'Name',
+                    text: 'ID',
                     sortable: true,
-                    value: 'name'
+                    value: 'id'
                 },
                 {
-                    text: 'Output',
+                    text: 'Login',
                     sortable: true,
-                    value: 'output'
+                    value: 'login'
+                },
+                {
+                    text: 'Access Level',
+                    sortable: true,
+                    value: 'level'
+                },
+                {
+                    text: 'Last Login',
+                    sortable: true,
+                    value: 'lastLogin'
+                },
+                {
+                    text: 'Last IP',
+                    sortable: true,
+                    value: 'lastIp'
                 },
                 {
                     text: 'Actions',
@@ -73,59 +91,42 @@ const labelsPage = {
                     value: null
                 }
             ],
-            labels: [],
+            admins: [],
             loading: true
         };
     },
-    computed: {
-        multiSiteId() {
-            return this.$store.getters.get('multiSiteId');
-        }
-    },
-    watch: {
-        // Triggering watch immediately
-        multiSiteId: {
-            immediate: true,
-            handler() {
-                this.fetchData();
-            }
-        }
+    created() {
+        this.fetchData();
     },
     methods: {
         async fetchData() {
             try {
-                // Fetch labels data
-                const response = await axios.get(`${mo.apiUrl}/labels`);
+                const response = await axios.get(`${mo.apiUrl}/admins`);
 
-                this.labels = response.data.data;
+                this.admins = response.data.data;
             } catch (error) {
-                // Display error message in case there is one
-                this.displayMessage(error, { type: 'error' });
+                console.error(error);
             } finally {
                 this.loading = false;
             }
         },
-        async deleteLabel(id) {
-            if (!confirm('Are you sure you want to delete label?')) {
+        async deleteAdmin(id) {
+            if (!confirm('Are you sure you want to delete admin?')) {
                 return false;
             }
 
-            // Display loader
             this.loading = true;
 
             try {
-                const response = await axios.delete(`${mo.apiUrl}/label/${id}`);
+                const response = await axios.delete(`${mo.apiUrl}/admin/${id}`);
 
-                // Display success message
                 this.displayMessage(response.data.message, { type: 'success' });
 
-                // Re-fetching data
+                // Re-fetch admin list
                 this.fetchData();
             } catch (error) {
-                // Display error message
                 this.displayMessage(error.response.data.message, { type: 'error' });
             } finally {
-                // Remove loader
                 this.loading = false;
             }
         }
@@ -134,13 +135,13 @@ const labelsPage = {
 
 // Routing
 mo.routes.push({
-    path: '/labels',
-    component: labelsPage,
+    path: '/admins',
+    component: adminsPage,
     meta: {
-        title: 'Labels',
+        title: 'Admins',
         loggedIn: true
     }
 });
 
-export default labelsPage;
+export default adminsPage;
 </script>

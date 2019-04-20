@@ -1,56 +1,85 @@
 <template>
-    <section class="login-form">
-        <!-- <header /> -->
+    <section class="login">
+        <v-layout class="login-form">
+            <header class="logo-wrapper">
+                <div class="logo-circle">
+                    <div class="logo" />
+                </div>
+            </header>
 
-        <div class="body">
-            <div v-if="formError"
-                class="alert alert-danger"
-            >{{ formError }}</div>
+            <v-form @submit.prevent="submitForm()">
+                <v-card-text>
+                    <v-text-field v-model="form.login"
+                        :rules="validationRules"
+                        name="login"
+                        label="Login"
+                        type="login"
+                        outline
+                    />
 
-            <form method="post"
-                @submit.prevent="submitForm()"
-            >
-                <input v-model="form.login"
-                    :class="{ 'error': formError }"
-                    placeholder="Login"
-                    type="text"
-                >
+                    <v-text-field v-model="form.password"
+                        :type="visible ? 'text' : 'password'"
+                        :append-icon="visible ? 'visibility_off' : 'visibility'"
+                        :rules="validationRules"
+                        name="password"
+                        label="Password"
+                        outline
+                        @click:append="visible = !visible"
+                    />
 
-                <input v-model="form.password"
-                    :class="{ 'error': formError }"
-                    placeholder="Password"
-                    type="password"
-                >
+                    <v-alert :value="error.display"
+                        type="error"
+                        outline
+                    >{{ error.message }}</v-alert>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn :loading="formLoading"
+                        :disabled="formLoading"
+                        type="submit"
+                        color="blue btn-login"
+                        round
+                        depressed
+                    >Login</v-btn>
+                </v-card-actions>
+            </v-form>
 
-                <button :disabled="formLoading"
-                    class="btn btn-lg btn-secondary"
-                >Enter</button>
-            </form>
-        </div>
-
-        <footer>
-            <a href="https://maxorlovsky.com"
-                target="_blank"
-            >CMS Version: {{ version }} <span>&copy;</span> 2011-{{ year }}</a>
-        </footer>
+            <footer>
+                <a href="https://maxorlovsky.com"
+                    target="_blank"
+                >CMS Version: {{ version }} <span>&copy;</span> 2011-{{ year }}</a>
+            </footer>
+        </v-layout>
     </section>
 </template>
 
 <script>
 // 3rd party libs
-import firebase from 'firebase';
+import axios from 'axios';
+
+// Globals functions
+import { functions } from '../../functions.js';
+
+// Mixins
+import formMixin from '../../mixins/form-mixin.js';
 
 const loginPage = {
+    mixins: [formMixin],
     data() {
         return {
+            formLoading: false,
             form: {
                 login: '',
                 password: ''
             },
-            formError: '',
-            formLoading: false,
+            error: {
+                display: false,
+                message: ''
+            },
+            visible: false,
             version: mo.version,
-            year: 0
+            year: 0,
+            validationRules: [(value) => this.formMixinIsRequired(value) || 'Required']
         };
     },
     created() {
@@ -63,22 +92,29 @@ const loginPage = {
     methods: {
         async submitForm() {
             this.formLoading = true;
-
-            if (!this.form.login || !this.form.password) {
-                this.formError = 'Please fill in the form';
-                this.formLoading = false;
-
-                return false;
-            }
+            this.error.display = false;
 
             try {
-                await firebase.auth().signInWithEmailAndPassword(this.form.login, this.form.password);
+                const response = await axios.post(`${mo.apiUrl}/login`, {
+                    login: this.form.login,
+                    password: this.form.password
+                });
 
-                this.$store.dispatch('authorization');
+                const token = response.data.sessionToken;
 
-                this.$router.push('/dashboard');
+                // 7 days
+                functions.storage('set', 'token', token, 604800000);
+
+                this.$store.dispatch('authorization', {
+                    token: token
+                });
+
+                mo.loggedIn = true;
+
+                this.$router.push('/profile');
             } catch (e) {
-                this.formError = e.message;
+                this.error.message = e.response.data.message;
+                this.error.display = true;
             } finally {
                 this.formLoading = false;
             }

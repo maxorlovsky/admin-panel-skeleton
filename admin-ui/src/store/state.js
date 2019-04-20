@@ -1,4 +1,8 @@
 export default {
     loggedIn: false,
-    user: {}
+    drawer: true,
+    user: {},
+    multiSite: [],
+    multiSiteId: 0,
+    menu: []
 };

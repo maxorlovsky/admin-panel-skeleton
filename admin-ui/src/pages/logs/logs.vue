@@ -1,106 +1,87 @@
 <template>
-<section class="logs">
-    <div class="heading">
-        <h2>Logs</h2>
-    </div>
+    <section class="logs">
+        <v-card-actions>
+            <h2>Logs</h2>
+            <v-spacer />
+        </v-card-actions>
 
-    <div class="filters">
-        <div class="filter-wrapper">
-            <label for="module">Module</label>
+        <v-data-table :headers="headers"
+            :items="logs"
+            :loading="loading"
+            :pagination.sync="pagination"
+            :total-items="logsAmount"
+            :rows-per-page-items="[pagination.rowsPerPage]"
+            :rows-per-page-text="pagination.rowsPerPage.toString()"
+            no-data-text="No logs found"
+        >
+            <v-progress-linear slot="progress"
+                color="purple"
+                indeterminate
+            />
 
-            <select id="module"
-                v-model="pickedModule"
-                class="module"
+            <template slot="header">
+                <td :colspan="headers.length">
+                    <strong>This is an extra footer</strong>
+                </td>
+            </template>
+
+            <template slot="items"
+                slot-scope="props"
             >
-                <option v-for="mod in modules"
-                    :value="mod"
-                    :key="mod"
-                >{{ mod }}</option>
-            </select>
-        </div>
-
-        <div class="filter-wrapper">
-            <label for="type">Type</label>
-
-            <select id="type"
-                v-model="pickedType"
-                class="type"
-            >
-                <option v-for="typ in types"
-                    :value="typ"
-                    :key="typ"
-                >{{ typ }}</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Module</th>
-                    <th>Type</th>
-                    <th>User</th>
-                    <th>Data</th>
-                    <th>IP</th>
-                    <th>Info</th>
+                    <td>{{ props.item.id }}</td>
+                    <td>{{ props.item.module }}</td>
+                    <td>{{ props.item.type }}</td>
+                    <td>{{ props.item.admin }}</td>
+                    <td>{{ props.item.date }}</td>
+                    <td>{{ props.item.ip }}</td>
+                    <td v-html="props.item.info" />
                 </tr>
-            </thead>
-            <tbody>
-                <tr v-if="loading">
-                    <td colspan="7"><loading/></td>
-                </tr>
+            </template>
 
-                <tr v-if="!logs">
-                    <td colspan="7"
-                        align="center"
-                    >There are no data in logs</td>
-                </tr>
-                <tr v-for="log in logs"
-                    v-else
-                    :key="log.id"
-                >
-                    <td>{{ log.id }}</td>
-                    <td>{{ log.module }}</td>
-                    <td>{{ log.type }}</td>
-                    <td>
-                        <span v-if="log.login">{{ log.login }}</span>
-                        <span v-else>N/A</span>
-                    </td>
-                    <td>{{ log.date }}</td>
-                    <td>{{ log.ip }}</td>
-                    <td class="logs-info"
-                        v-html="log.info"
-                    />
-                </tr>
-            </tbody>
-        </table>
+            <template v-slot:footer>
+                <td :colspan="headers.length - 2" />
+                <td :colspan="2">
+                    <div class="filters">
+                        <v-select v-model="pickedModule"
+                            :items="modules"
+                            :disabled="loading"
+                            outline
+                            clearable
+                            hide-details
+                            label="Module"
+                        />
 
-        <pagination :page="page"
-            :amount="logsAmount"
-            :amount-per-page="amountPerPage"
-            page-url="logs"
-        />
-    </div>
-</section>
+                        <v-spacer />
+
+                        <v-select v-model="pickedType"
+                            :items="types"
+                            :disabled="loading"
+                            outline
+                            clearable
+                            hide-details
+                            label="Type"
+                        />
+                    </div>
+                </td>
+            </template>
+        </v-data-table>
+    </section>
 </template>
 
 <script>
 // Website custom config
-import websiteConfig from '../../../../../../../mocms/config.json';
+import websiteConfig from '../../../config/config.json';
 
 // Components
 import loading from '../../components/loading/loading.vue';
-import pagination from '../../components/pagination/pagination.vue';
 
 // 3rd party libs
 import axios from 'axios';
 
 const logsPage = {
     components: {
-        loading,
-        pagination
+        loading
     },
     data() {
         if (!this.$route.params.page) {
@@ -108,56 +89,105 @@ const logsPage = {
         }
 
         return {
-            logs: null,
-            formLoading: false,
             loading: true,
-            offset: 0,
-            empty: null,
+            headers: [
+                {
+                    text: 'ID',
+                    sortable: false,
+                    value: 'id'
+                },
+                {
+                    text: 'Module',
+                    sortable: false,
+                    value: 'module'
+                },
+                {
+                    text: 'Type',
+                    sortable: false,
+                    value: 'type'
+                },
+                {
+                    text: 'Admin',
+                    sortable: false,
+                    value: 'admin'
+                },
+                {
+                    text: 'Date',
+                    sortable: false,
+                    value: 'date'
+                },
+                {
+                    text: 'IP',
+                    sortable: false,
+                    value: 'ip'
+                },
+                {
+                    text: 'Info',
+                    sortable: false,
+                    value: 'info'
+                }
+            ],
+            logs: [],
+            pagination: {
+                rowsPerPage: 20
+            },
             page: 1,
-            amountPerPage: 20,
             logsAmount: 0,
-            pickedModule: '',
-            pickedType: '',
-            modules: ['', 'labels', 'login', 'logout', 'pages', 'permissions', 'users'],
-            types: ['', 'add', 'delete', 'edit', 'fail', 'password-change', 'success']
+            pickedModule: null,
+            pickedType: null,
+            modules: ['admins', 'labels', 'login', 'logout', 'pages', 'permissions', 'users'],
+            types: ['add', 'delete', 'edit', 'fail', 'password-change', 'success']
         };
     },
     created() {
         this.modules = this.modules.concat(websiteConfig.logs.modules);
         this.types = this.types.concat(websiteConfig.logs.types);
 
-        return this.fetchData();
+        this.fetchData();
     },
     watch: {
         $route: 'fetchData',
         pickedModule: 'fetchData',
-        pickedType: 'fetchData'
+        pickedType: 'fetchData',
+        pagination: {
+            deep: true,
+            handler () {
+                this.$router.push(`/logs/page/${this.pagination.page}`);
+                this.loading = true;
+            }
+        }
     },
     methods: {
-        fetchData() {
+        async fetchData() {
             this.page = parseInt(this.$route.params.page);
 
-            axios.post('/api/logs', {
-                module: this.pickedModule,
-                type: this.pickedType,
-                offset: this.offset,
-                page: this.page
-            })
-            .then((response) => {
-                if (response.data.logs) {
-                    this.logs = response.data.logs;
+            let queryUrl = `page=${this.page}`;
+
+            if (this.pickedModule) {
+                queryUrl += `&module=${this.pickedModule}`;
+            }
+
+            if (this.pickedType) {
+                queryUrl += `&type=${this.pickedType}`;
+            }
+
+            try {
+                const response = await axios.get(`${mo.apiUrl}/logs?${queryUrl}`);
+
+                if (response.data.data) {
+                    this.logs = response.data.data;
                 } else {
-                    console.log('Module or Type not found, or page is set too high, dropping to first page');
+                    console.error('Module or Type not found, or page is set too high, dropping to first page');
+
                     this.$router.push('/logs/page/1');
                 }
 
-                this.logsAmount = response.data.maxAmount;
+                this.logsAmount = response.data.amount;
+            } catch (error) {
+                console.error(error);
+            } finally {
                 this.loading = false;
-            })
-            .catch((error) => {
-                this.$parent.authRequiredState(error);
-                this.loading = false;
-            });
+            }
         }
     }
 };

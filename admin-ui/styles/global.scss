@@ -1,22 +1,15 @@
 /* Project variables */
-$mainColor: #444 !default;
+$main-color: #472346 !default;
 $secondaryColor: #f1f1f1 !default;
 $bgColor: #f1f1f1 !default;
 $defaultBorderRadius: 8px;
 $font: "Open Sans";
-$header-width: 280px;
-$header-height: 60px;
-$assets: "/dist/assets/images";
+$images: "/dist/assets/images";
+$left-sidebar-width: 230px;
 
-// Rewriting variables
-// @import "../../../../../mocms/variables.scss";
-
-@import "../node_modules/vue-directive-tooltip/src/css/index.scss";
+@import "../node_modules/vuetify/dist/vuetify.min";
 @import "./styles.scss";
 
 // Import CMS "default" styles
 @import "../src/components/**/*.scss";
 @import "../src/pages/**/*.scss";
-
-// Import styles outside of CMS
-// @import "../../../../../mocms/components/**/*.scss";

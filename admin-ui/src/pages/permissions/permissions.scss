@@ -1,52 +1,97 @@
 .permissions {
     padding: 1rem;
 
-    .heading {
+    .permissions-table {
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .row {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        flex-wrap: wrap;
+        width: 100%;
 
-    .table td {
-        vertical-align: middle;
-    }
+        &.center {
+            justify-content: center;
+        }
 
-    input[type="text"] {
-        margin-bottom: 0;
-    }
+        &.head {
+            .column {
+                padding: 2.4rem;
+                color: rgba(0, 0, 0, 0.54);
+                font-size: 1.2rem;
+            }
+        }
 
-    .permissions-list {
-        margin: 0 0 1rem 0;
-        
-        .row {
-            align-items: center;
+        .column {
+            padding: 0 2.4rem;
+            font-size: 1.3rem;
             margin: 0;
 
-            &:nth-of-type(odd) {
-                background-color: rgba(0,0,0,0.05);
+            &.page-name {
+                width: 30%;
             }
-        }
 
-        .subpermissions-list {
-            width: 100%;
+            &.level {
+                width: 10%;
+            }
 
-            &.drag-on {
-                min-height: 1em;
+            &.icon-classes {
+                width: 25%;
+            }
+
+            &.key {
+                width: 15%;
+            }
+
+            &.actions {
+                width: 20%;
+                display: flex;
+
+                > div {
+                    padding-top: 1.5rem;
+                    padding-right: 0.5rem;
+                    
+                    > i {
+                        font-size: 3rem;
+                        cursor: pointer;
+
+                        &:hover {
+                            color: #000;
+                        }
+                    }
+                }
+            }
+
+            &.ghost {
+                height: 0;
+                padding: 0;
             }
         }
     }
 
-    .column {
-        padding: .75rem;
+    .subpermissions-list {
+        width: 100%;
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.87);
 
-        &.centered {
-            text-align: center;
+        &.drag-on {
+            min-height: 1em;
         }
-    }
 
-    .head {
-        font-weight: bold;
-        margin: 0;
+        .column {
+            &.subkey {
+                width: 5%;
+
+                > i {
+                    padding-top: 1.5rem;
+                }
+            }
+
+            &.page-name {
+                width: 25%;
+            }
+        }
     }
 
     .head,

@@ -1,17 +1,11 @@
 .labels {
     padding: 1rem;
 
-    .heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .table td {
-        vertical-align: middle;
-    }
-
     form {
         margin-top: 2rem;
+    }
+
+    .output-hint-message {
+        text-align: left;
     }
 }

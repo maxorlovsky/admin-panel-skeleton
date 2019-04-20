@@ -1,111 +1,64 @@
 <template>
-<section :class="{ 'collapsed': menuCollapsed }"
-    class="left-side"
->
-    <nav @click="triggerClick()">
-        <ul>
-            <li v-for="link in menu"
-                :key="link.url"
-                class="nav-link"
-            >
-                <router-link v-if="checkUrl(link.url)"
-                    :to="link.url"
-                    :class="{ 'collapsed': menuCollapsed }"
-                >
-                    <i :class="link.iconClasses" />
-                    <span>{{ link.title }}</span>
-                </router-link>
-                <a v-else
-                    :class="{ 'collapsed': menuCollapsed }"
-                    href="javascript:;"
-                >
-                    <i :class="link.iconClasses" />
-                    <span>{{ link.title }}</span>
-                </a>
-
-                <ul v-if="link.sublinks"
-                    class="nav-sub"
-                >
-                    <li v-for="sublink in link.sublinks"
-                        :key="sublink.url"
-                        class="nav-link"
+    <aside class="left-sidebar">
+        <v-navigation-drawer :value="drawer"
+            fixed
+            dark
+        >
+            <v-list dense>
+                <template v-for="item in menu">
+                    <v-list-tile v-if="!item.sublinks"
+                        :key="item.url"
+                        :to="item.url"
                     >
-                        <router-link :to="sublink.url">
-                            <i class="fa fa-angle-right" />
-                            <i :class="sublink.iconClasses" />
-                            <span>{{ sublink.title }}</span>
-                        </router-link>
-                    </li>
-                </ul>
-            </li>
+                        <v-list-tile-action>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-tile-action>
 
-            <li class="nav-link collapser">
-                <a href="javascript:;"
-                    @click="menuCollapserClick()"
-                >
-                    <i :class="{ 'fa-angle-double-right': menuCollapsed, 'fa-angle-double-left': !menuCollapsed }"
-                        class="fa"
-                    />
-                    <span v-if="!menuCollapsed">Collapse menu</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    </v-list-tile>
 
-    <div class="side-menu-cover"
-        @click="triggerClick()"
-    >
-        <i class="fa fa-times burger-closer" />
-    </div>
-</section>
+                    <v-list-group v-else
+                        :key="item.url"
+                        :prepend-icon="item.icon"
+                    >
+                        <template v-slot:activator>
+                            <v-list-tile>
+                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                            </v-list-tile>
+                        </template>
+
+                        <v-list-tile v-for="subitem in item.sublinks"
+                            :key="subitem.url"
+                            :to="subitem.url"
+                        >
+                            <v-list-tile-action>
+                                <v-icon>{{ subitem.icon }}</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-title>{{ subitem.title }}</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list-group>
+                </template>
+            </v-list>
+        </v-navigation-drawer>
+    </aside>
 </template>
 
 <script>
-// Globals functions
-import { functions } from '../../functions.js';
-
 export default {
     name: 'left-side',
-    props: {
-        menu: {
-            type: Object,
-            default: () => []
-        }
-    },
     data() {
-        return {
-            menuCollapsed: false
-        };
+        return {};
+    },
+    computed: {
+        drawer() {
+            return this.$store.getters.get('drawer');
+        },
+        menu() {
+            return this.$store.getters.get('menu');
+        }
     },
     created() {
-        const getMenuCollapseState = functions.storage('get', 'menu-collapse');
-
-        this.menuCollapsed = getMenuCollapseState.state;
-    },
-    methods: {
-        menuCollapserClick() {
-            if (this.menuCollapsed) {
-                this.menuCollapsed = false;
-                functions.storage('set', 'menu-collapse', {
-                    state: false
-                });
-            } else {
-                this.menuCollapsed = true;
-                functions.storage('set', 'menu-collapse', {
-                    state: true
-                });
-            }
-        },
-        triggerClick() {
-            this.$emit('nav-menu');
-        },
-        checkUrl(url) {
-            if (url.indexOf('nourl-') > 0) {
-                return false;
-            }
-
-            return true;
-        }
+        this.$store.dispatch('fetchMenu');
     }
-}
+};
 </script>
