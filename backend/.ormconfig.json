@@ -9,13 +9,13 @@
     "synchronize": true,
     "logging": false,
     "entities": [
-        "db/entity/**/*.ts"
+        "db/entity/**/*"
     ],
     "migrations": [
-        "db/migration/**/*.ts"
+        "db/migration/**/*"
     ],
     "subscribers": [
-        "db/subscriber/**/*.ts"
+        "db/subscriber/**/*"
     ],
     "cli": {
         "entitiesDir": "db/entity",
