@@ -1,4 +1,4 @@
-// Express
+// 3rd party libs
 import * as express from 'express';
 
 // Create DB connection
@@ -10,6 +10,9 @@ import cors from './inc/cors';
 // Middlewares
 import authMiddleware from './middleware/auth';
 import multisiteMiddleware from './middleware/multisite';
+
+// Helpers
+import { publicPath } from './helper';
 
 // Routes
 import adminsRoutes from './routes/admins';
@@ -35,7 +38,7 @@ app.use(authMiddleware);
 app.use(multisiteMiddleware);
 
 // Define static files
-app.use(express.static('public'));
+app.use(express.static(publicPath));
 
 // Initiate the routes
 app.use('/', adminsRoutes);
