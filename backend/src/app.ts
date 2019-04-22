@@ -48,7 +48,7 @@ app.use('/', permissionsRoutes);
 app.use('/', userDataRoutes);
 app.use('/', homeRoutes);
 
-app.listen(3888, (): void => {
+app.listen(3000, (): void => {
     // eslint-disable-next-line
-    console.log('App listening on port 3888!');
+    console.log('App listening on port 3000!');
 });
