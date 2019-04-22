@@ -1,6 +1,8 @@
-.env.json
+# Build files
 node_modules
-build
-tmp
-temp
+public/db
+public/src
+public/ormconfig.json
+
+# Exclude config, to not expose database connection in git
 ormconfig.json
