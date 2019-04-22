@@ -1,12 +1,19 @@
+// 3rd party libs
 import * as express from 'express';
 
-import PermissionsModules from '../modules/permissions';
+// Logger
 import { log } from '../inc/log';
+
+// Modules
+import PermissionsModules from '../modules/permissions';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.get('/permissions', async (req: express.Request, res: express.Response): JSON => {
+router.get('/permissions', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -22,7 +29,7 @@ router.get('/permissions', async (req: express.Request, res: express.Response): 
     });
 });
 
-router.put('/permissions', async (req: express.Request, res: express.Response): JSON => {
+router.put('/permissions', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 

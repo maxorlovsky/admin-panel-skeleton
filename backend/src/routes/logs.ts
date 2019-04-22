@@ -1,11 +1,17 @@
+// 3rd party libs
 import * as express from 'express';
 
+// Modules
 import LogsModules from '../modules/logs';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
+import { GetLogsInterface } from '../interfaces/logs';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.get('/logs', async (req: express.Request, res: express.Response): JSON => {
+router.get('/logs', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -19,7 +25,7 @@ router.get('/logs', async (req: express.Request, res: express.Response): JSON =>
     };
 
     const logsModules = new LogsModules();
-    const logs = await logsModules.getLogs(attributes);
+    const logs: GetLogsInterface = await logsModules.getLogs(attributes);
 
     // Passing session token to the user
     res.status(200).json({

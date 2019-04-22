@@ -1,12 +1,19 @@
+// 3rd party libs
 import * as express from 'express';
 
-import LabelsModules from '../modules/labels';
+// Logger
 import { log } from '../inc/log';
+
+// Modules
+import LabelsModules from '../modules/labels';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.get('/public/labels', async (req: express.Request, res: express.Response): JSON => {
+router.get('/public/labels', async (req: RequestInterface, res: express.Response): Promise<void> => {
     const attributes = {
         siteId: req.siteId
     };
@@ -20,7 +27,7 @@ router.get('/public/labels', async (req: express.Request, res: express.Response)
     });
 });
 
-router.get('/labels', async (req: express.Request, res: express.Response): JSON => {
+router.get('/labels', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -40,7 +47,7 @@ router.get('/labels', async (req: express.Request, res: express.Response): JSON 
     });
 });
 
-router.get('/label/:id', async (req: express.Request, res: express.Response): JSON => {
+router.get('/label/:id', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -61,7 +68,7 @@ router.get('/label/:id', async (req: express.Request, res: express.Response): JS
     });
 });
 
-router.post('/label', async (req: express.Request, res: express.Response): JSON => {
+router.post('/label', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -113,7 +120,7 @@ router.post('/label', async (req: express.Request, res: express.Response): JSON 
     });
 });
 
-router.put('/label', async (req: express.Request, res: express.Response): JSON => {
+router.put('/label', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -166,7 +173,7 @@ router.put('/label', async (req: express.Request, res: express.Response): JSON =
     });
 });
 
-router.delete('/label/:id', async (req: express.Request, res: express.Response): JSON => {
+router.delete('/label/:id', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 

@@ -1,3 +1,4 @@
+// 3rd party libs
 import { getConnection, LessThan } from 'typeorm';
 import { format, subMinutes } from 'date-fns';
 import { compare } from 'bcrypt';
@@ -8,13 +9,16 @@ import { address } from 'ip';
 import SharedComponents from '../shared-components';
 import Logout from './logout';
 
+// Interfaces
+import { LoginFormInterface } from '../interfaces/login';
+
 // Entities
 import { MoAdmins } from '../../db/entity/moAdmins';
 import { MoUsersAuth } from '../../db/entity/moUsersAuth';
 import { MoUsersAuthAttempts } from '../../db/entity/moUsersAuthAttempts';
 
 export default class Login extends SharedComponents {
-    private availableLoginAttempts: int;
+    private availableLoginAttempts: number;
 
     constructor(availableLoginAttempts) {
         super();
@@ -22,7 +26,7 @@ export default class Login extends SharedComponents {
         this.availableLoginAttempts = availableLoginAttempts;
     }
 
-    public async login(attributes: LoginInt): string | boolean {
+    public async login(attributes: LoginFormInterface): Promise<string | boolean> {
         if (!attributes.login) {
             this.message = 'Login is empty';
 
@@ -35,7 +39,7 @@ export default class Login extends SharedComponents {
             return false;
         }
 
-        if (!await this.checkBruteForce(attributes)) {
+        if (!await this.checkBruteForce()) {
             this.message = 'Brute force detected, your IP is blocked for 5 minutes';
 
             return false;
@@ -57,15 +61,15 @@ export default class Login extends SharedComponents {
         return sessionToken;
     }
 
-    private async createToken(user: MoAdmins): string {
-        const token = SHA256(`${user.id} ${user.login} ${Math.random(0, 99999)} ${new Date().toISOString}`).toString();
+    private async createToken(user: MoAdmins): Promise<string> {
+        const token = SHA256(`${user.id} ${user.login} ${Math.random()} ${new Date().toISOString}`).toString();
 
         // Remove old auth key, just in case it's in DB
         await Logout.cleanAuth(user);
 
         const usersAuth = new MoUsersAuth();
 
-        usersAuth.timestamp = new Date().toISOString();
+        usersAuth.timestamp = new Date();
         usersAuth.token = token;
         usersAuth.user = user;
 
@@ -74,12 +78,12 @@ export default class Login extends SharedComponents {
         return token;
     }
 
-    private async authentication(attributes: LoginInt): MoAdmins | null {
+    private async authentication(attributes: LoginFormInterface): Promise<MoAdmins | null> {
         // Check if such login exist
-        const user = await getConnection().getRepository(MoAdmins)
+        const user: MoAdmins = await getConnection().getRepository(MoAdmins)
             .findOne({
                 login: attributes.login,
-                deleted: 0
+                deleted: false
             });
 
         if (user && await Login.passwordVerify(attributes.password, user.password)) {
@@ -89,7 +93,7 @@ export default class Login extends SharedComponents {
         return null;
     }
 
-    private async checkBruteForce(): boolean {
+    private async checkBruteForce(): Promise<boolean> {
         // Remove timed out IPs
         this.timeOutAuthAttempts(true);
 
@@ -110,10 +114,10 @@ export default class Login extends SharedComponents {
                 await getConnection().getRepository(MoUsersAuthAttempts).save(response);
             } else {
                 // Saving first attempt from this IP address
-                const usersAuthAttempts = new MoUsersAuthAttempts();
+                const usersAuthAttempts: MoUsersAuthAttempts = new MoUsersAuthAttempts();
 
                 usersAuthAttempts.attempts = 1;
-                usersAuthAttempts.timestamp = new Date().toISOString();
+                usersAuthAttempts.timestamp = new Date();
                 usersAuthAttempts.ip = address();
                 await getConnection().getRepository(MoUsersAuthAttempts).save(usersAuthAttempts);
             }
@@ -126,9 +130,10 @@ export default class Login extends SharedComponents {
         return true;
     }
 
-    private async timeOutAuthAttempts(timer: boolean = false): boolean {
+    private async timeOutAuthAttempts(timer: boolean = false): Promise<boolean> {
         const findByRules = {
-            ip: address()
+            ip: address(),
+            timestamp: null
         };
 
         // Just in case if we need to check by timestamp
@@ -147,7 +152,7 @@ export default class Login extends SharedComponents {
         return true;
     }
 
-    static async passwordVerify(userSpecifiedPassword: string, dbPassword: string): boolean {
+    static async passwordVerify(userSpecifiedPassword: string, dbPassword: string): Promise<boolean> {
         const match = await compare(userSpecifiedPassword, dbPassword);
 
         if (match) {
@@ -156,9 +161,4 @@ export default class Login extends SharedComponents {
 
         return false;
     }
-}
-
-interface LoginInt {
-    login: string;
-    password: string;
 }

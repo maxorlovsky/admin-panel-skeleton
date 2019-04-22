@@ -1,12 +1,19 @@
+// 3rd party libs
 import * as express from 'express';
 
-import PagesModules from '../modules/pages';
+// Logger
 import { log } from '../inc/log';
+
+// Modules
+import PagesModules from '../modules/pages';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.get('/public/pages', async (req: express.Request, res: express.Response): JSON => {
+router.get('/public/pages', async (req: RequestInterface, res: express.Response): Promise<void> => {
     const attributes = {
         siteId: req.siteId
     };
@@ -20,7 +27,7 @@ router.get('/public/pages', async (req: express.Request, res: express.Response):
     });
 });
 
-router.get('/pages', async (req: express.Request, res: express.Response): JSON => {
+router.get('/pages', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -40,7 +47,7 @@ router.get('/pages', async (req: express.Request, res: express.Response): JSON =
     });
 });
 
-router.get('/page/:id', async (req: express.Request, res: express.Response): JSON => {
+router.get('/page/:id', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -61,7 +68,7 @@ router.get('/page/:id', async (req: express.Request, res: express.Response): JSO
     });
 });
 
-router.post('/page', async (req: express.Request, res: express.Response): JSON => {
+router.post('/page', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -117,7 +124,7 @@ router.post('/page', async (req: express.Request, res: express.Response): JSON =
     });
 });
 
-router.put('/page', async (req: express.Request, res: express.Response): JSON => {
+router.put('/page', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -173,7 +180,7 @@ router.put('/page', async (req: express.Request, res: express.Response): JSON =>
     });
 });
 
-router.delete('/page/:id', async (req: express.Request, res: express.Response): JSON => {
+router.delete('/page/:id', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 

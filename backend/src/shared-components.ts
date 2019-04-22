@@ -1,6 +1,6 @@
 export default class SharedComponents {
     public message: string;
-    public fields: array;
+    public fields: Array<string>;
 
     constructor() {
         this.message = '';
@@ -15,7 +15,7 @@ export default class SharedComponents {
         return this.message.trim();
     }
 
-    public getFields(): Array | null {
+    public getFields(): Array<string> | boolean {
         if (!this.fields) {
             return false;
         }

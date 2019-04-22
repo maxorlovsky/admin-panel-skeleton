@@ -5,7 +5,7 @@ import * as express from 'express';
 import './inc/db';
 
 // Import CORS rules
-import cors from './inc/cors.ts';
+import cors from './inc/cors';
 
 // Middlewares
 import authMiddleware from './middleware/auth';
@@ -34,6 +34,9 @@ app.use(express.json());
 app.use(authMiddleware);
 app.use(multisiteMiddleware);
 
+// Define static files
+app.use(express.static('public'));
+
 // Initiate the routes
 app.use('/', adminsRoutes);
 app.use('/', labelsRoutes);
@@ -45,7 +48,7 @@ app.use('/', permissionsRoutes);
 app.use('/', userDataRoutes);
 app.use('/', homeRoutes);
 
-app.listen(3000, (): void => {
+app.listen(3888, (): void => {
     // eslint-disable-next-line
-    console.log('App listening on port 3000!');
+    console.log('App listening on port 3888!');
 });

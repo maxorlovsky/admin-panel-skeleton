@@ -7,11 +7,14 @@ import * as config from '../inc/config.json';
 // Classes
 import SharedComponents from '../shared-components';
 
+// Interfaces
+import { AdminFormInterface } from '../interfaces/admins';
+
 // Entities
 import { MoAdmins } from '../../db/entity/moAdmins';
 
 export default class Admins extends SharedComponents {
-    private user: array;
+    private user: MoAdmins;
 
     constructor(user) {
         super();
@@ -19,25 +22,15 @@ export default class Admins extends SharedComponents {
         this.user = user;
     }
 
-    public async getAdmins(): array {
-        const returnAdmins = [];
+    public async getAdmins(): Promise<Array<MoAdmins>> {
+        let returnAdmins = null;
 
         try {
             // Fetching previous attempts to login
-            const admins = await getConnection().getRepository(MoAdmins)
+            returnAdmins = await getConnection().getRepository(MoAdmins)
                 .find({
                     deleted: false
                 });
-
-            for (const admin of admins) {
-                returnAdmins.push({
-                    id: admin.id,
-                    login: admin.login,
-                    level: admin.level,
-                    lastLogin: admin.lastLogin ? admin.lastLogin : null,
-                    lastIp: admin.lastIp
-                });
-            }
         } catch (error) {
             console.error(error);
         }
@@ -45,25 +38,16 @@ export default class Admins extends SharedComponents {
         return returnAdmins;
     }
 
-    public async getAdmin(id: int): JSON {
-        let returnAdmin = {};
+    public async getAdmin(id: number): Promise<MoAdmins | null> {
+        let returnAdmin = null;
 
         try {
             // Fetching previous attempts to login
-            const admin = await getConnection().getRepository(MoAdmins)
+            returnAdmin = await getConnection().getRepository(MoAdmins)
                 .findOne({
                     deleted: false,
                     id: id
                 });
-
-            if (admin) {
-                returnAdmin = {
-                    id: admin.id,
-                    login: admin.login,
-                    level: admin.level,
-                    customAccess: JSON.parse(admin.customAccess)
-                };
-            }
         } catch (error) {
             console.error(error);
         }
@@ -71,7 +55,7 @@ export default class Admins extends SharedComponents {
         return returnAdmin;
     }
 
-    public async addAdmin(attributes: array): boolean {
+    public async addAdmin(attributes: AdminFormInterface): Promise<boolean> {
         const formData = await this.checkForm(attributes, 'add');
 
         if (!formData) {
@@ -97,7 +81,7 @@ export default class Admins extends SharedComponents {
         return true;
     }
 
-    public async editAdmin(attributes: array): boolean {
+    public async editAdmin(attributes: AdminFormInterface): Promise<boolean> {
         const formData = await this.checkForm(attributes, 'edit');
 
         if (!formData) {
@@ -130,7 +114,7 @@ export default class Admins extends SharedComponents {
         return true;
     }
 
-    public async deleteAdmin(id: int): boolean {
+    public async deleteAdmin(id: number): Promise<boolean> {
         const admin = await this.getAdmin(id);
 
         if (admin.id === this.user.id) {
@@ -161,7 +145,7 @@ export default class Admins extends SharedComponents {
         return true;
     }
 
-    private async checkForm(attributes: array, type: string): boolean {
+    private async checkForm(attributes: AdminFormInterface, type: string): Promise<boolean> {
         if (type === 'add') {
             if (!attributes.login) {
                 this.message += 'Login is empty<br />';
@@ -205,7 +189,7 @@ export default class Admins extends SharedComponents {
         return true;
     }
 
-    private async checkIfAdminLoginExist(attributes: array, id: int = 0): boolean {
+    private async checkIfAdminLoginExist(attributes: AdminFormInterface, id: number = 0): Promise<boolean> {
         const admin = await getConnection().getRepository(MoAdmins)
             .findOne({
                 login: attributes.login,
@@ -220,7 +204,7 @@ export default class Admins extends SharedComponents {
         return false;
     }
 
-    public static async passwordConvert(password: string): string {
+    public static async passwordConvert(password: string): Promise<string> {
         let returnPassword = '';
 
         try {

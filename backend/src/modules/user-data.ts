@@ -1,10 +1,17 @@
+// 3rd party libs
 import { getConnection } from 'typeorm';
 import SharedComponents from '../shared-components';
-import Login from './login';
-import Admins from './admins';
 
 // Config
 import * as config from '../inc/config.json';
+
+// Modules
+import Login from './login';
+import Admins from './admins';
+
+// Interfaces
+import { AdminInterface } from '../interfaces/admins';
+import { PasswordFormInterface, MultisiteInterface, MenuInterface } from '../interfaces/user-data';
 
 // Entities
 import { Mo } from '../../db/entity/mo';
@@ -12,7 +19,7 @@ import { MoMultisite } from '../../db/entity/moMultisite';
 import { MoAdmins } from '../../db/entity/moAdmins';
 
 export default class UserData extends SharedComponents {
-    private user: array;
+    private user: AdminInterface;
 
     constructor(user) {
         super();
@@ -20,7 +27,7 @@ export default class UserData extends SharedComponents {
         this.user = user;
     }
 
-    public fetchAdminData(): array | null {
+    public fetchAdminData(): AdminInterface | null {
         if (!this.user) {
             return null;
         }
@@ -28,7 +35,7 @@ export default class UserData extends SharedComponents {
         return this.user;
     }
 
-    public async fetchMenu(): array {
+    public async fetchMenu(): Promise<Array<MenuInterface>> {
         // Fetching menu json from database
         const menu = await getConnection().getRepository(Mo)
             .findOne({
@@ -72,7 +79,7 @@ export default class UserData extends SharedComponents {
         return returnMenu;
     }
 
-    public async fetchMultisites(): array {
+    public async fetchMultisites(): Promise<Array<MultisiteInterface>> {
         // Fetching multisites from database
         const multisites = await getConnection().getRepository(MoMultisite).find();
 
@@ -93,7 +100,7 @@ export default class UserData extends SharedComponents {
         return gatherMultisites;
     }
 
-    public async updatePassword(attributes: array): boolean {
+    public async updatePassword(attributes: PasswordFormInterface): Promise<boolean> {
         if (!await this.checkFormPassword(attributes)) {
             return false;
         }
@@ -116,7 +123,7 @@ export default class UserData extends SharedComponents {
         return true;
     }
 
-    private async checkFormPassword(attributes: array): boolean {
+    private async checkFormPassword(attributes: PasswordFormInterface): Promise<boolean> {
         if (!attributes.currentPass) {
             this.message += 'Current Password is empty<br />';
             this.fields.push('currentPass');

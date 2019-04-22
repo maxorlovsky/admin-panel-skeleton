@@ -4,7 +4,7 @@ import { createConnection } from 'typeorm';
 import * as ormConfig from '../../ormconfig.json';
 
 createConnection({
-    type: ormConfig.type,
+    type: 'mariadb',
     host: ormConfig.host,
     port: ormConfig.port,
     username: ormConfig.username,

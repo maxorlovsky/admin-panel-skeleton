@@ -4,7 +4,7 @@ import { address } from 'ip';
 // Entities
 import { MoLogs } from '../../db/entity/moLogs';
 
-export async function log(log: LogInt): boolean {
+export async function log(log: LogInterface): Promise<boolean> {
     if (!log.userId) {
         log.userId = null;
     }
@@ -22,7 +22,7 @@ export async function log(log: LogInt): boolean {
 
     newLog.module = log.module;
     newLog.type = log.type;
-    newLog.date = new Date().toISOString();
+    newLog.date = new Date();
     newLog.ip = address();
     newLog.info = log.info;
     newLog.userId = log.userId;
@@ -32,8 +32,8 @@ export async function log(log: LogInt): boolean {
     return true;
 }
 
-interface LogInt {
-    userId: integer | null;
+interface LogInterface {
+    userId: number | null;
     module: string | null;
     type: string | null;
     info: string;

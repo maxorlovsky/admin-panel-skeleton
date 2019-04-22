@@ -1,12 +1,19 @@
+// 3rd party libs
 import * as express from 'express';
 
-import UserData from '../modules/user-data';
+// Logger
 import { log } from '../inc/log';
+
+// Modules
+import UserData from '../modules/user-data';
+
+// Interfacess
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.get('/me', (req: express.Request, res: express.Response): JSON => {
+router.get('/me', (req: RequestInterface, res: express.Response): boolean => {
     const userData = new UserData(req.user);
 
     const data = userData.fetchAdminData();
@@ -21,7 +28,7 @@ router.get('/me', (req: express.Request, res: express.Response): JSON => {
     res.status(200).json(data);
 });
 
-router.get('/menu', async (req: express.Request, res: express.Response): JSON => {
+router.get('/menu', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -42,7 +49,7 @@ router.get('/menu', async (req: express.Request, res: express.Response): JSON =>
     res.status(200).json(data);
 });
 
-router.get('/multisite', async (req: express.Request, res: express.Response): JSON => {
+router.get('/multisite', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -57,7 +64,7 @@ router.get('/multisite', async (req: express.Request, res: express.Response): JS
     res.status(200).json(data);
 });
 
-router.put('/user-data/change-password', async (req: express.Request, res: express.Response): JSON => {
+router.put('/user-data/change-password', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 

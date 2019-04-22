@@ -1,3 +1,4 @@
+// 3rd party libs
 import { getConnection } from 'typeorm';
 
 // Entities
@@ -5,7 +6,7 @@ import { MoUsersAuth } from '../../db/entity/moUsersAuth';
 import { MoAdmins } from '../../db/entity/moAdmins';
 
 export default class Logout {
-    static async cleanAuth(user: MoAdmins): boolean {
+    static async cleanAuth(user: MoAdmins): Promise<boolean> {
         const response = await getConnection().getRepository(MoUsersAuth)
             .find({
                 user: user

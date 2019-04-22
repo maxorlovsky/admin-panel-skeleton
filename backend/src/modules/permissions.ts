@@ -1,14 +1,18 @@
+// 3rd party libs
 import { getConnection } from 'typeorm';
 
 // Classes
 import SharedComponents from '../shared-components';
+
+// Interfaces
+import { PermissionsFormInterface } from '../interfaces/permissions';
 
 // Entities
 import { Mo } from '../../db/entity/mo';
 
 export default class Permissions extends SharedComponents {
 
-    public async getPermissions(): array {
+    public async getPermissions(): Promise<Array<string>> {
         let returnPermissions = [];
 
         try {
@@ -28,7 +32,7 @@ export default class Permissions extends SharedComponents {
         return returnPermissions;
     }
 
-    public async updatePermissions(attributes: array): boolean {
+    public async updatePermissions(attributes: Array<PermissionsFormInterface>): Promise<boolean> {
         const formData = await this.checkForm(attributes);
 
         if (!formData) {
@@ -53,7 +57,7 @@ export default class Permissions extends SharedComponents {
         return true;
     }
 
-    private checkForm(attributes: array): boolean {
+    private checkForm(attributes: Array<PermissionsFormInterface>): boolean {
         for (const attribute of attributes) {
             if (!attribute.name) {
                 this.message += `${attribute.key.charAt(0).toUpperCase()}${attribute.key.slice(1)} name is empty<br />`;

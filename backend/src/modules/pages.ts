@@ -1,13 +1,17 @@
+// 3rd party libs
 import { getConnection } from 'typeorm';
 
 // Classes
 import SharedComponents from '../shared-components';
 
+// Interfaces
+import { PagesFormInterface, GetPageInterface } from '../interfaces/pages';
+
 // Entities
 import { MoPages } from '../../db/entity/moPages';
 
 export default class Pages extends SharedComponents {
-    public async getPublicPages(attributes: array): array {
+    public async getPublicPages(attributes: GetPageInterface): Promise<Array<PagesFormInterface>> {
         const returnPages = [];
 
         try {
@@ -40,12 +44,12 @@ export default class Pages extends SharedComponents {
         return returnPages;
     }
 
-    public async getPages(attributes: array): array {
+    public async getPages(attributes: GetPageInterface): Promise<Array<PagesFormInterface>> {
         const returnPages = [];
 
         try {
             // Fetching previous attempts to login
-            const pages = await getConnection().getRepository(MoPages)
+            const pages: Array<MoPages> = await getConnection().getRepository(MoPages)
                 .find({
                     where: {
                         siteId: attributes.siteId,
@@ -74,12 +78,12 @@ export default class Pages extends SharedComponents {
         return returnPages;
     }
 
-    public async getPage(attributes: array): array {
-        let returnPage = {};
+    public async getPage(attributes: GetPageInterface): Promise<PagesFormInterface> {
+        let returnPage = null;
 
         try {
             // Fetching previous attempts to login
-            const page = await getConnection().getRepository(MoPages)
+            const page: MoPages = await getConnection().getRepository(MoPages)
                 .findOne({
                     siteId: attributes.siteId,
                     deleted: false,
@@ -104,7 +108,7 @@ export default class Pages extends SharedComponents {
         return returnPage;
     }
 
-    public async addPage(attributes: array): boolean {
+    public async addPage(attributes: PagesFormInterface): Promise<boolean> {
         const formData = await this.checkForm(attributes);
 
         if (!formData) {
@@ -132,7 +136,7 @@ export default class Pages extends SharedComponents {
         return true;
     }
 
-    public async editPage(attributes: array): boolean {
+    public async editPage(attributes: PagesFormInterface): Promise<boolean> {
         const formData = await this.checkForm(attributes);
 
         if (!formData) {
@@ -140,7 +144,7 @@ export default class Pages extends SharedComponents {
         }
 
         try {
-            const page = await getConnection().getRepository(MoPages)
+            const page: MoPages = await getConnection().getRepository(MoPages)
                 .findOne({
                     id: attributes.id
                 });
@@ -162,7 +166,7 @@ export default class Pages extends SharedComponents {
         return true;
     }
 
-    public async deletePage(id: int): boolean {
+    public async deletePage(id: number): Promise<boolean> {
         try {
             const page = await getConnection().getRepository(MoPages)
                 .findOne({
@@ -181,7 +185,7 @@ export default class Pages extends SharedComponents {
         return true;
     }
 
-    private checkForm(attributes: array): boolean {
+    private checkForm(attributes: PagesFormInterface): boolean {
         if (!attributes.title) {
             this.message += 'Title is empty<br />';
             this.fields.push('title');

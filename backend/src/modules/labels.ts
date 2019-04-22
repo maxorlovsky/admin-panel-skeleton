@@ -1,13 +1,18 @@
+// 3rd party libs
 import { getConnection, Not } from 'typeorm';
 
 // Classes
 import SharedComponents from '../shared-components';
 
+// Interfaces
+import { GetLabelInterface, LabelsFormInterface } from '../interfaces/labels';
+
 // Entities
 import { MoLabels } from '../../db/entity/moLabels';
 
 export default class Labels extends SharedComponents {
-    public async getPublicLabels(attributes: array): array {
+    // eslint-disable-next-line
+    public async getPublicLabels(attributes: GetLabelInterface): Promise<any> {
         const returnLabels = {};
 
         try {
@@ -34,7 +39,7 @@ export default class Labels extends SharedComponents {
         return returnLabels;
     }
 
-    public async getLabels(attributes: array): array {
+    public async getLabels(attributes: GetLabelInterface): Promise<Array<LabelsFormInterface>> {
         const returnLabels = [];
 
         try {
@@ -64,8 +69,8 @@ export default class Labels extends SharedComponents {
         return returnLabels;
     }
 
-    public async getLabel(attributes: array): array {
-        let returnLabel = {};
+    public async getLabel(attributes: GetLabelInterface): Promise<LabelsFormInterface> {
+        let returnLabel = null;
 
         try {
             // Fetching previous attempts to login
@@ -90,7 +95,7 @@ export default class Labels extends SharedComponents {
         return returnLabel;
     }
 
-    public async addLabel(attributes: array): boolean {
+    public async addLabel(attributes: LabelsFormInterface): Promise<boolean> {
         const formData = await this.checkForm(attributes, 'add');
 
         if (!formData) {
@@ -114,7 +119,7 @@ export default class Labels extends SharedComponents {
         return true;
     }
 
-    public async editLabel(attributes: array): boolean {
+    public async editLabel(attributes: LabelsFormInterface): Promise<boolean> {
         const formData = await this.checkForm(attributes, 'edit');
 
         if (!formData) {
@@ -140,7 +145,7 @@ export default class Labels extends SharedComponents {
         return true;
     }
 
-    public async deleteLabel(id: int): boolean {
+    public async deleteLabel(id: number): Promise<boolean> {
         try {
             const label = await getConnection().getRepository(MoLabels)
                 .findOne({
@@ -159,7 +164,7 @@ export default class Labels extends SharedComponents {
         return true;
     }
 
-    private async checkForm(attributes: array, type: string): boolean {
+    private async checkForm(attributes: LabelsFormInterface, type: string): Promise<boolean> {
         if (!attributes.name) {
             this.message += 'Name is empty<br />';
             this.fields.push('name');
@@ -184,7 +189,7 @@ export default class Labels extends SharedComponents {
         return true;
     }
 
-    private async checkIfLabelExist(attributes: array, id: int = 0): boolean {
+    private async checkIfLabelExist(attributes: LabelsFormInterface, id: number = 0): Promise<boolean> {
         const label = await getConnection().getRepository(MoLabels)
             .findOne({
                 name: attributes.name,

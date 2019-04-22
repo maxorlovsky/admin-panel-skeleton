@@ -7,7 +7,8 @@ export class MoUsersAuth {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne((): MoAdmins => MoAdmins)
+    // eslint-disable-next-line
+    @OneToOne(type => MoAdmins)
     @JoinColumn()
     user: MoAdmins;
 

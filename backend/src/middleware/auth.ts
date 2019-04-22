@@ -1,10 +1,15 @@
+// 3rd party libs
+import * as express from 'express';
 import { getConnection } from 'typeorm';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Entities
 import { Mo } from '../../db/entity/mo';
 import { MoUsersAuth } from '../../db/entity/moUsersAuth';
 
-export default async (req: express.Request, res: express.Response, next: express.Next): void => {
+export default async (req: RequestInterface, res: express.Response, next: express.NextFunction): Promise<boolean | void> => {
     // Marking user as logged out by default
     req.isLogged = false;
 
@@ -55,7 +60,7 @@ export default async (req: express.Request, res: express.Response, next: express
                  Searching for index of permission and if it exist, trying to get it level, by default level should be 0
                  meaning that all every endpoint is open by default
                 */
-                const index = permissions.findIndex((permission): void => permission.key === path || permission.key === `${path}s`);
+                const index = permissions.findIndex((permission): boolean => permission.key === path || permission.key === `${path}s`);
                 let level = 0;
 
                 if (index >= 0) {

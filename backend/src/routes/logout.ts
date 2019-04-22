@@ -1,13 +1,20 @@
+// 3rd party libs
 import * as express from 'express';
 
+// Logger
+import { log } from '../inc/log';
+
+// Modules
 import AdminsModules from '../modules/admins';
 import Logout from '../modules/logout';
-import { log } from '../inc/log';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.post('/logout', async (req: express.Request, res: express.Response): JSON => {
+router.post('/logout', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged || !req.user.id) {
         res.status(401).json({ message: 'Authorization error' });
 

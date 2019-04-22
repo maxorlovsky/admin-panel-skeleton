@@ -1,12 +1,19 @@
+// 3rd party libs
 import * as express from 'express';
 
-import AdminsModules from '../modules/admins';
+// Logger
 import { log } from '../inc/log';
+
+// Modules
+import AdminsModules from '../modules/admins';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.get('/admins', async (req: express.Request, res: express.Response): JSON => {
+router.get('/admins', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -22,7 +29,7 @@ router.get('/admins', async (req: express.Request, res: express.Response): JSON 
     });
 });
 
-router.get('/admin/:id', async (req: express.Request, res: express.Response): JSON => {
+router.get('/admin/:id', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -42,7 +49,7 @@ router.get('/admin/:id', async (req: express.Request, res: express.Response): JS
     });
 });
 
-router.post('/admin', async (req: express.Request, res: express.Response): JSON => {
+router.post('/admin', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -95,7 +102,7 @@ router.post('/admin', async (req: express.Request, res: express.Response): JSON 
     });
 });
 
-router.put('/admin', async (req: express.Request, res: express.Response): JSON => {
+router.put('/admin', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 
@@ -149,7 +156,7 @@ router.put('/admin', async (req: express.Request, res: express.Response): JSON =
     });
 });
 
-router.delete('/admin/:id', async (req: express.Request, res: express.Response): JSON => {
+router.delete('/admin/:id', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     if (!req.isLogged) {
         res.status(401).json({ message: 'Authorization error' });
 

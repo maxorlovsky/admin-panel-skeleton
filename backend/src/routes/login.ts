@@ -1,13 +1,22 @@
+// 3rd party libs
 import * as express from 'express';
+
+// Config
 import * as config from '../inc/config.json';
 
-import Login from '../modules/login';
+// Logger
 import { log } from '../inc/log';
+
+// Modules
+import Login from '../modules/login';
+
+// Interfaces
+import { RequestInterface } from '../routing-interfaces';
 
 // Define router
 const router: express.Router = express.Router();
 
-router.post('/login', async (req: express.Request, res: express.Response): JSON => {
+router.post('/login', async (req: RequestInterface, res: express.Response): Promise<boolean> => {
     // In case user is already authorized, we ignore login endpoint
     if (req.isLogged) {
         res.status(405).json({ message: 'Already authorized' });
