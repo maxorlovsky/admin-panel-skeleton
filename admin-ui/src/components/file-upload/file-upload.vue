@@ -1,6 +1,6 @@
 <template>
     <div class="file-upload">
-        <div :style="'height: '+elementHeight"
+        <div :style="`height: ${elementHeight}`"
             class="drop-box"
         >
             <input :id="inputId"
@@ -12,12 +12,8 @@
                 @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
             >
 
-            <p v-if="isSaving">
-                Uploading {{ fileCount }} files...
-            </p>
-            <p v-else>
-                Drag your file(s) here to begin <br> or click to browse
-            </p>
+            <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
+            <p v-else>Drag your file(s) here to begin <br> or click to browse</p>
         </div>
     </div>
 </template>
@@ -83,30 +79,30 @@ export default {
     },
     methods: {
         reset() {
-            // reset form to initial state
+            // Reset form to initial state
             this.currentStatus = status.initial;
             this.uploadedFiles = [];
             this.uploadError = null;
         },
-        save(formData) {
+        async save(formData) {
             this.currentStatus = status.saving;
 
-            axios.post(this.apiEndPoint, formData)
-            .then((response) => {
+            try {
+                const response = await axios.post(this.apiEndPoint, formData);
+
                 this.currentStatus = status.success;
                 this.$emit('upload-complete', response);
 
                 // Clearing file field with just Javascript as type="file" does not support v-model
                 document.querySelector(`#${this.inputId}`).value = '';
-            })
-            .catch((error) => {
+            } catch (error) {
                 this.uploadError = error.response;
                 this.currentStatus = status.failed;
                 this.$emit('upload-complete', error);
 
                 // Clearing file field with just Javascript as type="file" does not support v-model
                 document.querySelector(`#${this.inputId}`).value = '';
-            });
+            }
         },
         filesChange(fieldName, fileList) {
             // Handle file changes
@@ -125,5 +121,5 @@ export default {
             this.save(formData);
         }
     }
-}
+};
 </script>

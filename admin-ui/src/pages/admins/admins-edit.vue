@@ -177,7 +177,7 @@ const adminsEditPage = {
                 this.form.login = admin.data.data.login;
                 this.form.email = admin.data.data.email;
                 this.form.level = admin.data.data.level === 0 ? 'Custom' : admin.data.data.level;
-                this.form.permissions = (admin.data.data.customAccess ? admin.data.data.customAccess : [this.defaultPage]);
+                this.form.permissions = (admin.data.data.customAccess ? JSON.parse(admin.data.data.customAccess) : [this.defaultPage]);
 
                 this.setPermissions(permissions.data.data);
             } catch (error) {

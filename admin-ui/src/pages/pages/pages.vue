@@ -70,7 +70,7 @@ const pagesPage = {
                 },
                 {
                     text: 'Enabled',
-                    sortable: false,
+                    sortable: true,
                     value: 'enabled'
                 },
                 {

@@ -150,6 +150,11 @@ const profilePage = {
 
                 // Display success message
                 this.displayMessage(response.data.message, { type: 'success' });
+
+                // Clean up the form
+                this.form.currentPass = '';
+                this.form.newPass = '';
+                this.form.repeatPass = '';
             } catch (error) {
                 // Display error message from API
                 this.displayMessage(error.response.data.message, { type: 'error' });
