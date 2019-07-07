@@ -35,14 +35,12 @@ export default class Logs {
                 .from(MoLogs, 'l')
                 .leftJoinAndMapOne('l.admin', MoAdmins, 'a', 'a.id = l.userId')
                 .where(new Brackets((qb): WhereExpression => {
-                    if (attributes.module) {
+                    if (attributes.module && attributes.type) {
                         qb.where('l.module = :module', { module: attributes.module });
-                    }
-
-                    return qb;
-                }))
-                .andWhere(new Brackets((qb): WhereExpression => {
-                    if (attributes.type) {
+                        qb.andWhere('l.type = :type', { type: attributes.type });
+                    } else if (attributes.module) {
+                        qb.where('l.module = :module', { module: attributes.module });
+                    } else if (attributes.type) {
                         qb.where('l.type = :type', { type: attributes.type });
                     }
 
