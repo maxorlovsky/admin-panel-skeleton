@@ -4,7 +4,9 @@
         "**/.DS_Store": true,
         "**/node_modules": true
     },
+    "git.inputValidationSubjectLength": 72,
     "eslint.validate": [
         "typescript"
-    ]
+    ],
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
