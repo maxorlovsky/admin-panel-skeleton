@@ -1,5 +1,6 @@
 <template>
     <v-app id="app"
+        :class="bodyClass"
         class="app"
     >
         <v-content :class="{ 'collapsed-drawer': drawer }">
@@ -50,7 +51,8 @@ export default {
     },
     data() {
         return {
-            loading: true
+            loading: true,
+            bodyClass: mo.env
         };
     },
     computed: {

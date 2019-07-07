@@ -63,6 +63,19 @@ const functions = {
         }
 
         return true;
+    },
+    getEnv: () => {
+        let env = functions.storage('get', 'env');
+
+        if (env === 'dev' || location.host.indexOf('dev') === 0 || location.host.indexOf('localhost') === 0) {
+            env = 'dev';
+        } else if (env === 'test' || location.host.indexOf('test') === 0) {
+            env = 'test';
+        } else {
+            env = 'prod';
+        }
+
+        return env;
     }
 };
 
