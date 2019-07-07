@@ -4,5 +4,4 @@
 
 # Folders
 /node_modules
-/public/dist/
-/public/index.html
+/public
