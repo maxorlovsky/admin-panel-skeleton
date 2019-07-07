@@ -5,7 +5,7 @@
             <v-spacer />
         </v-card-actions>
 
-        <form class="permissions-table"
+        <v-form class="permissions-table"
             @submit.prevent="submitForm()"
         >
             <div class="row head">
@@ -191,23 +191,23 @@
                     depressed
                 >Save</v-btn>
             </v-card-actions>
-        </form>
+        </v-form>
     </section>
 </template>
 
 <script>
+// 3rd party libs
+import axios from 'axios';
+
+// Website custom config
+import websiteConfig from '../../../config/config.json';
+
 // Components
 import loading from '../../components/loading/loading.vue';
 import draggable from 'vuedraggable';
 
 // Mixins
 import formMixin from '../../mixins/form-mixin.js';
-
-// 3rd party libs
-import axios from 'axios';
-
-// Website custom config
-import websiteConfig from '../../../config/config.json';
 
 const permissionsPage = {
     components: {
@@ -227,14 +227,23 @@ const permissionsPage = {
         };
     },
     created() {
-        this.levels = Array.from({ length: this.maxLevel }, (v, k) => k++);
+        this.levels = this.setUpLevels();
 
         this.fetchData();
     },
     methods: {
+        setUpLevels() {
+            const levels = [];
+
+            for (let i = 1; i <= this.maxLevel; ++i) {
+                levels.push(i);
+            }
+
+            return levels;
+        },
         async fetchData() {
             try {
-                const response = await axios.get('/api/permissions');
+                const response = await axios.get(`${mo.apiUrl}/permissions`);
 
                 this.permissions = response.data.data;
 
@@ -265,7 +274,7 @@ const permissionsPage = {
 
             try {
                 // Submit to API
-                const response = await axios.put('/api/permissions', this.permissions);
+                const response = await axios.put(`${mo.apiUrl}/permissions`, this.permissions);
 
                 this.displayMessage(response.data.message, { type: 'success' });
 
