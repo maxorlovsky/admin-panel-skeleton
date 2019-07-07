@@ -7,7 +7,10 @@
       "dev": "ts-node-dev --respawn --transpileOnly ./src/app.ts",
       "tslint": "node_modules/.bin/eslint --ext .ts ./src/",
       "start": "cd public && node ./src/app.js",
-      "start:prod": "cd public && pm2 start ./src/app.js"
+      "start:prod": "cd public && pm2 start ./src/app.js --name \"BackendName\"",
+      "migrations": "node_modules/.bin/typeorm migration:run",
+      "migrations:revert": "node_modules/.bin/typeorm migration:revert",
+      "release": "git pull && yarn && tsc && pm2 restart BackendName"
    },
    "author": "",
    "license": "ISC",
