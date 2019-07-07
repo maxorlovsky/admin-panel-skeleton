@@ -154,7 +154,7 @@ export default class UserData extends SharedComponents {
                 id: this.user.id
             });
 
-        if (!await Login.passwordVerify(attributes.currentPass, checkPassword.password)) {
+        if (!await Login.passwordVerify(attributes.currentPass, checkPassword.password.replace('$2y$', '$2a$'))) {
             this.message += 'Current password is incorrect<br />';
             this.fields.push('currentPass');
         }

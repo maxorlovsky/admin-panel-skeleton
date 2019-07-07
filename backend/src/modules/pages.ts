@@ -1,5 +1,6 @@
 // 3rd party libs
 import { getConnection } from 'typeorm';
+import * as decode from 'unescape';
 
 // Classes
 import SharedComponents from '../shared-components';
@@ -34,7 +35,7 @@ export default class Pages extends SharedComponents {
                     metaTitle: page.metaTitle ? page.metaTitle : page.title,
                     metaDescription: page.metaDescription,
                     link: page.link,
-                    text: page.text
+                    text: decode(page.text)
                 });
             }
         } catch (error) {
@@ -67,7 +68,7 @@ export default class Pages extends SharedComponents {
                     metaTitle: page.metaTitle,
                     metaDescription: page.metaDescription,
                     link: page.link,
-                    text: page.text,
+                    text: decode(page.text),
                     enabled: page.enabled
                 });
             }
@@ -97,7 +98,7 @@ export default class Pages extends SharedComponents {
                     metaTitle: page.metaTitle,
                     metaDescription: page.metaDescription,
                     link: page.link,
-                    text: page.text,
+                    text: decode(page.text),
                     enabled: page.enabled
                 };
             }
