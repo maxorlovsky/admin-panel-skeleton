@@ -45,7 +45,7 @@
     "sass": "1.22.3",
     "sass-loader": "7.1.0",
     "stylelint": "10.1.0",
-    "tinymce": "5.0.11",
+    "tinymce": "4.8.5",
     "uglify-es": "3.3.9",
     "vue": "2.6.10",
     "vue-directive-tooltip": "1.6.2",

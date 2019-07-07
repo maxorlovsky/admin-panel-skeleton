@@ -101,7 +101,7 @@ const config = {
     devtool: 'source-map',
     devServer: {
         compress: true,
-        https: true,
+        https: false,
         port: 8071,
         historyApiFallback: true,
         contentBase: './public/',
