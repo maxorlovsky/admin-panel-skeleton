@@ -17,7 +17,7 @@
             hide-actions
         >
             <v-progress-linear slot="progress"
-                color="purple"
+                color="blue"
                 indeterminate
             />
 

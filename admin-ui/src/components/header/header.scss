@@ -10,7 +10,7 @@
 
     .multi-brand {
         padding-top: 8px;
-        max-width: 200px;
+        max-width: 300px;
         margin-left: 2rem;
     }
 
@@ -20,7 +20,7 @@
     }
 
     &.v-toolbar {
-        background-color: $main-color !important;
+        background-color: $mainColor;
     
         .v-icon {
             color: #fff !important;

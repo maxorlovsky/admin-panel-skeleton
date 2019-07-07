@@ -14,11 +14,11 @@ export default {
             // Add JWT token as default header
             axios.defaults.headers.common.sessionToken = value.token;
 
-            const axiosEndpoints = [axios.get('/api/me')];
+            const axiosEndpoints = [axios.get(`${mo.apiUrl}/me`)];
 
             // In case website need to support multibrands, run mutlisite API call as well
             if (websiteConfig.multiBrands) {
-                axiosEndpoints.push(axios.get('/api/multisite'));
+                axiosEndpoints.push(axios.get(`${mo.apiUrl}/multisite`));
             }
 
             const response = await axios.all(axiosEndpoints);

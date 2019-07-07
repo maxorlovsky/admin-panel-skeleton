@@ -5,9 +5,7 @@
         <router-link to="/profile"
             class="logo-wrapper"
         >
-            <div class="logo-circle">
-                <div class="logo" />
-            </div>
+            <div class="logo" />
         </router-link>
 
         <v-select v-if="enableBrands"
@@ -49,7 +47,7 @@ export default {
         return {
             loggedIn: false,
             enableBrands: websiteConfig.multiBrands,
-            multiSiteId: null
+            multiSiteId: 0
         };
     },
     computed: {
@@ -72,23 +70,21 @@ export default {
                 siteId = 1;
             }
 
+            this.multiSiteId = siteId;
+
             axios.defaults.headers.common.siteId = siteId;
 
             this.$store.commit('saveMultiSiteId', siteId);
-
-            this.multiSiteId = siteId;
-
-            this.siteId = siteId;
         },
         updateMultiSiteId() {
             // Storring site ID in localStorage
-            functions.storage('set', 'site-id', this.siteId);
+            functions.storage('set', 'site-id', this.multiSiteId);
 
             // Update axios calls header
-            axios.defaults.headers.common.siteId = this.siteId;
+            axios.defaults.headers.common.siteId = this.multiSiteId;
 
             // Update store data
-            this.$store.commit('saveMultiSiteId', this.siteId);
+            this.$store.commit('saveMultiSiteId', this.multiSiteId);
         },
         burgerMenu() {
             this.$store.commit('drawer');

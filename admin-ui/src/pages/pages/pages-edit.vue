@@ -121,7 +121,7 @@ const pagesEditPage = {
         tinymce
     },
     mixins: [formMixin],
-    data: function() {
+    data() {
         return {
             add: false,
             edit: false,

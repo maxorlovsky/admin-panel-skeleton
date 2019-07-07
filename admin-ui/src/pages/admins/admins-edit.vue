@@ -159,7 +159,7 @@ const adminsEditPage = {
         setUpLevels() {
             const levels = [];
 
-            for (let i = 1; i < this.maxLevel; ++i) {
+            for (let i = 1; i <= this.maxLevel; ++i) {
                 levels.push(i);
             }
 
@@ -170,8 +170,8 @@ const adminsEditPage = {
         async fetchEditData(id) {
             try {
                 const [admin, permissions] = await axios.all([
-                    axios.get(`/api/admin/${id}`),
-                    axios.get('/api/permissions')
+                    axios.get(`${mo.apiUrl}/admin/${id}`),
+                    axios.get(`${mo.apiUrl}/permissions`)
                 ]);
 
                 this.form.login = admin.data.data.login;

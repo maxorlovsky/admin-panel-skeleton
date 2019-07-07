@@ -19,6 +19,7 @@
 
                     <v-list-group v-else
                         :key="item.url"
+                        v-model="item.active"
                         :prepend-icon="item.icon"
                     >
                         <template v-slot:activator>
@@ -55,6 +56,24 @@ export default {
         },
         menu() {
             return this.$store.getters.get('menu');
+        }
+    },
+    watch: {
+        menu() {
+            if (this.menu) {
+                const path = `/${this.$route.path.split('/')[1]}`;
+
+                // Only trigger this when menu is available
+                for (const item of this.menu) {
+                    if (item.sublinks) {
+                        const findPath = item.sublinks.find((sublink) => sublink.url === path);
+
+                        if (findPath) {
+                            item.active = true;
+                        }
+                    }
+                }
+            }
         }
     },
     created() {

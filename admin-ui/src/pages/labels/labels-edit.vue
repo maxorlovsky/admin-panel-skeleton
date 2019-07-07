@@ -111,21 +111,6 @@ const labelsEditPage = {
             ]
         };
     },
-    created() {
-        // Define if we add or edit
-        if (this.$route.params.id) {
-            this.edit = true;
-            this.fetchEditData(this.$route.params.id);
-        } else {
-            this.add = true;
-            this.loading = false;
-        }
-    },
-    computed: {
-        multiSiteId() {
-            return this.$store.getters.get('multiSiteId');
-        }
-    },
     watch: {
         multiSiteId: {
             // Triggering watch immediately
@@ -142,6 +127,21 @@ const labelsEditPage = {
             handler() {
                 this.disableSubmit();
             }
+        }
+    },
+    created() {
+        // Define if we add or edit
+        if (this.$route.params.id) {
+            this.edit = true;
+            this.fetchEditData(this.$route.params.id);
+        } else {
+            this.add = true;
+            this.loading = false;
+        }
+    },
+    computed: {
+        multiSiteId() {
+            return this.$store.getters.get('multiSiteId');
         }
     },
     methods: {

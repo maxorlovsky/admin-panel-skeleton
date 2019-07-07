@@ -15,7 +15,7 @@
             no-data-text="No logs found"
         >
             <v-progress-linear slot="progress"
-                color="purple"
+                color="blue"
                 indeterminate
             />
 

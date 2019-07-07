@@ -8,22 +8,20 @@ import Vuetify from 'vuetify';
 // Main app file
 import App from './app.vue';
 
-/* eslint-disable */
 // Pages
-import pagesPage from './pages/pages/pages.vue';
-import pagesEditPage from './pages/pages/pages-edit.vue';
-import permissionsPage from './pages/permissions/permissions.vue';
-import profilePage from './pages/profile/profile.vue';
-import labelsPage from './pages/labels/labels.vue';
-import labelsEditPage from './pages/labels/labels-edit.vue';
-import loginPage from './pages/login/login.vue';
-import logsPage from './pages/logs/logs.vue';
-import adminsPage from './pages/admins/admins.vue';
-import adminsEditPage from './pages/admins/admins-edit.vue';
+import './pages/pages/pages.vue';
+import './pages/pages/pages-edit.vue';
+import './pages/permissions/permissions.vue';
+import './pages/profile/profile.vue';
+import './pages/labels/labels.vue';
+import './pages/labels/labels-edit.vue';
+import './pages/login/login.vue';
+import './pages/logs/logs.vue';
+import './pages/admins/admins.vue';
+import './pages/admins/admins-edit.vue';
 
 // Mixins
-import globalMixins from './mixins/global-mixin.js';
-/* eslint-enable */
+import './mixins/global-mixin.js';
 
 // Destroying old cache
 functions.storageCacheBuster();
@@ -32,6 +30,8 @@ functions.storageCacheBuster();
 import router from './router.js';
 
 Vue.use(Vuetify);
+
+mo.env = functions.getEnv();
 
 // Check if there is a token
 if (functions.storage('get', 'token')) {

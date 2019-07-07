@@ -142,7 +142,7 @@ const profilePage = {
 
             try {
                 // Sending request to API, to update user password
-                const response = await axios.put('/api/user-data/change-password', {
+                const response = await axios.put(`${mo.apiUrl}/user-data/change-password`, {
                     currentPass: this.form.currentPass,
                     newPass: this.form.newPass,
                     repeatPass: this.form.repeatPass
