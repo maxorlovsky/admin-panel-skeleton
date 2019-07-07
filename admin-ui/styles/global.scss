@@ -1,11 +1,10 @@
 /* Project variables */
-$main-color: #472346 !default;
+$mainColor: #472346 !default;
 $secondaryColor: #f1f1f1 !default;
 $bgColor: #f1f1f1 !default;
 $defaultBorderRadius: 8px;
 $font: "Open Sans";
 $images: "/dist/assets/images";
-$left-sidebar-width: 230px;
 
 @import "../node_modules/vuetify/dist/vuetify.min";
 @import "./styles.scss";
