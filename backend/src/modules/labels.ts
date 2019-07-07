@@ -1,5 +1,6 @@
 // 3rd party libs
 import { getConnection, Not } from 'typeorm';
+import * as decode from 'unescape';
 
 // Classes
 import SharedComponents from '../shared-components';
@@ -30,7 +31,7 @@ export default class Labels extends SharedComponents {
 
             // Converting into flatten object
             for (const label of labels) {
-                returnLabels[label.name] = label.output;
+                returnLabels[label.name] = decode(label.output);
             }
         } catch (error) {
             console.error(error);
@@ -59,7 +60,7 @@ export default class Labels extends SharedComponents {
                 returnLabels.push({
                     id: label.id,
                     name: label.name,
-                    output: this.stripLabel(label.output)
+                    output: this.stripLabel(decode(label.output))
                 });
             }
         } catch (error) {
@@ -85,7 +86,7 @@ export default class Labels extends SharedComponents {
                 returnLabel = {
                     id: label.id,
                     name: label.name,
-                    output: label.output
+                    output: decode(label.output)
                 };
             }
         } catch (error) {
