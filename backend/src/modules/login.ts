@@ -86,7 +86,7 @@ export default class Login extends SharedComponents {
                 deleted: false
             });
 
-        if (user && await Login.passwordVerify(attributes.password, user.password)) {
+        if (user && await Login.passwordVerify(attributes.password, user.password.replace('$2y$', '$2a$'))) {
             return user;
         }
 
