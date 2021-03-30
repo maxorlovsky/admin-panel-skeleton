@@ -8397,10 +8397,10 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tinymce@5.0.11:
-  version "5.0.11"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.0.11.tgz#71589a6bea1fbc4affbf47578f2a18cb23e51d18"
-  integrity sha512-V3wRlxsaEOrbh1T3bW0/buR/L+eXsz8w+hJa6E8tfitJNtO9haKqdFCG16oyBEbwpQq9Zc97tHLF2Cx3IX/62w==
+tinymce@4.8.5:
+  version "4.8.5"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.8.5.tgz#a80ea66c4f90078bd93625b0f0914a4f774e0af3"
+  integrity sha512-1V6+PxP5Kp8H/Kuf+EOe6vyrtj1Dlj98q33DgiKGoGPTmbcQaVZWiT+lhqj8ICXKVLV3YxAieOJyJXai4SLHQg==
 
 tinymce@^4.6.3:
   version "4.9.5"
@@ -9232,9 +9232,9 @@ xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   integrity sha1-pcbVMr5lbiPbgg77lDofBJmNY68=
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
